@@ -1,0 +1,16 @@
+# /etc/systemd/system/evmosd.service
+[Unit]
+Description=Evmos Node
+After=network.target
+
+[Service]
+Type=simple
+User={{ ansible_user_id }}
+WorkingDirectory={{ ansible_user_dir }}
+ExecStart={{ansible_user_dir }}/go/bin/evmosd start
+Restart=on-failure
+RestartSec=3
+LimitNOFILE=4096
+
+[Install]
+WantedBy=multi-user.target

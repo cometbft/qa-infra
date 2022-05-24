@@ -1,0 +1,16 @@
+- name: base
+  hosts: validator
+  gather_facts: yes
+  become_method: sudo
+ 
+  tasks:
+    - name: install git
+      ansible.builtin.yum:
+        name: git
+        state: installed
+      become: yes
+    - name: install gcc
+      ansible.builtin.yum:
+        name: gcc
+        state: installed
+      become: yes

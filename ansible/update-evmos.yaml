@@ -1,0 +1,29 @@
+- name: update evmos
+  hosts: validator
+  become_method: sudo
+  gather_facts: yes
+  vars:
+    version: v0.3.
+ 
+  tasks:
+    - name: latest tagged version
+      shell:
+        cmd: curl --silent 'https://api.github.com/repos/tharsis/evmos/releases/latest' |  grep '"tag_name":' | cut -d'"' -f4
+      register: version
+    - name: clone evmos repo
+      ansible.builtin.git:
+        repo: https://github.com/tharsis/evmos
+        dest: "{{ ansible_user_dir }}/evmos"
+          # version: "{{ version.stdout }}"
+        version: "v0.3.0"
+    - name: rebuild evmos
+      shell: "cd evmos/cmd/evmosd && go install"
+    - name: update unit file 
+      template:
+        src: templates/evmosd.service.j2
+        dest: /lib/systemd/system/evmosd.service
+      become: yes
+    - name: reload systemd daemon
+      ansible.builtin.systemd:
+        daemon_reload: yes
+      become: yes

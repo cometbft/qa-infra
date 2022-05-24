@@ -1,0 +1,14 @@
+- name: install evmos
+  hosts: validator
+  become_
+  gather_facts: yes
+  vars: 
+    chain_id:  "evmos_9000-2"
+    moniker: "beef"
+ 
+  tasks:
+  - name: start the systemd-unit
+    ansible.builtin.systemd:
+      name: evmosd
+      state: started
+      enabled: yes

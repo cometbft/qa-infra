@@ -1,8 +1,7 @@
-resource "digitalocean_droplet" "v0.36-testnet-node" {
-  name         = "v0.36-testnet-node"
+resource "digitalocean_droplet" "v036-testnet-node" {
+  name         = "v036-testnet-node"
   image        = "debian-11-x64"
   region       = "fra1"
-  tags = ["v0.36-testnet"]
+  tags = ["v036-testnet"]
   size = "s-4vcpu-8gb"
 }
-

@@ -1,1 +1,4 @@
-/tf/tokens.tfvars
+/tf/terraform.tfvars
+/tf/terraform.tfstate*
+/tf/.terraform/*
+/tf/.terraform.lock.hcl

@@ -14,7 +14,7 @@ variable "instance_tags" {
 
 resource "digitalocean_droplet" "v036-testnet-node" {
   count        = var.testnet_size
-  name         = "v036-testnet-node"
+  name         = "validator${count.index}"
   image        = "debian-11-x64"
   region       = "fra1"
   tags = var.instance_tags

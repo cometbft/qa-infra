@@ -1,27 +1,23 @@
-- name: update evmos
+- name: update testapp
   hosts: validators
   become_method: sudo
   gather_facts: yes
   vars:
-    version: v0.3.
+    version_tag: v0.35.5
  
   tasks:
-    - name: latest tagged version
-      shell:
-        cmd: curl --silent 'https://api.github.com/repos/tharsis/evmos/releases/latest' |  grep '"tag_name":' | cut -d'"' -f4
-      register: version
-    - name: clone evmos repo
+    - name: clone tendermint repo
       ansible.builtin.git:
-        repo: https://github.com/tharsis/evmos
-        dest: "{{ ansible_user_dir }}/evmos"
+        repo: https://github.com/tendermint/tendermint
+        dest: "{{ ansible_user_dir }}/tendermint"
           # version: "{{ version.stdout }}"
-        version: "v0.3.0"
-    - name: rebuild evmos
-      shell: "cd evmos/cmd/evmosd && go install"
+        version: "{{ version_tag }}"
+    - name: rebuild testapp
+      shell: "cd tendermint/test/e2e/node && /usr/lib/go-1.17/bin/go install"
     - name: update unit file 
       template:
-        src: templates/evmosd.service.j2
-        dest: /lib/systemd/system/evmosd.service
+        src: templates/testappd.service.j2
+        dest: /lib/systemd/system/testappd.service
       become: yes
     - name: reload systemd daemon
       ansible.builtin.systemd:

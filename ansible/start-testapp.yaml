@@ -1,14 +1,10 @@
-- name: install evmos
+- name: start testapp
   hosts: validators
-  become_
   gather_facts: yes
-  vars: 
-    chain_id:  "evmos_9000-2"
-    moniker: "beef"
  
   tasks:
   - name: start the systemd-unit
     ansible.builtin.systemd:
-      name: evmosd
+      name: testappd
       state: started
       enabled: yes

@@ -4,6 +4,7 @@
   gather_facts: yes
   vars:
     version_tag: v0.35.5
+    tm_home: /root/.testapp/
  
   tasks:
     - name: clone tendermint repo

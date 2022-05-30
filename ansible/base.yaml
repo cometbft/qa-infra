@@ -2,7 +2,8 @@
   hosts: validators
   gather_facts: yes
   become_method: sudo
-  ansible_host_key_checking: false
+  vars:
+    ansible_host_key_checking: false
  
   tasks:
     - name: Update apt cache

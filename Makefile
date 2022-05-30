@@ -1,7 +1,13 @@
 DO_INSTANCE_TAGNAME=v036-testnet
-TESTNET_SIZE=20
+TESTNET_SIZE=2
 
-compute:
+terraform-apply:
+	cd tf && terraform refresh
+	cd tf && terraform validate
+	cd tf && terraform apply -var='testnet_size=$(TESTNET_SIZE)' -var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]'
+
+terraform-destroy:
+	cd tf && terraform destroy
 
 hosts:
 	echo "[validators]" > ./ansible/hosts

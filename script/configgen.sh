@@ -16,3 +16,4 @@ rm -rf ansible/testnet-configs
 go run github.com/tendermint/tendermint/test/e2e/runner@v0.35.5 setup -f testnet.toml
 mv testnet ansible/testnet-configs
 rm ansible/testnet-configs/docker-compose.yml
+rm testnet.toml

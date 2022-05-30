@@ -5,12 +5,12 @@
  
   tasks:
     - name: install git
-      ansible.builtin.yum:
+      ansible.builtin.apt:
         name: git
         state: installed
       become: yes
     - name: install gcc
-      ansible.builtin.yum:
+      ansible.builtin.apt:
         name: gcc
         state: installed
       become: yes

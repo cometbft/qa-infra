@@ -4,6 +4,11 @@
   become_method: sudo
  
   tasks:
+    - name: Update and upgrade apt packages
+      ansible.builtin.apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400
     - name: install git
       ansible.builtin.apt:
         name: git
@@ -16,6 +21,6 @@
       become: yes
     - name: install go
       ansible.builtin.apt:
-        name: golang-go
+        name: golang-1.17-go
         state: latest
       become: yes

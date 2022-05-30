@@ -4,9 +4,8 @@
   become_method: sudo
  
   tasks:
-    - name: Update and upgrade apt packages
+    - name: Update apt cache
       ansible.builtin.apt:
-        upgrade: yes
         update_cache: yes
         cache_valid_time: 86400
     - name: install git

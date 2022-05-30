@@ -7,10 +7,15 @@
     - name: install git
       ansible.builtin.apt:
         name: git
-        state: installed
+        state: latest
       become: yes
     - name: install gcc
       ansible.builtin.apt:
         name: gcc
-        state: installed
+        state: latest
+      become: yes
+    - name: install go
+      ansible.builtin.apt:
+        name: golang-go
+        state: latest
       become: yes

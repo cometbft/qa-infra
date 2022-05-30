@@ -12,7 +12,8 @@ EOF
 
 NUM_IPS=`echo $NEW_IPS | tr , '\n' | wc -l`
 
-for i in `seq 1 $NUM_IPS`; do
+m=`expr $NUM_IPS - 1`
+for i in `seq 0 $m`; do
 	echo [node.validator$i] >> $TMPDIR/testnet.yaml
 done
 
@@ -23,7 +24,7 @@ IPS=`grep -E '(ipv4_address)' $TMPDIR/testnet/docker-compose.yml | sed 's/^.*ipv
 rm $TMPDIR/testnet/docker-compose.yml
 while read old <&3 && read new <&4; do
 	find $TMPDIR/testnet/ -type f | xargs -I{} sed -i "s/$old/$new/g" {}
-done 3< <(echo $IPS | tr ' ' '\n') 4< <(tail -n+2 ./ansible/hosts) 
+done 3< <(echo $IPS | tr ' ' '\n') 4< <(echo $NEW_IPS | tr , '\n' ) 
  
 
 rm -rf ansible/testnet-configs

@@ -1,33 +1,14 @@
-- name: install evmos
+- name: initialize app
   hosts: validators
   become: false
   gather_facts: yes
+  hosts: validators
   vars: 
-    chain_id:  "evmos_9000-2"
-    moniker: "beef"
+    tm_home: /root/.testapp/
+    ansible_host_key_checking: false
  
   tasks:
-    - name: init evmosd
-      shell: >
-        evmosd config chain-id {{chain_id}} && 
-        evmosd init {{ moniker }} --chain-id {{ chain_id}}
-
-    - name: copy genesis
-      shell: >
-        curl https://raw.githubusercontent.com/tharsis/testnets/main/olympus_mons/genesis.json > ~/.evmosd/config/genesis.json
-
-    - name: fetch seeds
-      shell: >
-        SEEDS=`curl -sL https://raw.githubusercontent.com/tharsis/testnets/main/olympus_mons/seeds.txt \
-        | awk '{print $1}' \
-        | paste -s -d, -` && \
-        sed -i.bak -e "s/^seeds =.*/seeds = \"$SEEDS\"/" ~/.evmosd/config/config.toml
-
-    - name: fetch persistent peers
-      shell: >
-        PEERS=`curl -sL https://raw.githubusercontent.com/tharsis/testnets/main/olympus_mons/peers.txt \ 
-        | sort -R \
-        | head -n 10 \
-        | awk '{print $1}' \
-        | paste -s -d, -` && \ 
-        sed -i.bak -e "s/^persistent_peers *=.*/persistent_peers = \"$PEERS\"/" ~/.evmosd/config/config.toml
+    - name: copy configuration files
+      ansible.builtin.copy:
+        src: ./testnet-configs/{{ hostvars[inventory_hostname].name }}
+        dest: "{{ ansible_user_dir }}/{{ tm_home }}/"

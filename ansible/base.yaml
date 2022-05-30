@@ -7,7 +7,7 @@
     - name: Update apt cache
       ansible.builtin.apt:
         update_cache: yes
-        cache_valid_time: 86400
+        cache_valid_time: 60
     - name: install git
       ansible.builtin.apt:
         name: git

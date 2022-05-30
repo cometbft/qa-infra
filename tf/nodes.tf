@@ -1,4 +1,7 @@
-variable "testnet_size" {}
+variable "testnet_size" {
+  type = number
+  default = 20
+}
 
 resource "digitalocean_droplet" "v036-testnet-node" {
   count        = var.testnet_size

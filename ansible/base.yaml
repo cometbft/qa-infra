@@ -1,5 +1,5 @@
 - name: base
-  hosts: validator
+  hosts: validators
   gather_facts: yes
   become_method: sudo
  

@@ -1,5 +1,5 @@
 - name: install golang
-  hosts: validator
+  hosts: validators
   become: false
   gather_facts: yes
  

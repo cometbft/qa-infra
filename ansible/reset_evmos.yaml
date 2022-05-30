@@ -1,5 +1,5 @@
 - name: reset evmos
-  hosts: validator
+  hosts: validators
   become_method: sudo
  
   tasks:

@@ -1,5 +1,5 @@
 - name: install evmos
-  hosts: validator
+  hosts: validators
   become_
   gather_facts: yes
   vars: 

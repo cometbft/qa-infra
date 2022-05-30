@@ -12,16 +12,9 @@
         cache_valid_time: 60
     - name: install git
       ansible.builtin.apt:
-        name: git
-        state: latest
-      become: yes
-    - name: install gcc
-      ansible.builtin.apt:
-        name: gcc
-        state: latest
-      become: yes
-    - name: install go
-      ansible.builtin.apt:
-        name: golang-1.17-go
+        name: 
+          - git
+          - gcc
+          - golang-1.17-go
         state: latest
       become: yes

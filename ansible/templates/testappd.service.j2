@@ -1,13 +1,13 @@
-# /etc/systemd/system/evmosd.service
+# /etc/systemd/system/testappd.service
 [Unit]
-Description=Evmos Node
+Description=Testapp Node
 After=network.target
 
 [Service]
 Type=simple
 User={{ ansible_user_id }}
 WorkingDirectory={{ ansible_user_dir }}
-ExecStart={{ansible_user_dir }}/go/bin/evmosd start
+ExecStart={{ansible_user_dir }}/go/bin/node start
 Restart=on-failure
 RestartSec=3
 LimitNOFILE=4096

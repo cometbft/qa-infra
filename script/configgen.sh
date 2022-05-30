@@ -1,19 +1,31 @@
 #!/bin/sh
 set -euo pipefail
 
-size=$1
+NEW_IPS=$1
+TMPDIR=`mktemp -d`
 
-touch testnet.toml
-echo "disable_legacy_p2p = false" > testnet.toml
-echo "initial_height = 1" >> testnet.toml
-echo  >> testnet.toml
+cat << EOF > $TMPDIR/testnet.yaml
+disable_legacy_p2p = false 
+initial_height = 1
 
-for i in `seq 1 $size`; do
-	echo [node.validator$i] >> testnet.toml
+EOF
+
+NUM_IPS=`echo $NEW_IPS | tr , '\n' | wc -l`
+
+for i in `seq 1 $NUM_IPS`; do
+	echo [node.validator$i] >> $TMPDIR/testnet.yaml
 done
 
+go run github.com/tendermint/tendermint/test/e2e/runner@v0.35.5 setup -f $TMPDIR/testnet.yaml
+IPS=`grep -E '(ipv4_address)' $TMPDIR/testnet/docker-compose.yml | sed 's/^.*ipv4_address: \(.*\)/\1/g'`
+
+
+rm $TMPDIR/testnet/docker-compose.yml
+while read old <&3 && read new <&4; do
+	find $TMPDIR/testnet/ -type f | xargs -I{} sed -i "s/$old/$new/g" {}
+done 3< <(echo $IPS | tr ' ' '\n') 4< <(tail -n+2 ./ansible/hosts) 
+ 
+
 rm -rf ansible/testnet-configs
-go run github.com/tendermint/tendermint/test/e2e/runner@v0.35.5 setup -f testnet.toml
-mv testnet ansible/testnet-configs
-rm ansible/testnet-configs/docker-compose.yml
-rm testnet.toml
+mv $TMPDIR/testnet ansible/testnet-configs
+rm -rf $TMPDIR

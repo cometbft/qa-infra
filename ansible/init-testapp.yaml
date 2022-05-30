@@ -10,5 +10,5 @@
   tasks:
     - name: copy configuration files
       ansible.builtin.copy:
-        src: ./testnet-configs/{{ hostvars[inventory_hostname].name }}
-        dest: "{{ ansible_user_dir }}/{{ tm_home }}/"
+        src: ./testnet-configs/{{ hostvars[inventory_hostname].name }}/
+        dest: "{{ tm_home }}/"

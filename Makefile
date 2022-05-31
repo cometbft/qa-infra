@@ -1,5 +1,5 @@
 DO_INSTANCE_TAGNAME=v036-testnet
-TESTNET_SIZE=20
+TESTNET_SIZE=1
 
 terraform-apply:
 	cd tf && terraform refresh
@@ -11,10 +11,12 @@ terraform-destroy:
 
 hosts:
 	echo "[validators]" > ./ansible/hosts
-	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | tail -n+2 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' >> ./ansible/hosts
+	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) | tail -n+2  | grep "validator[0-9]\+" |  tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' >> ./ansible/hosts
+	echo "[prometheus]" >> ./ansible/hosts
+	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) | tail -n+2 |  tr -s ' ' | grep "testnet-prometheus"| cut -d' ' -f3   >> ./ansible/hosts
 
 configgen:
-	./script/configgen.sh `tail -n+2 ./ansible/hosts | cut -d' ' -f1| paste -s -d, -`
+	./script/configgen.sh `tail -n+2 ./ansible/hosts | head -n -2 |cut -d' ' -f1| paste -s -d, -`
 
 ansible-install:
 	cd ansible && ansible-playbook -i hosts -u root base.yaml -f 10
@@ -24,4 +26,4 @@ ansible-install:
 start:
 	cd ansible && ansible-playbook -i hosts -u root start-testapp.yaml -f 10
 
-temp: hosts configgen ansible-install start
+all: terraform-apply hosts configgen ansible-install start

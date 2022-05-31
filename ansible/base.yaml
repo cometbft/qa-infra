@@ -1,5 +1,5 @@
 - name: base
-  hosts: validators
+  hosts: validators,prometheus
   gather_facts: yes
   become_method: sudo
   vars:
@@ -10,11 +10,12 @@
       ansible.builtin.apt:
         update_cache: yes
         cache_valid_time: 60
-    - name: install git
+    - name: install deps
       ansible.builtin.apt:
-        name: 
+        name:
           - git
           - gcc
           - golang-1.17-go
+          - prometheus
         state: latest
       become: yes

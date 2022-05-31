@@ -1,5 +1,5 @@
-DO_INSTANCE_TAGNAME=v036-testnet
-TESTNET_SIZE=1
+DO_INSTANCE_TAGNAME=v035-testnet
+TESTNET_SIZE=20
 
 terraform-apply:
 	cd tf && terraform refresh
@@ -23,7 +23,10 @@ ansible-install:
 	cd ansible && ansible-playbook -i hosts -u root init-testapp.yaml -f 10
 	cd ansible && ansible-playbook -i hosts -u root update-testapp.yaml -f 10
 
-start:
+start-network:
 	cd ansible && ansible-playbook -i hosts -u root start-testapp.yaml -f 10
 
-all: terraform-apply hosts configgen ansible-install start
+prometheus-init:
+	cd ansible && ansible-playbook -i hosts  -u root prometheus.yaml -f 10
+
+all: terraform-apply hosts configgen ansible-install start-network prometheus-init

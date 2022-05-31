@@ -15,12 +15,15 @@
         src: templates/prometheus.yml.j2
         dest: /etc/prometheus/prometheus.yml
       become: yes
-    - name: reload systemd daemon
-      ansible.builtin.systemd:
-        daemon_reload: yes
-      become: yes
     - name: start the systemd-unit
       ansible.builtin.systemd:
         name: prometheus
         state: started
+        daemon_reload: yes
+        enabled: yes
+    - name: restart the systemd-unit # not sure why this is necessary
+      ansible.builtin.systemd:
+        name: prometheus
+        state: restarted
+        daemon_reload: yes
         enabled: yes

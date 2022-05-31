@@ -4,4 +4,3 @@
 /tf/.terraform.lock.hcl
 /ansible/testnet-configs/*
 /ansible/hosts
-/tf/nodes.tf

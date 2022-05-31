@@ -23,7 +23,7 @@ resource "digitalocean_droplet" "testnet-node" {
 }
 
 resource "digitalocean_droplet" "testnet-prometheus" {
-  name         = "test-prometheus"
+  name         = "testnet-prometheus"
   image        = "debian-11-x64"
   region       = "fra1"
   tags = var.instance_tags

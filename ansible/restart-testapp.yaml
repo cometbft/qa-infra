@@ -1,0 +1,11 @@
+- name: update testapp
+  hosts: validators
+  become_method: sudo
+  gather_facts: yes
+ 
+  tasks:
+    - name: restart app
+      ansible.builtin.systemd:
+        name: testappd
+        state: restarted
+      become: yes

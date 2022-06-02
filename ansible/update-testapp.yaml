@@ -3,7 +3,7 @@
   become_method: sudo
   gather_facts: yes
   vars:
-    version_tag: v0.35.5
+    version_tag: v0.35.x
     tm_home: /root/.testapp/
  
   tasks:
@@ -11,7 +11,6 @@
       ansible.builtin.git:
         repo: https://github.com/tendermint/tendermint
         dest: "{{ ansible_user_dir }}/tendermint"
-          # version: "{{ version.stdout }}"
         version: "{{ version_tag }}"
     - name: rebuild testapp
       shell: "cd tendermint/test/e2e/node && /usr/lib/go-1.17/bin/go install"

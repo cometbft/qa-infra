@@ -5,6 +5,6 @@
   tasks:
   - name: start the systemd-unit
     ansible.builtin.systemd:
-      name: testappd
+      name: celestiad
       state: started
       enabled: yes

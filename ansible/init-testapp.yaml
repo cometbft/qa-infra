@@ -20,8 +20,11 @@
         src: "{{ ansible_user_dir }}/networks/mamaki/genesis.json"
         dest: "{{ tm_home }}/config/genesis.json"
         remote_src: yes
-    - name: init celestia node
+        force: yes
+    - name: add bootstrap peers to config
       shell: |
         BOOTSTRAP_PEERS=$(curl -sL https://raw.githubusercontent.com/celestiaorg/networks/master/mamaki/bootstrap-peers.txt | tr -d '\n')
-        echo $BOOTSTRAP_PEERS
         sed -i.bak -e "s/^bootstrap-peers *=.*/bootstrap-peers = \"$BOOTSTRAP_PEERS\"/" "{{ tm_home}}/config/config.toml"
+    - name: update prometheus setting
+      shell: |
+        sed -i.bak -e "s/^prometheus *=.*/prometheus = true/" "{{ tm_home}}/config/config.toml"

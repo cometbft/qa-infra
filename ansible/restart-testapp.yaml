@@ -1,4 +1,4 @@
-- name: update testapp
+- name: restart celestiad
   hosts: validators
   become_method: sudo
   gather_facts: yes
@@ -6,6 +6,6 @@
   tasks:
     - name: restart app
       ansible.builtin.systemd:
-        name: testappd
+        name: celestiad
         state: restarted
       become: yes

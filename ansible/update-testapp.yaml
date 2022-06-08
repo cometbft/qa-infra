@@ -8,11 +8,10 @@
     ansible_host_key_checking: false
  
   tasks:
-    - name: clone celestia repo
-      ansible.builtin.git:
-        repo: https://github.com/celestiaorg/celestia-app
-        dest: "{{ ansible_user_dir }}/celestia-app"
-        version: "{{ version_tag }}"
+    - name: rebuild celestia
+      shell: |
+        cd tendermint
+        git pull origin wb/celestia-fixes
     - name: rebuild celestia
       shell: |
         cd celestia-app 

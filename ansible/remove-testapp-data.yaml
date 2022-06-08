@@ -3,7 +3,7 @@
   become_method: sudo
   gather_facts: yes
   vars:
-    tm_home: /root/.testapp/
+    tm_home: /root/.celestia-app/
  
   tasks:
     - name: stop app

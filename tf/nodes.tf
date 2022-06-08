@@ -7,7 +7,7 @@ variable "instance_tags" {
 }
 
 resource "digitalocean_droplet" "celestia-node" {
-  name         = var.instance_names[count.index]
+  name         = "celestia-node"
   image        = "debian-11-x64"
   region       = "fra1"
   tags = concat(var.instance_tags, ["celestia-node"])

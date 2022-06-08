@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User={{ ansible_user_id }}
 WorkingDirectory={{ ansible_user_dir }}
-ExecStart={{ansible_user_dir }}/go/bin/celestia-app
+ExecStart={{ansible_user_dir }}/go/bin/celestia-appd start
 Environment=TMHOME={{ tm_home }}
 Restart=on-failure
 RestartSec=3

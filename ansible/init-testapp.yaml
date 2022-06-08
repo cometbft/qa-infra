@@ -4,11 +4,24 @@
   gather_facts: yes
   hosts: validators
   vars:
-    tm_home: /root/.testapp/
+    tm_home: /root/.celestia-app/
     ansible_host_key_checking: false
  
   tasks:
-    - name: copy configuration files
+    - name: clone the networks file
+      ansible.builtin.git:
+        repo: https://github.com/celestiaorg/networks
+        dest: "{{ ansible_user_dir }}/networks"
+        version: "{{ version_tag }}"
+    - name: init celestia node
+      shell: "{{ ansible_user_dir }}/go/bin/celestia-app init interchain --chain-id mamaki"
+    - name: copy over networks file
       ansible.builtin.copy:
-        src: ./testnet/{{ hostvars[inventory_hostname].name }}/
-        dest: "{{ tm_home }}/"
+        src: "{{ ansible_user_dir }}/networks/mamaki/genesis.json"
+        dest: "{{ tm_home }}/config/genesis.json"
+        remote_src: yes
+    - name: init celestia node
+      shell: |
+        BOOTSTRAP_PEERS=$(curl -sL https://raw.githubusercontent.com/celestiaorg/networks/master/mamaki/bootstrap-peers.txt | tr -d '\n')
+        echo $BOOTSTRAP_PEERS
+        sed -i.bak -e "s/^bootstrap-peers *=.*/bootstrap-peers = \"$BOOTSTRAP_PEERS\"/" "{{ tm_home}}/config/config.toml"

@@ -1,23 +1,26 @@
-- name: update testapp
+- name: update celestia
   hosts: validators
   become_method: sudo
   gather_facts: yes
   vars:
-    version_tag: v0.35.x
-    tm_home: /root/.testapp/
+    version_tag: evan/profile-constantly
+    tm_home: /root/.celestia-app/
+    ansible_host_key_checking: false
  
   tasks:
-    - name: clone tendermint repo
+    - name: clone celestia repo
       ansible.builtin.git:
-        repo: https://github.com/tendermint/tendermint
-        dest: "{{ ansible_user_dir }}/tendermint"
+        repo: https://github.com/celestiaorg/celestia-app
+        dest: "{{ ansible_user_dir }}/celestia-app"
         version: "{{ version_tag }}"
-    - name: rebuild testapp
-      shell: "cd tendermint/test/e2e/node && /usr/lib/go-1.17/bin/go install"
+    - name: rebuild celestia
+      shell: |
+        cd celestia-app 
+        PATH=$PATH:/usr/lib/go-1.17/bin make install
     - name: update unit file 
       template:
-        src: templates/testappd.service.j2
-        dest: /lib/systemd/system/testappd.service
+        src: templates/celestiad.service.j2
+        dest: /lib/systemd/system/celestiad.service
       become: yes
     - name: reload systemd daemon
       ansible.builtin.systemd:

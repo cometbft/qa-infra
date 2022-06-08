@@ -17,5 +17,6 @@
           - gcc
           - golang-1.17-go
           - prometheus
+          - make
         state: latest
       become: yes

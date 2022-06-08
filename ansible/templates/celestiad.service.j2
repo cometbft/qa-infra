@@ -1,0 +1,16 @@
+[Unit]
+Description=Testapp Node
+After=network.target
+
+[Service]
+Type=simple
+User={{ ansible_user_id }}
+WorkingDirectory={{ ansible_user_dir }}
+ExecStart={{ansible_user_dir }}/go/bin/celestia-app
+Environment=TMHOME={{ tm_home }}
+Restart=on-failure
+RestartSec=3
+LimitNOFILE=4096
+
+[Install]
+WantedBy=multi-user.target

@@ -12,9 +12,9 @@
       ansible.builtin.git:
         repo: https://github.com/celestiaorg/networks
         dest: "{{ ansible_user_dir }}/networks"
-        version: "{{ version_tag }}"
+        version: master
     - name: init celestia node
-      shell: "{{ ansible_user_dir }}/go/bin/celestia-app init interchain --chain-id mamaki"
+      shell: "{{ ansible_user_dir }}/go/bin/celestia-appd init interchain --chain-id mamaki"
     - name: copy over networks file
       ansible.builtin.copy:
         src: "{{ ansible_user_dir }}/networks/mamaki/genesis.json"

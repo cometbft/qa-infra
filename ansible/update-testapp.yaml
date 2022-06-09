@@ -3,25 +3,26 @@
   become_method: sudo
   gather_facts: yes
   vars:
-    version_tag: evan/profile-constantly
     tm_home: /root/.celestia-app/
     ansible_host_key_checking: false
  
   tasks:
-    - name: rebuild celestia
+    - name: pull latest celestia fork
       shell: |
-        cd tendermint
-        git pull origin wb/celestia-fixes
+        cd celestia-core
+        git pull william william-celestia-fixes
     - name: rebuild celestia
       shell: |
         cd celestia-app 
         PATH=$PATH:/usr/lib/go-1.17/bin make install
-    - name: update unit file 
+    - name: update unit file
       template:
         src: templates/celestiad.service.j2
         dest: /lib/systemd/system/celestiad.service
       become: yes
-    - name: reload systemd daemon
+    - name: restart systemd process
       ansible.builtin.systemd:
+        name: celestiad
+        state: restarted
         daemon_reload: yes
       become: yes

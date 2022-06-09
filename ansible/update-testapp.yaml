@@ -10,7 +10,7 @@
     - name: pull latest celestia fork
       shell: |
         cd celestia-core
-        git pull william william-celestia-fixes
+        git pull origin v035-testing
     - name: rebuild celestia
       shell: |
         cd celestia-app 

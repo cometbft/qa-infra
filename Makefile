@@ -19,7 +19,7 @@ ansible-install:
 	cd ansible && ansible-playbook -i hosts -u root init-testapp.yaml
 	cd ansible && ansible-playbook -i hosts -u root update-testapp.yaml
 
-update:
+rebuild:
 	cd ansible && ansible-playbook -i hosts -u root update-testapp.yaml
 
 start-network:

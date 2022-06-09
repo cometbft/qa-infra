@@ -1,0 +1,4 @@
+[validators]
+159.89.8.0 name=celestia-node
+[prometheus]
+167.99.141.212

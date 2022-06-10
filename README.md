@@ -54,8 +54,8 @@ make start-network
 
 Once you've completed setting up the network, take a look at your
 `ansible/hosts` file for the IP address of the Prometheus server, then navigate
-to that address on port 9090 in order to query collected metrics and view
-their associated graphs.
+to that address on port 9090 in your web browser in order to query collected
+metrics and view their associated graphs.
 
 [Ansible]: https://docs.ansible.com/ansible/latest/index.html
 [Terraform]: https://www.terraform.io/docs

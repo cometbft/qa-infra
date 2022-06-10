@@ -1,8 +1,5 @@
 DO_INSTANCE_TAGNAME=v035-testnet
 
-tfgen:
-	./script/tfgen.sh
-
 configgen:
 	./script/configgen.sh `tail -n+2 ./ansible/hosts | head -n -2 |cut -d' ' -f1| paste -s -d, -`
 
@@ -16,6 +13,7 @@ hosts:
 	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "testnet-node" | tail -n+2   |  tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' >> ./ansible/hosts
 	echo "[prometheus]" >> ./ansible/hosts
 	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "testnet-observability" | tail -n+2 |  tr -s ' ' | cut -d' ' -f3   >> ./ansible/hosts
+
 terraform-destroy:
 	cd tf && terraform destroy -var='testnet_size=$(shell grep "\[node..*\]" ./testnet.toml -c)' -var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]' -var='instance_names=[$(shell grep '\[node..*\]' ./testnet.toml | sed -e 's/\[node\.\(.*\)]/"\1"/' | sort | paste -s -d, -)]'
 
@@ -34,4 +32,4 @@ prometheus-init:
 runload:
 	runner load --ip-list `tail -n+2 ./ansible/hosts | head -n -2 |cut -d' ' -f1| paste -s -d, -` --seed-delta $(shell echo $$RANDOM)
 
-all: tfgen configgen terraform-apply hosts ansible-install prometheus-init start-network
+all: configgen terraform-apply hosts ansible-install prometheus-init start-network

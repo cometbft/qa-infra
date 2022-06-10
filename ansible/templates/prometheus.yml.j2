@@ -6,10 +6,16 @@ scrape_configs:
 {% for host in groups['validators'] %}
   - job_name: {{ hostvars[host].name }}
 
-    # Override the global default and scrape targets from this job every 5 seconds.
     scrape_interval: 5s
 
     static_configs:
       - targets: ['{{ hostvars[host].inventory_hostname }}:26660']
+
+  - job_name: {{ hostvars[host].name }}-node-exporter
+
+    scrape_interval: 5s
+
+    static_configs:
+      - targets: ['{{ hostvars[host].inventory_hostname }}:9100']
 
 {% endfor %}

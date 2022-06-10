@@ -1,13 +1,32 @@
+TESTNET_SIZE=$(shell grep '^\[node.*\]' -c ../testnet.toml)
+INSTANCE_NAMES=$(shell grep '^\[node.*\]' ../testnet.toml | sed -e 's/^\[node\.\(.*\)]/"\1"/' | sort | paste -s -d, -)
 
-# apply the terraform plan to 
-.PHONY: terraform-apply
-terraform-apply:
-	terraform refresh
-	terraform validate
-	terraform apply
+.PHONY: init
+init:
+	terraform init
 
-.PHONY: terraform-destroy
-terraform-destroy:
-	terraform refresh
-	terraform validate
-	terraform destroy
+.PHONY: apply
+apply:
+	terraform refresh \
+		-var='testnet_size=$(TESTNET_SIZE)' \
+		-var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]' \
+		-var='instance_names=[$(INSTANCE_NAMES)]'\
+		-var='do_token=$(DO_TOKEN)' \
+		-var='ssh_keys=$(DO_SSH_KEYS)' && \
+	terraform validate && \
+	terraform apply \
+		-var='testnet_size=$(TESTNET_SIZE)' \
+		-var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]' \
+		-var='instance_names=[$(INSTANCE_NAMES)]'\
+		-var='do_token=$(DO_TOKEN)' \
+		-var='ssh_keys=$(DO_SSH_KEYS)'
+
+.PHONY: destroy
+destroy:
+	terraform destroy \
+		-var='testnet_size=$(TESTNET_SIZE)' \
+		-var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]' \
+		-var='instance_names=[$(INSTANCE_NAMES)]'\
+		-var='do_token=$(DO_TOKEN)' \
+		-var='ssh_keys=$(DO_SSH_KEYS)'
+

@@ -1,5 +1,5 @@
 - name: base
-  hosts: validators,prometheus
+  hosts: validators,prometheus,ephemeral
   gather_facts: yes
   become_method: sudo
   vars:

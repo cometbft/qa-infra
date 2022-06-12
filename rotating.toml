@@ -1,0 +1,6 @@
+[node.ephemeral00]
+mode = "full"
+persistent_peers = ["seed00"]
+[node.ephemeral01]
+mode = "full"
+persistent_peers = ["seed00"]

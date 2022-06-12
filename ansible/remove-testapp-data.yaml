@@ -1,5 +1,5 @@
 - name: remove testapp data
-  hosts: validators
+  hosts: validators,ephemeral
   become_method: sudo
   gather_facts: yes
   vars:

@@ -3,6 +3,15 @@ variable "testnet_size" {
   default = 20
 }
 
+variable "ephemeral_size" {
+  type = number
+  default = 5
+}
+
+variable "ephemeral_names" {
+	type = list(string)
+}
+
 variable "ssh_keys" {
 	type = list(string)
 }
@@ -22,6 +31,16 @@ resource "digitalocean_droplet" "testnet-node" {
   image        = "debian-11-x64"
   region       = "fra1"
   tags = concat(var.instance_tags, ["testnet-node"])
+  size = "s-4vcpu-8gb"
+  ssh_keys = var.ssh_keys
+}
+
+resource "digitalocean_droplet" "ephemeral-node" {
+  count        = var.ephemeral_size
+  name         = var.ephemeral_names[count.index]
+  image        = "debian-11-x64"
+  region       = "fra1"
+  tags = concat(var.instance_tags, ["ephemeral-node"])
   size = "s-4vcpu-8gb"
   ssh_keys = var.ssh_keys
 }

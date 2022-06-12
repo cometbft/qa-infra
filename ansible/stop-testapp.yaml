@@ -1,9 +1,9 @@
 - name: start testapp
-  hosts: validators
+  hosts: validators,ephemeral
   gather_facts: yes
  
   tasks:
-  - name: start the systemd-unit
+  - name: stop the systemd-unit
     ansible.builtin.systemd:
       name: testappd
       state: stopped

@@ -1,23 +1,26 @@
 DO_INSTANCE_TAGNAME=v035-testnet
+EPHEMERAL_SIZE=1
 
 tfgen:
 	./script/tfgen.sh
 
 configgen:
-	./script/configgen.sh `tail -n+2 ./ansible/hosts | head -n -2 |cut -d' ' -f1| paste -s -d, -`
+	./script/configgen.sh `ansible all --list-hosts -i ./ansible/hosts --limit validators |tail -n +2 | paste -s -d, - | tr -d ' '`
 
 terraform-apply:
-	cd tf && terraform refresh -var='testnet_size=$(shell grep "\[node..*\]" ./testnet.toml -c)' -var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]' -var='instance_names=[$(shell grep '\[node..*\]' ./testnet.toml | sed -e 's/\[node\.\(.*\)]/"\1"/' | sort | paste -s -d, -)]'
+	cd tf && terraform refresh -var='testnet_size=$(shell grep "\[node..*\]" ./testnet.toml -c )' -var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]' -var='instance_names=[$(shell grep '\[node..*\]' ./testnet.toml | sed -e 's/\[node\.\(.*\)]/"\1"/' | sort | paste -s -d, -)]' -var='ephemeral_size=$(EPHEMERAL_SIZE)' -var='ephemeral_names=[$(shell for i in `seq 1 5`; do printf "\"ephemeral%02d\"\n" $i; done | paste -s -d, -)]'
 	cd tf && terraform validate
-	cd tf && terraform apply -var='testnet_size=$(shell grep "\[node..*\]" ./testnet.toml -c)' -var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]' -var='instance_names=[$(shell grep '\[node..*\]' ./testnet.toml | sed -e 's/\[node\.\(.*\)]/"\1"/' | sort | paste -s -d, -)]'
+	cd tf && terraform apply -var='testnet_size=$(shell grep "\[node..*\]" ./testnet.toml -c )' -var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]' -var='instance_names=[$(shell grep '\[node..*\]' ./testnet.toml | sed -e 's/\[node\.\(.*\)]/"\1"/' | sort | paste -s -d, -)]' -var='ephemeral_size=$(EPHEMERAL_SIZE)' -var='ephemeral_names=[$(shell for i in `seq 1 5`; do printf "\"ephemeral%02d\"\n" $i; done | paste -s -d, -)]'
 
 hosts:
-	echo "[validators]" > ./ansible/hosts
+	echo "[ephemeral]" > ./ansible/hosts
+	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "ephemeral-node" | tail -n+2   |  tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' >> ./ansible/hosts
+	echo "[validators]" >> ./ansible/hosts
 	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "testnet-node" | tail -n+2   |  tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' >> ./ansible/hosts
 	echo "[prometheus]" >> ./ansible/hosts
 	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "testnet-observability" | tail -n+2 |  tr -s ' ' | cut -d' ' -f3   >> ./ansible/hosts
 terraform-destroy:
-	cd tf && terraform destroy -var='testnet_size=$(shell grep "\[node..*\]" ./testnet.toml -c)' -var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]' -var='instance_names=[$(shell grep '\[node..*\]' ./testnet.toml | sed -e 's/\[node\.\(.*\)]/"\1"/' | sort | paste -s -d, -)]'
+	cd tf && terraform destroy -var='testnet_size=$(shell grep "\[node..*\]" ./testnet.toml -c )' -var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]' -var='instance_names=[$(shell grep '\[node..*\]' ./testnet.toml | sed -e 's/\[node\.\(.*\)]/"\1"/' | sort | paste -s -d, -)]' -var='ephemeral_size=$(EPHEMERAL_SIZE)' -var='ephemeral_names=[$(shell for i in `seq 1 5`; do printf "\"ephemeral%02d\"\n" $i; done | paste -s -d, -)]'
 
 ansible-install:
 	cd ansible && ansible-playbook -i hosts -u root base.yaml -f 10
@@ -30,6 +33,9 @@ start-network:
 
 prometheus-init:
 	cd ansible && ansible-playbook -i hosts  -u root prometheus.yaml -f 10
+
+rotate:
+	./script/rotate.sh `ansible all --list-hosts -i ./ansible/hosts --limit ephemeral | tail -n +2 | paste -s -d, | tr -d ' '` `sed -n 's/\[node.\(ephemeral.*\)\]/\1/p' rotating.toml`
 
 runload:
 	runner load --ip-list `tail -n+2 ./ansible/hosts | head -n -2 |cut -d' ' -f1| paste -s -d, -` --seed-delta $(shell echo $$RANDOM)

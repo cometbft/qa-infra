@@ -1,4 +1,6 @@
 DO_INSTANCE_TAGNAME=v035-testnet
+LOAD_RUNNER_COMMIT_HASH ?= 51685158fe36869ab600527b852437ca0939d0cc
+LOAD_RUNNER_CMD=go run github.com/tendermint/tendermint/test/e2e/runner@$(LOAD_RUNNER_COMMIT_HASH)
 export DO_INSTANCE_TAGNAME
 
 .PHONY: terraform-init
@@ -38,8 +40,9 @@ start-network:
 
 .PHONY: runload
 runload:
-	# TODO(thane): What is this "runner"?
-	runner load --ip-list `tail -n+2 ./ansible/hosts | head -n -2 |cut -d' ' -f1| paste -s -d, -` --seed-delta $(shell echo $$RANDOM)
+	$(LOAD_RUNNER_CMD) load \
+		--ip-list `tail -n+2 ./ansible/hosts | head -n -2 |cut -d' ' -f1| paste -s -d, -` \
+		--seed-delta $(shell echo $$RANDOM)
 
 .PHONY: terraform-destroy
 terraform-destroy:

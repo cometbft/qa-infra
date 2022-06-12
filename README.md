@@ -24,30 +24,38 @@ doctl auth login
 #    user on the created VMs
 doctl compute ssh-key list
 
-# 3. Initialize Terraform (only needed once)
+# 3. Set up your Digital Ocean credentials as Terraform variables. Be sure to
+#    write them to ./tf/terraform.tfvars as this file is ignored in .gitignore.
+cat <<EOF > ./tf/terraform.tfvars
+do_token = "dop_v1_0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+ssh_keys = ["ab:cd:ef:01:23:45:67:89:ab:cd:ef:01:23:45:67:89"]
+EOF
+
+# 4. Initialize Terraform (only needed once)
 make terraform-init
 
-# 4. Create the VMs for the validators and Prometheus as specified in ./testnet.toml
+# 5. Create the VMs for the validators and Prometheus as specified in ./testnet.toml
 #    Be sure to use your actual DO token and SSH key fingerprints for the DO_TOKEN
 #    and DO_SSH_KEYS variables.
-DO_TOKEN=dop_v1_0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef \
-    DO_SSH_KEYS=["ab:cd:ef:01:23:45:67:89:ab:cd:ef:01:23:45:67:89"] \
-    make terraform-apply
+make terraform-apply
 
-# 5. Discover the IP addresses of the hosts for Ansible
+# 6. Discover the IP addresses of the hosts for Ansible
 make hosts
 
-# 6. Generate the testnet configuration
+# 7. Generate the testnet configuration
 make configgen
 
-# 7. Install all necessary software on the created VMs using Ansible
+# 8. Install all necessary software on the created VMs using Ansible
 make ansible-install
 
-# 8. Initialize the Prometheus instance
+# 9. Initialize the Prometheus instance
 make prometheus-init
 
-# 9. Start the test application on all of the validators
+# 10. Start the test application on all of the validators
 make start-network
+
+# 11. Execute a load test against the network
+make runload
 ```
 
 ## Metrics

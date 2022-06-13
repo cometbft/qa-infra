@@ -9,7 +9,7 @@ variable "ssh_keys" {
 
 variable "instance_tags" {
 	type = list(string)
-	default = ["v036-testnet"]
+	default = ["v035-testnet"]
 }
 
 variable "instance_names" {
@@ -17,20 +17,20 @@ variable "instance_names" {
 }
 
 resource "digitalocean_droplet" "testnet-node" {
-  count        = var.testnet_size
-  name         = var.instance_names[count.index]
-  image        = "debian-11-x64"
-  region       = "fra1"
-  tags = concat(var.instance_tags, ["testnet-node"])
-  size = "s-4vcpu-8gb"
+  count    = var.testnet_size
+  name     = var.instance_names[count.index]
+  image    = "debian-11-x64"
+  region   = "fra1"
+  tags     = concat(var.instance_tags, ["testnet-node"])
+  size     = "s-4vcpu-8gb"
   ssh_keys = var.ssh_keys
 }
 
 resource "digitalocean_droplet" "testnet-prometheus" {
-  name         = "testnet-prometheus"
-  image        = "debian-11-x64"
-  region       = "fra1"
-  tags = concat(var.instance_tags, ["testnet-observability"])
-  size = "s-4vcpu-8gb"
+  name     = "testnet-prometheus"
+  image    = "debian-11-x64"
+  region   = "fra1"
+  tags     = concat(var.instance_tags, ["testnet-observability"])
+  size     = "s-4vcpu-8gb"
   ssh_keys = var.ssh_keys
 }

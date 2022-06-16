@@ -1,0 +1,27 @@
+- name: install common dependencies
+  ansible.builtin.apt:
+    name:
+      - iptables
+      - iptables-persistent
+    state: latest
+    update_cache: yes
+    cache_valid_time: 60
+
+- name: ensure persistent iptables dir exists
+  ansible.builtin.file:
+    path: /etc/iptables
+    state: directory
+
+- name: copy base iptables rules
+  ansible.builtin.copy:
+    src: "iptables-{{ item }}"
+    dest: "/etc/iptables/{{ item }}"
+  loop:
+    - rules.v4
+    - rules.v6
+
+- name: apply base ipv4 iptables rules
+  ansible.builtin.shell: "iptables-restore /etc/iptables/rules.v4"
+
+- name: apply base ipv6 iptables rules
+  ansible.builtin.shell: "ip6tables-restore /etc/iptables/rules.v6"

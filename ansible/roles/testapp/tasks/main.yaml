@@ -1,0 +1,67 @@
+- name: deploy testapp execution scripts
+  ansible.builtin.template:
+    src: "{{ item }}.j2"
+    dest: "{{ tendermint.home_dir }}/{{ item }}"
+    owner: tendermint
+    group: tendermint
+    mode: 0775
+  loop:
+    - run-testapp.sh
+    - stop-testapp.sh
+
+- name: clone Tendermint git repo
+  become_user: tendermint
+  ansible.builtin.git:
+    repo: https://github.com/tendermint/tendermint
+    dest: "{{ tendermint.home_dir }}/src"
+    version: "{{ tendermint.version }}"
+    clone: yes
+    update: yes
+
+- name: build testapp
+  become_user: tendermint
+  ansible.builtin.shell:
+    cmd: /usr/lib/go-1.18/bin/go build -o /usr/local/bin/tendermint-testapp
+    chdir: "{{ tendermint.home_dir }}/src/test/e2e/node"
+
+- name: touch Tendermint log file
+  ansible.builtin.file:
+    path: "{{ tendermint.log_file }}"
+    state: touch
+    owner: tendermint
+    group: tendermint
+
+- name: stop testapp
+  become_user: tendermint
+  ansible.builtin.shell:
+    cmd: ./stop-testapp.sh
+    chdir: "{{ tendermint.home_dir }}"
+
+- name: wipe testapp config and data
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  loop:
+    - "{{ tendermint.home_dir }}/config"
+    - "{{ tendermint.home_dir }}/data"
+
+- name: copy testapp config
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/testnet/{{ inventory_hostname }}/"
+    dest: "{{ tendermint.home_dir }}/"
+    owner: tendermint
+    group: tendermint
+
+# We run the testapp as a background process instead of as a service
+# specifically so we can control how we kill the process in testnet
+# perturbations.
+#
+# This also enables easier log collection with Telegraf, as it can just tail
+# the JSON entries in the log file and ship them off to the monitor.
+- name: start testapp
+  become_user: tendermint
+  ansible.builtin.shell: |
+    nohup ./run-testapp.sh </dev/null >/dev/null
+  args:
+    chdir: "{{ tendermint.home_dir }}"
+

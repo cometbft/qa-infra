@@ -1,0 +1,25 @@
+---
+# This playbook must be executed as root.
+#
+# It's also critical that the monitor is deployed first before the nodes
+# because the monitor deployment generates an API token for Telegraf instances
+# on the nodes to access the InfluxDB database on the monitor.
+- hosts: monitor
+  become: no
+  vars_files:
+    - ./vars.yaml
+    - ./secrets.yaml
+  roles:
+    - common
+    - influxdb
+
+- hosts: nodes
+  become: no
+  vars_files:
+    - ./vars.yaml
+    - ./secrets.yaml
+  roles:
+    - common
+    - telegraf
+    - tendermint
+    - testapp

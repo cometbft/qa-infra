@@ -1,0 +1,6 @@
+${monitor.name} ansible_host=${monitor.ipv4_address}
+
+[nodes]
+%{ for node in nodes ~}
+${node.name} ansible_host=${node.ipv4_address}
+%{ endfor ~}

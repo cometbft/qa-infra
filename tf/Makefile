@@ -19,6 +19,7 @@ apply: terraform.tfvars
 		-var='instance_names=[$(INSTANCE_NAMES)]' && \
 	terraform validate && \
 	terraform apply \
+		-auto-approve \
 		-var='testnet_size=$(TESTNET_SIZE)' \
 		-var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]' \
 		-var='instance_names=[$(INSTANCE_NAMES)]'
@@ -26,6 +27,7 @@ apply: terraform.tfvars
 .PHONY: destroy
 destroy: terraform.tfvars
 	terraform destroy \
+		-auto-approve \
 		-var='testnet_size=$(TESTNET_SIZE)' \
 		-var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]' \
 		-var='instance_names=[$(INSTANCE_NAMES)]'

@@ -10,7 +10,7 @@ test networks on Digital Ocean (DO).
 - [Ansible CLI][Ansible]
 - Go
 
-## Instructions
+## Deployment
 
 After you have all the prerequisites installed and have configured your
 [`testnet.toml`](./testnet.toml) file appropriately:
@@ -32,30 +32,49 @@ ssh_keys = ["ab:cd:ef:01:23:45:67:89:ab:cd:ef:01:23:45:67:89"]
 EOF
 
 # 4. Initialize Terraform (only needed once)
-make terraform-init
+make init
 
-# 5. Create the VMs for the validators and Prometheus as specified in ./testnet.toml
-#    Be sure to use your actual DO token and SSH key fingerprints for the DO_TOKEN
-#    and DO_SSH_KEYS variables.
-make terraform-apply
+# 5. Create the VMs for the validators and monitoring server as specified in
+#    ./testnet.toml
+make deploy
 
-# 6. Discover the IP addresses of the hosts for Ansible
-make hosts
-
-# 7. Generate the testnet configuration
-make configgen
-
-# 8. Install all necessary software on the created VMs using Ansible
-make ansible-install
-
-# 9. Initialize the Prometheus instance
-make prometheus-init
-
-# 10. Start the test application on all of the validators
-make start-network
-
-# 11. Execute a load test against the network
+# 6. Execute a load test against the network
 make runload
+```
+
+## Data visualization
+
+Once you have deployed a testnet, there will be a "monitor" server available
+running an [InfluxDB] instance. Check the generated `ansible/hosts` file for the
+IP address of the monitor and navigate to `http://<monitor-ip>:8086` in your web
+browser to access the InfluxDB interface.
+
+The username is `admin` and the password is automatically generated during
+deployment. The password can be found in the `ansible/secrets.yaml` file (not
+committed to the repository).
+
+The UI is relatively straightforward, but if you need additional help please
+see the [InfluxDB docs][InfluxDB].
+
+## Reloading the test app
+
+In cases where you don't want to tear down the infrastructure and only want to
+reload the test app running across the network (say there are new changes on the
+`v0.35.x` branch in the Git repo):
+
+```bash
+make update-testapp
+```
+
+This will stop the test app, remove all config and data, redeploy the config,
+and restart the test app.
+
+## Teardown
+
+To destroy all Digital Ocean infrastructure:
+
+```bash
+make destroy
 ```
 
 ## Metrics
@@ -68,3 +87,4 @@ metrics and view their associated graphs.
 [Ansible]: https://docs.ansible.com/ansible/latest/index.html
 [Terraform]: https://www.terraform.io/docs
 [doctl]: https://docs.digitalocean.com/reference/doctl/how-to/install/
+[InfluxDB]: https://docs.influxdata.com/influxdb/v2.2/

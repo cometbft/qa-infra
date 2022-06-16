@@ -1,0 +1,21 @@
+influxdb:
+  version: "2.2.0"
+  checksum: dccc6cbf8af734407488d9b91c71b72f49c8cf4da2746e891be09b16f9b510d6
+  port: "8086"
+influxdb_cli:
+  version: "2.3.0"
+  checksum: d88f9dd7707a4d1e1ecf6d04d9102626a7c72262dcf1ea28e5e795c2c01615aa
+telegraf:
+  version: "1.23.0"
+  checksum: f00854dfaab40ecdda05eeab841cab77aff8242601b80310d46a97887c998c39
+tendermint:
+  # The Git branch/tag/commit hash of the Tendermint repo from which the E2E
+  # test app will be built.
+  version: "v0.35.x"
+  # This must match what has already been configured in the Tendermint nodes'
+  # config files. Changing this value will only affect the port that Telegraf
+  # polls for Prometheus metrics.
+  prometheus_port: "26660"
+  home_dir: /tendermint
+  log_file: /var/log/tendermint.log
+  pid_file: /tendermint/testapp.pid

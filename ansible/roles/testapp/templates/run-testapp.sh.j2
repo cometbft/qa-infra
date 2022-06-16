@@ -1,0 +1,7 @@
+#!/bin/bash
+set -euo pipefail
+
+export TMHOME="{{ tendermint.home_dir }}"
+tendermint-testapp {{ tendermint.home_dir }}/config/app.toml > {{ tendermint.log_file }} 2>&1 &
+echo "$!" > {{ tendermint.pid_file }}
+

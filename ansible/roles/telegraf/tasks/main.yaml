@@ -1,0 +1,26 @@
+- name: load Telegraf token
+  include_vars:
+    file: ../vars/secret.yaml
+    name: telegraf_secret
+
+- name: fetch Telegraf .deb package
+  ansible.builtin.get_url:
+    url: "https://dl.influxdata.com/telegraf/releases/telegraf_{{ telegraf.version }}-1_amd64.deb"
+    checksum: "sha256:{{ telegraf.checksum }}"
+    dest: /tmp/telegraf.deb
+
+- name: install Telegraf
+  ansible.builtin.apt:
+    deb: /tmp/telegraf.deb
+
+- name: deploy Telegraf config
+  ansible.builtin.template:
+    src: telegraf.conf.j2
+    dest: /etc/telegraf/telegraf.conf
+
+- name: enable and start Telegraf
+  ansible.builtin.service:
+    name: telegraf
+    enabled: true
+    state: restarted
+

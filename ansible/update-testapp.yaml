@@ -1,25 +1,7 @@
-- name: update testapp
-  hosts: validators
-  become_method: sudo
-  gather_facts: yes
-  vars:
-    version_tag: v0.35.x
-    tm_home: /root/.testapp/
- 
-  tasks:
-    - name: clone tendermint repo
-      ansible.builtin.git:
-        repo: https://github.com/tendermint/tendermint
-        dest: "{{ ansible_user_dir }}/tendermint"
-        version: "{{ version_tag }}"
-    - name: rebuild testapp
-      shell: "cd tendermint/test/e2e/node && /usr/lib/go-1.17/bin/go install"
-    - name: update unit file 
-      template:
-        src: templates/testappd.service.j2
-        dest: /lib/systemd/system/testappd.service
-      become: yes
-    - name: reload systemd daemon
-      ansible.builtin.systemd:
-        daemon_reload: yes
-      become: yes
+---
+- hosts: nodes
+  become: no
+  vars_files:
+    - ./vars.yaml
+  roles:
+    - testapp

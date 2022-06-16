@@ -1,0 +1,89 @@
+- name: ensure jq and curl are present
+  ansible.builtin.apt:
+    name:
+      - jq
+      - curl
+    state: latest
+    update_cache: yes
+    cache_valid_time: 60
+
+- name: enable WAN access to InfluxDB
+  ansible.builtin.iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_port: "{{ influxdb.port }}"
+    jump: ACCEPT
+    action: insert
+    rule_num: 6
+
+- name: fetch InfluxDB .deb package
+  ansible.builtin.get_url:
+    url: "https://dl.influxdata.com/influxdb/releases/influxdb2-{{ influxdb.version }}-amd64.deb"
+    checksum: "sha256:{{ influxdb.checksum }}"
+    dest: /tmp/influxdb.deb
+
+- name: fetch InfluxDB cli .deb package
+  ansible.builtin.get_url:
+    url: "https://dl.influxdata.com/influxdb/releases/influxdb2-client-{{ influxdb_cli.version }}-amd64.deb"
+    checksum: "sha256:{{ influxdb_cli.checksum }}"
+    dest: /tmp/influxdb-cli.deb
+
+- name: install InfluxDB
+  ansible.builtin.apt:
+    deb: /tmp/influxdb.deb
+
+- name: copy InfluxDB config
+  ansible.builtin.copy:
+    src: config.toml
+    dest: /etc/influxdb/config.toml
+    owner: root
+    group: root
+
+- name: install InfluxDB CLI
+  ansible.builtin.apt:
+    deb: /tmp/influxdb-cli.deb
+
+- name: enable and start InfluxDB
+  ansible.builtin.systemd:
+    name: influxdb
+    daemon_reload: true
+    enabled: true
+    state: restarted
+
+- name: perform InfluxDB initial setup
+  ansible.builtin.shell: |
+    influx setup \
+      -u admin \
+      -p "{{ generated_secrets.influxdb_admin_password }}" \
+      -o tendermint \
+      -b tendermint \
+      -r 0 \
+      -f
+  args:
+    creates: /root/.influxdbv2/configs
+
+# TODO(thane): Restrict telegraf user access when we know which specific
+#              permissions it needs.
+- name: create Telegraf user and login for InfluxDB
+  ansible.builtin.shell: |
+    influx user create \
+      -n telegraf \
+      -p "{{ generated_secrets.influxdb_telegraf_password }}" \
+      -o tendermint
+    influx auth create \
+      -u telegraf \
+      -o tendermint \
+      --all-access
+    export TELEGRAF_TOKEN=$(influx auth ls --json | jq -r '.[] | select(.userName == "telegraf") | .token')
+    echo "influxdb_token: ${TELEGRAF_TOKEN}" > /root/telegraf-secret.yaml
+  args:
+    creates: /root/telegraf-secret.yaml
+
+- name: fetch InfluxDB telegraf token to distribute to nodes
+  ansible.builtin.fetch:
+    src: /root/telegraf-secret.yaml
+    dest: "{{ playbook_dir }}/roles/telegraf/vars/secret.yaml"
+    flat: true
+
+# TODO(thane): Enable TLS support for longer-running testnets
+# See https://docs.influxdata.com/influxdb/v2.2/security/enable-tls/

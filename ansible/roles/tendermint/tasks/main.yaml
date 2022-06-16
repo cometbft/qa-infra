@@ -1,0 +1,41 @@
+- name: install Tendermint prerequisites
+  ansible.builtin.apt:
+    name:
+      - git
+      - gcc
+      - golang-1.18-go
+    state: latest
+    update_cache: yes
+    cache_valid_time: 60
+
+- name: create tendermint group
+  ansible.builtin.group:
+    name: tendermint
+    state: present
+
+- name: create tendermint user
+  ansible.builtin.user:
+    name: tendermint
+    group: tendermint
+    home: "{{ tendermint.home_dir }}"
+    create_home: true
+    shell: /usr/bin/bash
+    state: present
+
+- name: ensure tendermint config dir exists
+  ansible.builtin.file:
+    path: "{{ tendermint.home_dir }}/config"
+    state: directory
+    owner: tendermint
+    group: tendermint
+
+- name: allow TCP port access to SSH, P2P and RPC
+  ansible.builtin.iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_ports:
+      - "26656"
+      - "26657"
+    action: insert
+    rule_num: 6
+    jump: ACCEPT

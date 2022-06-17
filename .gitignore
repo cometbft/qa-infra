@@ -6,4 +6,4 @@
 /ansible/hosts
 # These files are auto-generated during deployment
 /ansible/secrets.yaml
-/ansible/roles/telegraf/vars/secrets.yaml
+/ansible/roles/telegraf/vars/secret.yaml

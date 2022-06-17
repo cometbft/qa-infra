@@ -22,13 +22,6 @@
     shell: /usr/bin/bash
     state: present
 
-- name: ensure tendermint config dir exists
-  ansible.builtin.file:
-    path: "{{ tendermint.home_dir }}/config"
-    state: directory
-    owner: tendermint
-    group: tendermint
-
 - name: allow TCP port access to SSH, P2P and RPC
   ansible.builtin.iptables:
     chain: INPUT

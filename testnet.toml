@@ -7,53 +7,53 @@ persistent_peers = ["seed01"]
 [node.validator02]
 use_legacy_p2p = true
 persistent_peers = ["seed01"]
-#[node.validator03]
-#use_legacy_p2p = true
-#persistent_peers = ["seed01"]
-#[node.validator04]
-#use_legacy_p2p = true
-#persistent_peers = ["seed01"]
-#[node.validator05]
-#use_legacy_p2p = true
-#persistent_peers = ["seed01"]
-#[node.validator06]
-#use_legacy_p2p = true
-#persistent_peers = ["seed01"]
-#[node.validator07]
-#use_legacy_p2p = true
-#persistent_peers = ["seed01"]
-#[node.validator08]
-#use_legacy_p2p = true
-#persistent_peers = ["seed01"]
-#[node.validator09]
-#use_legacy_p2p = true
-#persistent_peers = ["seed01"]
-#[node.validator10]
-#use_legacy_p2p = true
-#persistent_peers = ["seed01"]
-#[node.validator11]
-#use_legacy_p2p = true
-#persistent_peers = ["seed01"]
-#[node.validator12]
-#use_legacy_p2p = true
-#persistent_peers = ["seed01"]
-#[node.validator13]
-#use_legacy_p2p = true
-#persistent_peers = ["seed01"]
-#[node.validator14]
-#use_legacy_p2p = true
-#persistent_peers = ["seed01"]
-#[node.validator15]
-#use_legacy_p2p = true
-#persistent_peers = ["seed01"]
-#[node.validator16]
-#use_legacy_p2p = true
-#persistent_peers = ["seed01"]
-#[node.validator17]
-#use_legacy_p2p = true
-#persistent_peers = ["seed01"]
-#[node.validator18]
-#use_legacy_p2p = true
-#persistent_peers = ["seed01"]
+[node.validator03]
+use_legacy_p2p = true
+persistent_peers = ["seed01"]
+[node.validator04]
+use_legacy_p2p = true
+persistent_peers = ["seed01"]
+[node.validator05]
+use_legacy_p2p = true
+persistent_peers = ["seed01"]
+[node.validator06]
+use_legacy_p2p = true
+persistent_peers = ["seed01"]
+[node.validator07]
+use_legacy_p2p = true
+persistent_peers = ["seed01"]
+[node.validator08]
+use_legacy_p2p = true
+persistent_peers = ["seed01"]
+[node.validator09]
+use_legacy_p2p = true
+persistent_peers = ["seed01"]
+[node.validator10]
+use_legacy_p2p = true
+persistent_peers = ["seed01"]
+[node.validator11]
+use_legacy_p2p = true
+persistent_peers = ["seed01"]
+[node.validator12]
+use_legacy_p2p = true
+persistent_peers = ["seed01"]
+[node.validator13]
+use_legacy_p2p = true
+persistent_peers = ["seed01"]
+[node.validator14]
+use_legacy_p2p = true
+persistent_peers = ["seed01"]
+[node.validator15]
+use_legacy_p2p = true
+persistent_peers = ["seed01"]
+[node.validator16]
+use_legacy_p2p = true
+persistent_peers = ["seed01"]
+[node.validator17]
+use_legacy_p2p = true
+persistent_peers = ["seed01"]
+[node.validator18]
+use_legacy_p2p = true
+persistent_peers = ["seed01"]
 [node.seed01]
 use_legacy_p2p = true

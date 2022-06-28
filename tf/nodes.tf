@@ -31,6 +31,6 @@ resource "digitalocean_droplet" "testnet-prometheus" {
   image    = "debian-11-x64"
   region   = "fra1"
   tags     = concat(var.instance_tags, ["testnet-observability"])
-  size     = "s-4vcpu-8gb"
+  size     = "s-2vcpu-4gb"
   ssh_keys = var.ssh_keys
 }

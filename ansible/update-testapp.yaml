@@ -12,6 +12,7 @@
         repo: https://github.com/tendermint/tendermint
         dest: "{{ ansible_user_dir }}/tendermint"
         version: "{{ version_tag }}"
+        force: yes
     - name: rebuild testapp
       shell: "cd tendermint/test/e2e/node && /usr/lib/go-1.17/bin/go install"
     - name: update unit file 
@@ -21,5 +22,7 @@
       become: yes
     - name: reload systemd daemon
       ansible.builtin.systemd:
+        name: testappd
+        state: restarted 
         daemon_reload: yes
       become: yes

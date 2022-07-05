@@ -25,23 +25,23 @@ configgen:
 .PHONY: ansible-install
 ansible-install:
 	cd ansible && \
-		ansible-playbook -i hosts -u root base.yaml -f 10 && \
-		ansible-playbook -i hosts -u root prometheus-node-exporter.yaml -f 10 && \
-		ansible-playbook -i hosts -u root init-testapp.yaml -f 10 && \
-		ansible-playbook -i hosts -u root update-testapp.yaml -f 10
+		ansible-playbook -i hosts -u root base.yaml -f 30 --limit && \
+		ansible-playbook -i hosts -u root prometheus-node-exporter.yaml -f 30 --limit && \
+		ansible-playbook -i hosts -u root init-testapp.yaml -f 30 --limit && \
+		ansible-playbook -i hosts -u root update-testapp.yaml -f 30 --limit
 
 .PHONY: prometheus-init
 prometheus-init:
-	cd ansible && ansible-playbook -i hosts  -u root prometheus.yaml -f 10
+	cd ansible && ansible-playbook -i hosts  -u root prometheus.yaml -f 30
 
 .PHONY: start-network
 start-network:
-	cd ansible && ansible-playbook -i hosts -u root start-testapp.yaml -f 10
+	cd ansible && ansible-playbook -i hosts -u root start-testapp.yaml -f 30
 
 .PHONY: runload
 runload:
 	$(LOAD_RUNNER_CMD) load \
-		--ip-list `tail -n+2 ./ansible/hosts | head -n -2 |cut -d' ' -f1| paste -s -d, -` \
+		--ip-list `ansible all --list-hosts -i ./ansible/hosts --limit validators |tail -n +2 | paste -s -d, - | tr -d ' '` \
 		--seed-delta $(shell echo $$RANDOM)
 
 .PHONY: terraform-destroy

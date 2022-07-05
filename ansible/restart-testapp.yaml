@@ -1,4 +1,4 @@
-- name: update testapp
+- name: restart testapp
   hosts: validators
   become_method: sudo
   gather_facts: yes

@@ -1,0 +1,11 @@
+[Unit]
+Description=Runload
+
+[Service]
+Restart=on-failure
+User={{ ansible_user_id }}
+RestartSec=3
+ExecStart=/usr/bin/runload.sh
+
+[Install]
+WantedBy=multi-user.target

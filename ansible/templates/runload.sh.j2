@@ -1,0 +1,4 @@
+#!/bin/bash
+/usr/lib/go-1.17/bin/go run github.com/tendermint/tendermint/test/e2e/runner@51685158fe36869ab600527b852437ca0939d0cc load \
+                --ip-list 127.0.0.1 \
+                --seed-delta `echo $RANDOM`

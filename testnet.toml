@@ -39,15 +39,15 @@ persistent_peers = ["seed00"]
 [node.validator19]
 persistent_peers = ["seed00"]
 [node.validator20]
-persistent_peers = ["seed00"]
+persistent_peers = ["seed01"]
 [node.validator21]
-persistent_peers = ["seed00"]
+persistent_peers = ["seed01"]
 [node.validator22]
-persistent_peers = ["seed00"]
+persistent_peers = ["seed01"]
 [node.validator23]
-persistent_peers = ["seed00"]
+persistent_peers = ["seed01"]
 [node.validator24]
-persistent_peers = ["seed00"]
+persistent_peers = ["seed01"]
 [node.validator25]
 persistent_peers = ["seed01"]
 [node.validator26]
@@ -77,27 +77,27 @@ persistent_peers = ["seed01"]
 [node.validator38]
 persistent_peers = ["seed01"]
 [node.validator39]
-persistent_peers = ["seed01"]
+persistent_peers = ["seed02"]
 [node.validator40]
-persistent_peers = ["seed01"]
+persistent_peers = ["seed02"]
 [node.validator41]
-persistent_peers = ["seed01"]
+persistent_peers = ["seed02"]
 [node.validator42]
-persistent_peers = ["seed01"]
+persistent_peers = ["seed02"]
 [node.validator43]
-persistent_peers = ["seed01"]
+persistent_peers = ["seed02"]
 [node.validator44]
-persistent_peers = ["seed01"]
+persistent_peers = ["seed02"]
 [node.validator45]
-persistent_peers = ["seed01"]
+persistent_peers = ["seed02"]
 [node.validator46]
-persistent_peers = ["seed01"]
+persistent_peers = ["seed02"]
 [node.validator47]
-persistent_peers = ["seed01"]
+persistent_peers = ["seed02"]
 [node.validator48]
-persistent_peers = ["seed01"]
+persistent_peers = ["seed02"]
 [node.validator49]
-persistent_peers = ["seed01"]
+persistent_peers = ["seed02"]
 [node.validator50]
 persistent_peers = ["seed02"]
 [node.validator51]
@@ -119,35 +119,35 @@ persistent_peers = ["seed02"]
 [node.validator59]
 persistent_peers = ["seed02"]
 [node.validator60]
-persistent_peers = ["seed02"]
+persistent_peers = ["seed03"]
 [node.validator61]
-persistent_peers = ["seed02"]
+persistent_peers = ["seed03"]
 [node.validator62]
-persistent_peers = ["seed02"]
+persistent_peers = ["seed03"]
 [node.validator63]
-persistent_peers = ["seed02"]
+persistent_peers = ["seed03"]
 [node.validator64]
-persistent_peers = ["seed02"]
+persistent_peers = ["seed03"]
 [node.validator65]
-persistent_peers = ["seed02"]
+persistent_peers = ["seed03"]
 [node.validator66]
-persistent_peers = ["seed02"]
+persistent_peers = ["seed03"]
 [node.validator67]
-persistent_peers = ["seed02"]
+persistent_peers = ["seed03"]
 [node.validator68]
-persistent_peers = ["seed02"]
+persistent_peers = ["seed03"]
 [node.validator69]
-persistent_peers = ["seed02"]
+persistent_peers = ["seed03"]
 [node.validator70]
-persistent_peers = ["seed02"]
+persistent_peers = ["seed03"]
 [node.validator71]
-persistent_peers = ["seed02"]
+persistent_peers = ["seed03"]
 [node.validator72]
-persistent_peers = ["seed02"]
+persistent_peers = ["seed03"]
 [node.validator73]
-persistent_peers = ["seed02"]
+persistent_peers = ["seed03"]
 [node.validator74]
-persistent_peers = ["seed02"]
+persistent_peers = ["seed03"]
 [node.validator75]
 persistent_peers = ["seed03"]
 [node.validator76]
@@ -159,45 +159,45 @@ persistent_peers = ["seed03"]
 [node.validator79]
 persistent_peers = ["seed03"]
 [node.validator80]
-persistent_peers = ["seed03"]
+persistent_peers = ["seed04"]
 [node.validator81]
-persistent_peers = ["seed03"]
+persistent_peers = ["seed04"]
 [node.validator82]
-persistent_peers = ["seed03"]
+persistent_peers = ["seed04"]
 [node.validator83]
-persistent_peers = ["seed03"]
+persistent_peers = ["seed04"]
 [node.validator84]
-persistent_peers = ["seed03"]
+persistent_peers = ["seed04"]
 [node.validator85]
-persistent_peers = ["seed03"]
+persistent_peers = ["seed04"]
 [node.validator86]
-persistent_peers = ["seed03"]
+persistent_peers = ["seed04"]
 [node.validator87]
-persistent_peers = ["seed03"]
+persistent_peers = ["seed04"]
 [node.validator88]
-persistent_peers = ["seed03"]
+persistent_peers = ["seed04"]
 [node.validator89]
-persistent_peers = ["seed03"]
+persistent_peers = ["seed04"]
 [node.validator90]
-persistent_peers = ["seed03"]
+persistent_peers = ["seed04"]
 [node.validator91]
-persistent_peers = ["seed03"]
+persistent_peers = ["seed04"]
 [node.validator92]
-persistent_peers = ["seed03"]
+persistent_peers = ["seed04"]
 [node.validator93]
-persistent_peers = ["seed03"]
+persistent_peers = ["seed04"]
 [node.validator94]
-persistent_peers = ["seed03"]
+persistent_peers = ["seed04"]
 [node.validator95]
-persistent_peers = ["seed03"]
+persistent_peers = ["seed04"]
 [node.validator96]
-persistent_peers = ["seed03"]
+persistent_peers = ["seed04"]
 [node.validator97]
-persistent_peers = ["seed03"]
+persistent_peers = ["seed04"]
 [node.validator98]
-persistent_peers = ["seed03"]
+persistent_peers = ["seed04"]
 [node.validator99]
-persistent_peers = ["seed03"]
+persistent_peers = ["seed04"]
 
 [node.full00]
 mode = "full"
@@ -216,49 +216,274 @@ mode = "full"
 persistent_peers = ["seed00"]
 [node.full05]
 mode = "full"
-persistent_peers = ["seed01"]
+persistent_peers = ["seed00"]
 [node.full06]
 mode = "full"
-persistent_peers = ["seed01"]
+persistent_peers = ["seed00"]
 [node.full07]
 mode = "full"
-persistent_peers = ["seed01"]
+persistent_peers = ["seed00"]
 [node.full08]
 mode = "full"
-persistent_peers = ["seed01"]
+persistent_peers = ["seed00"]
 [node.full09]
 mode = "full"
-persistent_peers = ["seed01"]
+persistent_peers = ["seed00"]
 [node.full10]
 mode = "full"
-persistent_peers = ["seed02"]
+persistent_peers = ["seed00"]
 [node.full11]
 mode = "full"
-persistent_peers = ["seed02"]
+persistent_peers = ["seed00"]
 [node.full12]
 mode = "full"
-persistent_peers = ["seed02"]
+persistent_peers = ["seed00"]
 [node.full13]
 mode = "full"
-persistent_peers = ["seed02"]
+persistent_peers = ["seed00"]
 [node.full14]
 mode = "full"
-persistent_peers = ["seed02"]
+persistent_peers = ["seed00"]
 [node.full15]
 mode = "full"
-persistent_peers = ["seed03"]
+persistent_peers = ["seed00"]
 [node.full16]
 mode = "full"
-persistent_peers = ["seed03"]
+persistent_peers = ["seed01"]
 [node.full17]
 mode = "full"
-persistent_peers = ["seed03"]
+persistent_peers = ["seed01"]
 [node.full18]
 mode = "full"
-persistent_peers = ["seed03"]
+persistent_peers = ["seed01"]
 [node.full19]
 mode = "full"
+persistent_peers = ["seed01"]
+[node.full20]
+mode = "full"
+persistent_peers = ["seed01"]
+[node.full21]
+mode = "full"
+persistent_peers = ["seed01"]
+[node.full22]
+mode = "full"
+persistent_peers = ["seed01"]
+[node.full23]
+mode = "full"
+persistent_peers = ["seed01"]
+[node.full24]
+mode = "full"
+persistent_peers = ["seed01"]
+[node.full25]
+mode = "full"
+persistent_peers = ["seed01"]
+[node.full26]
+mode = "full"
+persistent_peers = ["seed01"]
+[node.full27]
+mode = "full"
+persistent_peers = ["seed01"]
+[node.full28]
+mode = "full"
+persistent_peers = ["seed01"]
+[node.full29]
+mode = "full"
+persistent_peers = ["seed01"]
+[node.full30]
+mode = "full"
+persistent_peers = ["seed01"]
+[node.full31]
+mode = "full"
+persistent_peers = ["seed01"]
+[node.full32]
+mode = "full"
+persistent_peers = ["seed01"]
+[node.full33]
+mode = "full"
+persistent_peers = ["seed01"]
+[node.full34]
+mode = "full"
+persistent_peers = ["seed01"]
+[node.full35]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full36]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full37]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full38]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full39]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full40]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full41]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full42]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full43]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full44]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full45]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full46]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full47]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full48]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full49]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full50]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full51]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full52]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full53]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full54]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full55]
+mode = "full"
+persistent_peers = ["seed02"]
+[node.full56]
+mode = "full"
 persistent_peers = ["seed03"]
+[node.full57]
+mode = "full"
+persistent_peers = ["seed03"]
+[node.full58]
+mode = "full"
+persistent_peers = ["seed03"]
+[node.full59]
+mode = "full"
+persistent_peers = ["seed03"]
+[node.full60]
+mode = "full"
+persistent_peers = ["seed03"]
+[node.full61]
+mode = "full"
+persistent_peers = ["seed03"]
+[node.full62]
+mode = "full"
+persistent_peers = ["seed03"]
+[node.full63]
+mode = "full"
+persistent_peers = ["seed03"]
+[node.full64]
+mode = "full"
+persistent_peers = ["seed03"]
+[node.full65]
+mode = "full"
+persistent_peers = ["seed03"]
+[node.full66]
+mode = "full"
+persistent_peers = ["seed03"]
+[node.full67]
+mode = "full"
+persistent_peers = ["seed03"]
+[node.full68]
+mode = "full"
+persistent_peers = ["seed03"]
+[node.full69]
+mode = "full"
+persistent_peers = ["seed03"]
+[node.full70]
+mode = "full"
+persistent_peers = ["seed03"]
+[node.full71]
+mode = "full"
+persistent_peers = ["seed03"]
+[node.full72]
+mode = "full"
+persistent_peers = ["seed03"]
+[node.full73]
+mode = "full"
+persistent_peers = ["seed03"]
+[node.full74]
+mode = "full"
+persistent_peers = ["seed03"]
+[node.full75]
+mode = "full"
+persistent_peers = ["seed04"]
+[node.full76]
+mode = "full"
+persistent_peers = ["seed04"]
+[node.full77]
+mode = "full"
+persistent_peers = ["seed04"]
+[node.full78]
+mode = "full"
+persistent_peers = ["seed04"]
+[node.full79]
+mode = "full"
+persistent_peers = ["seed04"]
+[node.full80]
+mode = "full"
+persistent_peers = ["seed04"]
+[node.full81]
+mode = "full"
+persistent_peers = ["seed04"]
+[node.full82]
+mode = "full"
+persistent_peers = ["seed04"]
+[node.full83]
+mode = "full"
+persistent_peers = ["seed04"]
+[node.full84]
+mode = "full"
+persistent_peers = ["seed04"]
+[node.full85]
+mode = "full"
+persistent_peers = ["seed04"]
+[node.full86]
+mode = "full"
+persistent_peers = ["seed04"]
+[node.full87]
+mode = "full"
+persistent_peers = ["seed04"]
+[node.full88]
+mode = "full"
+persistent_peers = ["seed04"]
+[node.full89]
+mode = "full"
+persistent_peers = ["seed04"]
+[node.full90]
+mode = "full"
+persistent_peers = ["seed04"]
+[node.full91]
+mode = "full"
+persistent_peers = ["seed04"]
+[node.full92]
+mode = "full"
+persistent_peers = ["seed04"]
+[node.full93]
+mode = "full"
+persistent_peers = ["seed04"]
+[node.full94]
+mode = "full"
+persistent_peers = ["seed04"]
 
 [node.seed00]
 mode = "seed"
@@ -267,4 +492,6 @@ mode = "seed"
 [node.seed02]
 mode = "seed"
 [node.seed03]
+mode = "seed"
+[node.seed04]
 mode = "seed"

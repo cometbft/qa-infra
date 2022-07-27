@@ -20,23 +20,25 @@ hosts:
 
 .PHONY: configgen
 configgen:
-	./script/configgen.sh `tail -n+2 ./ansible/hosts | head -n -2 |cut -d' ' -f1| paste -s -d, -`
+	./script/configgen.sh `tail -n+2 ./ansible/hosts | head -n -2 |cut -d' ' -f1| paste -s -d, -` \
+		`grep seed ./ansible/hosts | cut -d' ' -f1| paste -s -d, -`
 
 .PHONY: ansible-install
 ansible-install:
 	cd ansible && \
-		ansible-playbook -i hosts -u root base.yaml -f 30 --limit && \
-		ansible-playbook -i hosts -u root prometheus-node-exporter.yaml -f 30 --limit && \
-		ansible-playbook -i hosts -u root init-testapp.yaml -f 30 --limit && \
-		ansible-playbook -i hosts -u root update-testapp.yaml -f 30 --limit
+		ansible-playbook -i hosts -u root base.yaml -f 200 && \
+		ansible-playbook -i hosts -u root prometheus-node-exporter.yaml -f 200  && \
+		ansible-playbook -i hosts -u root init-testapp.yaml -f 200 && \
+		ansible-playbook -i hosts -u root update-testapp.yaml -e -f 200
 
 .PHONY: prometheus-init
 prometheus-init:
-	cd ansible && ansible-playbook -i hosts  -u root prometheus.yaml -f 30
+	cd ansible && ansible-playbook -i hosts  -u root prometheus.yaml
 
 .PHONY: start-network
 start-network:
-	cd ansible && ansible-playbook -i hosts -u root start-testapp.yaml -f 30
+	cd ansible && ansible-playbook -i hosts -u root start-testapp.yaml -f 200 --limit `grep seed ./hosts | cut -d' ' -f1| paste -s -d, -`
+	cd ansible && ansible-playbook -i hosts -u root start-testapp.yaml -f 200
 
 .PHONY: runload
 runload:

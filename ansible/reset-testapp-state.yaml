@@ -3,6 +3,7 @@
   become_method: sudo
   gather_facts: yes
   vars:
+    ansible_host_key_checking: false
     tm_home: /root/.testapp/
  
   tasks:
@@ -20,4 +21,13 @@
       ansible.builtin.file:
         path: "{{ ansible_user_dir }}/data"
         state: absent
+      become: yes
+    - name: copy configuration files
+      ansible.builtin.copy:
+        src: ./testnet/{{ hostvars[inventory_hostname].name }}/
+        dest: "{{ tm_home }}/"
+    - name: start app
+      ansible.builtin.systemd:
+        name: testappd
+        state: started
       become: yes

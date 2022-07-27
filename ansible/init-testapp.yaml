@@ -8,6 +8,11 @@
     ansible_host_key_checking: false
  
   tasks:
+    - name: restart journal
+      ansible.builtin.systemd:
+        name: systemd-journald
+        state: restarted
+      become: yes
     - name: copy configuration files
       ansible.builtin.copy:
         src: ./testnet/{{ hostvars[inventory_hostname].name }}/

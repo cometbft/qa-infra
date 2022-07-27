@@ -2,6 +2,8 @@
   hosts: validators
   become_method: sudo
   gather_facts: yes
+  vars:
+    ansible_host_key_checking: false
  
   tasks:
     - name: restart app

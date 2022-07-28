@@ -29,7 +29,7 @@ ansible-install:
 		ansible-playbook -i hosts -u root base.yaml -f 200 && \
 		ansible-playbook -i hosts -u root prometheus-node-exporter.yaml -f 200  && \
 		ansible-playbook -i hosts -u root init-testapp.yaml -f 200 && \
-		ansible-playbook -i hosts -u root update-testapp.yaml -e -f 200
+		ansible-playbook -i hosts -u root update-testapp.yaml -f 200
 
 .PHONY: prometheus-init
 prometheus-init:

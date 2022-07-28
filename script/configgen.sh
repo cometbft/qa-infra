@@ -14,8 +14,8 @@ done 3< <(echo $OLD_IPS | tr ' ' '\n') 4< <(echo $NEW_IPS | tr , '\n' )
 for fname in `find . -path './testnet/*' -type f -name config.toml`; do
 	sed -i 's/max-connections =.*/max-connections = 200/g' $fname
 	sed -i 's/max-outgoing-connections =.*/max-outgoing-connections = 35/g' $fname
+	sed -i "s/queue-type =.*/queue-type = \"simple-priority\"/g" $fname
 done
-
 
 seedsSlashSeparated=`echo $SEED_IPS | sed 's/,/\\\|/g'`
 for fname in `find . -path './testnet/seed*' -type f -name config.toml`; do
@@ -27,7 +27,6 @@ for fname in `find . -path './testnet/seed*' -type f -name config.toml`; do
 	echo $result
 	sed -i "s/persistent-peers = .*/persistent-peers = \"$result\"/g" $fname
 done
-
 
 rm -rf ./ansible/testnet
 mv ./testnet ./ansible

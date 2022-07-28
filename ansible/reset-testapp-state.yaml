@@ -5,7 +5,7 @@
   vars:
     ansible_host_key_checking: false
     tm_home: /root/.testapp/
- 
+
   tasks:
     - name: stop app
       ansible.builtin.systemd:

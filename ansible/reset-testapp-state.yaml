@@ -26,8 +26,3 @@
       ansible.builtin.copy:
         src: ./testnet/{{ hostvars[inventory_hostname].name }}/
         dest: "{{ tm_home }}/"
-    - name: start app
-      ansible.builtin.systemd:
-        name: testappd
-        state: started
-      become: yes

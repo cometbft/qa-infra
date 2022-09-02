@@ -4,7 +4,7 @@
   gather_facts: yes
   vars:
     ansible_host_key_checking: false
-    version_tag: v0.35.x
+    version_tag: wb/lock-debug
     tm_home: /root/.testapp/
  
   tasks:

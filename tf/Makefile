@@ -13,11 +13,6 @@ endif
 
 .PHONY: apply
 apply: terraform.tfvars
-	terraform refresh \
-		-var='testnet_size=$(TESTNET_SIZE)' \
-		-var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]' \
-		-var='instance_names=[$(INSTANCE_NAMES)]' && \
-	terraform validate && \
 	terraform apply \
 		-var='testnet_size=$(TESTNET_SIZE)' \
 		-var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]' \

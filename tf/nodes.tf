@@ -22,7 +22,7 @@ resource "digitalocean_droplet" "testnet-node" {
   image    = "debian-11-x64"
   region   = "fra1"
   tags     = concat(var.instance_tags, ["testnet-node"])
-  size     = "s-2vcpu-4gb"
+  size     = "s-4vcpu-8gb"
   ssh_keys = var.ssh_keys
 }
 
@@ -31,6 +31,6 @@ resource "digitalocean_droplet" "testnet-prometheus" {
   image    = "debian-11-x64"
   region   = "fra1"
   tags     = concat(var.instance_tags, ["testnet-observability"])
-  size     = "s-2vcpu-4gb"
+  size     = "s-8vcpu-16gb"
   ssh_keys = var.ssh_keys
 }

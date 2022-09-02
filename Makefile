@@ -27,7 +27,7 @@ configgen:
 ansible-install:
 	cd ansible && \
 		ansible-playbook -i hosts -u root base.yaml -f 200 && \
-		ansible-playbook -i hosts -u root prometheus-node-exporter.yaml -f 200  && \
+		ansible-playbook -i hosts -u root prometheus-node-exporter.yaml -f 200 && \
 		ansible-playbook -i hosts -u root init-testapp.yaml -f 200 && \
 		ansible-playbook -i hosts -u root update-testapp.yaml -f 200
 
@@ -37,7 +37,7 @@ prometheus-init:
 
 .PHONY: start-network
 start-network:
-	cd ansible && ansible-playbook -i hosts -u root start-testapp.yaml -f 200 --limit `grep seed ./hosts | cut -d' ' -f1| paste -s -d, -`
+	cd ansible && ansible-playbook -i hosts -u root start-testapp.yaml --limit `grep seed ./hosts | cut -d' ' -f1| paste -s -d, -`
 	cd ansible && ansible-playbook -i hosts -u root start-testapp.yaml -f 200
 
 .PHONY: runload

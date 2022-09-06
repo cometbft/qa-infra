@@ -1,4 +1,7 @@
-DO_INSTANCE_TAGNAME ?= v035-testnet
+ifndef DO_INSTANCE_TAGNAME
+	$(error DO_INSTANCE_TAGNAME is not set)
+endif
+
 TESTNET_SIZE=$(shell grep '^\[node.*\]' -c ../testnet.toml)
 INSTANCE_NAMES=$(shell grep '^\[node.*\]' ../testnet.toml | sed -e 's/^\[node\.\(.*\)]/"\1"/' | sort | paste -s -d, -)
 

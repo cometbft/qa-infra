@@ -3,7 +3,6 @@
   become_method: sudo
   gather_facts: yes
   vars:
-    version_tag: v0.35.x
     tm_home: /root/.testapp/
  
   tasks:

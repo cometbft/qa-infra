@@ -18,7 +18,7 @@ After you have all the prerequisites installed and have configured your
 ```bash
 # 1. Set up your personal access token for DO
 #    See https://docs.digitalocean.com/reference/api/create-personal-access-token/
-doctl auth login
+doctl auth init
 
 # 2. Get the fingerprint of the SSH key you want to be associated with the root
 #    user on the created VMs

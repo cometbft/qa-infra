@@ -1,5 +1,5 @@
 - name: prometheus node exporter
-  hosts: validators,prometheus
+  hosts: validators,prometheus,loadrunners
   gather_facts: yes
   become_method: sudo
   vars:

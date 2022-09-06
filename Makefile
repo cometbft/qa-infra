@@ -18,10 +18,12 @@ hosts:
 	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "testnet-node" | tail -n+2 |  tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' >> ./ansible/hosts
 	echo "[prometheus]" >> ./ansible/hosts
 	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "testnet-observability" | tail -n+2 |  tr -s ' ' | cut -d' ' -f3   >> ./ansible/hosts
+	echo "[loadrunners]" >> ./ansible/hosts
+	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "testnet-load" | tail -n+2 |  tr -s ' ' | cut -d' ' -f3   >> ./ansible/hosts
 
 .PHONY: configgen
 configgen:
-	./script/configgen.sh $(VERSION_TAG) `grep ' name=' ./ansible/hosts | cut -d' ' -f1 | paste -s -d, -`
+	./script/configgen.sh $(VERSION_TAG) `ansible -i ./ansible/hosts --list-hosts validators | tail +2 | sed  's/ //g' | paste -s -d, -`
 
 .PHONY: ansible-install
 ansible-install:
@@ -41,9 +43,7 @@ start-network:
 
 .PHONY: runload
 runload:
-	$(LOAD_RUNNER_CMD) load \
-		--ip-list `grep ' name=' ./ansible/hosts | cut -d' ' -f1 | paste -s -d, -` \
-		--seed-delta $(shell echo $$RANDOM)
+	cd ansible &&  ansible-playbook runload.yaml -i hosts -u root -e endpoints=`ansible -i ./hosts --list-hosts validators | tail +2 | sed  "s/ //g" | sed 's/\(.*\)/ws:\/\/\1:26657\/websocket/' | paste -s -d, -` -vvv
 
 .PHONY: terraform-destroy
 terraform-destroy:

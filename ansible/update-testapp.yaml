@@ -1,8 +1,9 @@
 - name: update testapp
-  hosts: validators
+  hosts: validators,loadrunners
   become_method: sudo
   gather_facts: yes
   vars:
+    version_tag: v0.37.x
     tm_home: /root/.testapp/
  
   tasks:
@@ -13,7 +14,7 @@
         version: "{{ version_tag }}"
     - name: rebuild testapp
       shell: "cd tendermint/test/e2e/node && /usr/lib/go-1.17/bin/go install"
-    - name: update unit file 
+    - name: update unit file
       template:
         src: templates/testappd.service.j2
         dest: /lib/systemd/system/testappd.service

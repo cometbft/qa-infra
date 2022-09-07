@@ -45,11 +45,13 @@ runload:
 		--ip-list `grep ' name=' ./ansible/hosts | cut -d' ' -f1 | paste -s -d, -` \
 		--seed-delta $(shell echo $$RANDOM)
 
-retrieve-blockstore:
+retrieve-data:
 	@DIR=`date "+%Y-%m-%d-%H_%M_%S%N"`; \
 	mkdir -p "./experiments/$${DIR}"; \
 	cd ansible && ansible-playbook -i hosts -u root retrieve-blockstore.yaml --limit `ansible -i hosts --list-hosts validators | tail -1| sed  's/ //g'` -e "dir=../experiments/$${DIR}/blockstore.db.zip"; \
-	cd "../experiments/$${DIR}/" && unzip "blockstore.db.zip"
+	ansible-playbook -i hosts -u root retrieve-prometheus.yaml --limit `ansible -i hosts --list-hosts prometheus | tail -1| sed  's/ //g'` -e "dir=../experiments/$${DIR}/prometheus.zip"; \
+	cd "../experiments/$${DIR}/" && unzip "blockstore.db.zip"; \
+	unzip "prometheus.zip"
 
 .PHONY: terraform-destroy
 terraform-destroy:

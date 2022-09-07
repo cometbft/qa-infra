@@ -45,6 +45,10 @@ runload:
 		--ip-list `grep ' name=' ./ansible/hosts | cut -d' ' -f1 | paste -s -d, -` \
 		--seed-delta $(shell echo $$RANDOM)
 
+retrieve-blockstore:
+	mkdir -p ./experiments
+	cd ansible && ansible-playbook -i hosts -u root retrieve-blockstore.yaml --limit `ansible -i hosts --list-hosts validators | tail -1| sed  's/ //g'` -e dir=experiments/`date "+%Y-%m-%d-%H_%M_%S%N".zip`
+
 .PHONY: terraform-destroy
 terraform-destroy:
 	$(MAKE) -C ./tf/ destroy

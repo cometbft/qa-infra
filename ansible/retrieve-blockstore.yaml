@@ -1,0 +1,19 @@
+- name: retrieve blockstore
+  hosts: validators
+  become: false
+  gather_facts: yes
+  vars:
+    tm_home: /root/.testapp/
+    dir: '/home/'
+    ansible_host_key_checking: false
+  tasks:
+    - name: Ansible zip directory
+      archive:
+        path: "{{ tm_home }}/data/blockstore.db"
+        format: zip
+        dest: "{{ tm_home }}/data/blockstore.db.zip"
+    - name: Fetch the blockstore
+      ansible.builtin.fetch:
+        src: "{{ tm_home }}/data/blockstore.db.zip"
+        dest: "{{dir}}"
+        flat: yes

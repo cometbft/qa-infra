@@ -46,8 +46,10 @@ runload:
 		--seed-delta $(shell echo $$RANDOM)
 
 retrieve-blockstore:
-	mkdir -p ./experiments
-	cd ansible && ansible-playbook -i hosts -u root retrieve-blockstore.yaml --limit `ansible -i hosts --list-hosts validators | tail -1| sed  's/ //g'` -e dir=../experiments/`date "+%Y-%m-%d-%H_%M_%S%N"/blockstore.db.zip`
+	@DIR=`date "+%Y-%m-%d-%H_%M_%S%N"`; \
+	mkdir -p "./experiments/$${DIR}"; \
+	cd ansible && ansible-playbook -i hosts -u root retrieve-blockstore.yaml --limit `ansible -i hosts --list-hosts validators | tail -1| sed  's/ //g'` -e "dir=../experiments/$${DIR}/blockstore.db.zip"; \
+	cd "../experiments/$${DIR}/" && unzip "blockstore.db.zip"
 
 .PHONY: terraform-destroy
 terraform-destroy:

@@ -14,5 +14,5 @@
     - name: Fetch the blockstore
       ansible.builtin.fetch:
         src: "{{ tm_home }}/data/blockstore.db.zip"
-        dest: "{{dir}}"
+        dest: "{{dir}}/{{ hostvars[inventory_hostname].name }}/blockstore.db.zip"
         flat: yes

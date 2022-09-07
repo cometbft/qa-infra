@@ -47,7 +47,7 @@ runload:
 
 retrieve-blockstore:
 	mkdir -p ./experiments
-	cd ansible && ansible-playbook -i hosts -u root retrieve-blockstore.yaml --limit `ansible -i hosts --list-hosts validators | tail -1| sed  's/ //g'` -e dir=experiments/`date "+%Y-%m-%d-%H_%M_%S%N".zip`
+	cd ansible && ansible-playbook -i hosts -u root retrieve-blockstore.yaml --limit `ansible -i hosts --list-hosts validators | tail -1| sed  's/ //g'` -e dir=../experiments/`date "+%Y-%m-%d-%H_%M_%S%N"/blockstore.db.zip`
 
 .PHONY: terraform-destroy
 terraform-destroy:

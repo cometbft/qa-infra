@@ -21,7 +21,8 @@ hosts:
 
 .PHONY: configgen
 configgen:
-	./script/configgen.sh $(VERSION_TAG) `grep ' name=' ./ansible/hosts | cut -d' ' -f1 | paste -s -d, -`
+	./script/configgen.sh $(VERSION_TAG) `grep ' name=' ./ansible/hosts | cut -d' ' -f1 | paste -s -d, -` \
+		`grep seed ./ansible/hosts | cut -d' ' -f1| paste -s -d, -`
 
 .PHONY: ansible-install
 ansible-install:

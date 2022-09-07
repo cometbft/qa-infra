@@ -18,5 +18,7 @@
           - golang-1.17-go
           - prometheus
           - prometheus-node-exporter
+          - ntp
+          - ntpstat
         state: latest
       become: yes

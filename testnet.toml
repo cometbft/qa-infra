@@ -12,3 +12,4 @@ use_legacy_p2p = true
 persistent_peers = ["seed01"]
 [node.seed01]
 use_legacy_p2p = true
+mode = "seed"

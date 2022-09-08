@@ -1,0 +1,17 @@
+- name: retrieve prometheus
+  hosts: prometheus
+  become: false
+  gather_facts: yes
+  vars:
+    ansible_host_key_checking: false
+  tasks:
+    - name: Zip the prometheus directory
+      archive:
+        path: "/var/lib/prometheus"
+        format: zip
+        dest: "/tmp/prometheus.zip"
+    - name: Fetch the prometheus dir
+      ansible.builtin.fetch:
+        src: "/tmp/prometheus.zip"
+        dest: "{{dir}}"
+        flat: yes

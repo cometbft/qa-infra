@@ -45,6 +45,12 @@ start-network:
 runload:
 	cd ansible &&  ansible-playbook runload.yaml -i hosts -u root -e endpoints=`ansible -i ./hosts --list-hosts validators | tail +2 | sed  "s/ //g" | sed 's/\(.*\)/ws:\/\/\1:26657\/websocket/' | paste -s -d, -` -vvv
 
+retrieve-data:
+	@DIR=`date "+%Y-%m-%d-%H_%M_%S%N"`; \
+	mkdir -p "./experiments/$${DIR}"; \
+	cd ansible && ansible-playbook -i hosts -u root retrieve-blockstore.yaml -e "dir=../experiments/$${DIR}/"; \
+	ansible-playbook -i hosts -u root retrieve-prometheus.yaml --limit `ansible -i hosts --list-hosts prometheus | tail -1 | sed  's/ //g'` -e "dir=../experiments/$${DIR}/";
+
 .PHONY: terraform-destroy
 terraform-destroy:
 	$(MAKE) -C ./tf/ destroy

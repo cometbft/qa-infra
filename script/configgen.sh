@@ -31,7 +31,7 @@ for fname in `find . -path './testnet/seed*' -type f -name config.toml`; do
 	sed $INPLACE_SED_FLAG "s/persistent_peers = .*/persistent-peers = \"$result\"/g" $fname
 done
 
-for fname in `find . -path './testnet/**/*' -type f -name config.toml`; do
+for fname in `find './testnet/' -type f -name config.toml`; do
 	sed $INPLACE_SED_FLAG "s/prometheus = .*/prometheus = true/g" $fname
 done
 

@@ -23,7 +23,8 @@ hosts:
 
 .PHONY: configgen
 configgen:
-	./script/configgen.sh $(VERSION_TAG) `ansible -i ./ansible/hosts --list-hosts validators | tail +2 | sed  's/ //g' | paste -s -d, -`
+	./script/configgen.sh $(VERSION_TAG) `ansible -i ./ansible/hosts --list-hosts validators | tail +2 | sed  's/ //g' | paste -s -d, -` \
+		`grep seed ./ansible/hosts | cut -d' ' -f1| paste -s -d, -`
 
 .PHONY: ansible-install
 ansible-install:

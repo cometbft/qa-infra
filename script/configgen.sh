@@ -14,7 +14,7 @@ go run github.com/tendermint/tendermint/test/e2e/runner@$VERSION setup -f ./test
 OLD_IPS=`grep -E '(ipv4_address|container_name)' ./testnet/docker-compose.yml | sed 's/^.*ipv4_address: \(.*\)/\1/g' | sed 's/.*container_name: \(.*\)/\1/g' | paste -sd ' \n' - | sort -k1 | cut -d ' ' -f2`
 
 while read old <&3 && read new <&4; do
-	find ./testnet/ -type f | xargs -I{} sed $INPLACE_SED_FLAG "s/$old\b/$new/g" {}
+	find ./testnet/ -type f | xargs -I{} sed $INPLACE_SED_FLAG "s/\b$old\b/$new/g" {}
 done 3< <(echo $OLD_IPS | tr ' ' '\n') 4< <(echo $NEW_IPS | tr , '\n' ) 
 
 

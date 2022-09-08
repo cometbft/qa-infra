@@ -8,7 +8,6 @@ use_legacy_p2p = true
 use_legacy_p2p = true
 [node.seed4]
 use_legacy_p2p = true
-[node.validator000]
 
 [node.full00]
 mode = full
@@ -71,6 +70,7 @@ persistent_peers = ["seed3"]
 mode = full
 persistent_peers = ["seed4"]
 
+[node.validator000]
 use_legacy_p2p = true
 persistent_peers = ["seed0"]
 [node.validator001]

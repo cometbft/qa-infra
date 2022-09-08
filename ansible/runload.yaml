@@ -1,0 +1,17 @@
+- name: runload
+  become: false
+  gather_facts: yes
+  hosts: loadrunners
+  vars:
+    ansible_host_key_checking: false
+    endpoints: ws://127.0.0.1:26656/websocket # comma separated list of endpoints
+    connections: 25
+    time_seconds: 60
+    tx_per_second: 1000
+    size_bytes: 1024
+
+  tasks:
+    - name: install load tool
+      shell: "cd tendermint/test/loadtime/cmd/load/ && /usr/lib/go-1.17/bin/go install"
+    - name: run the script
+      shell: "/root/go/bin/load -c {{ connections }} -T {{ time_seconds }} -r {{ tx_per_second }} -s {{ size_bytes }} --broadcast-tx-method sync --endpoints {{endpoints}}"

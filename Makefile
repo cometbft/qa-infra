@@ -54,7 +54,7 @@ runload:
 
 .PHONY: rotate
 rotate:
-	./script/rotate.sh $(VERSION_TAG) `ansible all --list-hosts -i ./ansible/hosts --limit ephemeral | tail -n +2 | paste -s -d, | tr -d ' '`
+	./script/rotate.sh $(VERSION_TAG) `ansible all --list-hosts -i ./ansible/hosts --limit ephemeral | tail +2 | paste -s -d, | tr -d ' '`
 
 retrieve-data:
 	@DIR=`date "+%Y-%m-%d-%H_%M_%S%N"`; \

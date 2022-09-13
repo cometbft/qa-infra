@@ -1,20 +1,20 @@
 #!/bin/bash
 set -euo pipefail
 
-INPLACE_SED_FLAG='-i ""'
-if sed --version | head -1 | grep GNU; then
-	INPLACE_SED_FLAG='-i'
+INPLACE_SED_FLAG='-i'
+if [[ $(uname) == "Darwin" ]]; then
+	INPLACE_SED_FLAG='-i ""'
 fi
 
 VERSION=$1
-ADDRS=$1
+ADDRS=$2
 
 ephemeral-configs() {
 	ADDRS=$1
 	size=`echo $ADDRS | tr , '\n' | wc -l`
 
 	echo > ./rotating.toml
-	for i in `seq 0 $(expr $size - 1)`; do
+	for i in `seq 1 $(expr $size)`; do
 		printf "[node.ephemeral%02d]" "$i" >> ./rotating.toml
 		echo >> ./rotating.toml
 	done
@@ -22,13 +22,22 @@ ephemeral-configs() {
 	go run github.com/tendermint/tendermint/test/e2e/runner@$VERSION setup -f ./rotating.toml
 	rm ./rotating.toml
 
+	# Update the persistent peers for all of the ephemeral nodes to match the persistent peers
+	# of one of the validators.
+	for d in `find  ./rotating -maxdepth 1 -path './rotating/ephemeral*'  -type d | tr -d .`; do
+		num=`basename $d | sed 's/ephemeral\(.*\)/\1/'`
+		valconf=`find . -regex "./ansible/testnet/validator0*$num/config/config.toml"`
+		rotconf=".$d/config/config.toml"
+		persistent_peers=`grep 'persistent_peers = ".*' $valconf | tr -d '\n'`
+		sed $INPLACE_SED_FLAG "s/persistent_peers = .*/$persistent_peers/g" $rotconf
+		echo `grep 'persistent_peers = ".*' $rotconf`
+	done
 
-	persistent_peers=`grep 'persistent-peers = ".*' ./ansible/testnet/validator00/config/config.toml | tr -d '\n'`
-	find ./rotating/ -name config.toml -type f | xargs -I{} sed -i "s/persistent-peers = .*/$persistent_peers/g"  {}
-
-	genesis=`find ./ansible/testnet  -name genesis.json -type f | head -n 1`
+	# Copy over the genesis file from the current testnet to the ephemeral node directories.
+	genesis=`find . -regex "./ansible/testnet/validator0*1/config/genesis.json" | head -1`
 	find ./rotating/ -name genesis.json -type f | xargs -I{} cp $genesis {}
 
+	# Gather the set of old ips as listed in the docker compose file.
 	old_ips=`grep -E '(ipv4_address|container_name)' ./rotating/docker-compose.yml \
 		| sed 's/^.*ipv4_address: \(.*\)/\1/g' \
 		| sed 's/.*container_name: \(.*\)/\1/g' \
@@ -36,13 +45,15 @@ ephemeral-configs() {
 		| sort -k1 \
 		| cut -d ' ' -f2`
 
-	while read old <&3 && read new <&4; do
-		find ./rotating/ -type f | xargs -I{} sed -i "s/$old/$new/g" {}
-	done 3< <(echo $old_ips | tr ' ' '\n') 4< <(echo $ADDRS | tr , '\n' )
-
-	# Enable blocksync
-	find ./rotating/ -type f -name config.toml \
-		| xargs -I{} sed -i "430,440s/enable = false/enable = true/g" {}
+	for f in `find ./rotating/ -name config.toml`; do
+		while read old <&3 && read new <&4; do
+			sed $INPLACE_SED_FLAG "s/$old/$new/g" $f
+		done 3< <(echo $old_ips | tr ' ' '\n') 4< <(echo $ADDRS | tr , '\n' )
+		# Enable blocksync
+		sed $INPLACE_SED_FLAG "430,440s/enable = false/enable = true/g" $f
+		# Enable prometheus
+		sed $INPLACE_SED_FLAG "430,440s/prometheus = .*/prometheus = true/g" $f
+	done
 
 	rm -rf ./ansible/rotating
 	mv ./rotating ./ansible/

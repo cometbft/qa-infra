@@ -1,9 +1,10 @@
+EPHEMERAL_SIZE ?= 0
 DO_INSTANCE_TAGNAME=v037-testnet
 LOAD_RUNNER_COMMIT_HASH ?= 51685158fe36869ab600527b852437ca0939d0cc
 LOAD_RUNNER_CMD=go run github.com/tendermint/tendermint/test/e2e/runner@$(LOAD_RUNNER_COMMIT_HASH)
 export DO_INSTANCE_TAGNAME
+export EPHEMERAL_SIZE
 VERSION_TAG=v0.37.x
-EPHEMERAL_SIZE ?= 0
 
 .PHONY: terraform-init
 terraform-init:
@@ -23,7 +24,7 @@ hosts:
 	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "testnet-load" | tail -n+2 |  tr -s ' ' | cut -d' ' -f3   >> ./ansible/hosts
 ifneq (0, $(EPHEMERAL_SIZE))
 	echo "[ephemeral]" >> ./ansible/hosts
-	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "testnet-ephemeral" | tail -n+2 |  tr -s ' ' | cut -d' ' -f3   >> ./ansible/hosts
+	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "ephemeral-node" | tail -n+2 |  tr -s ' ' | cut -d' ' -f3   >> ./ansible/hosts
 endif
 
 .PHONY: configgen

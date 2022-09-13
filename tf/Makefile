@@ -6,6 +6,7 @@ ifndef EPHEMERAL_SIZE
 	$(error EPHEMERAL_SIZE is not set)
 endif
 
+EPHEMERAL_NAMES=$(shell for i in $$(seq 0 `expr $(EPHEMERAL_SIZE) - 1`); do printf "ephemeral%02d\n" $$i; done | paste -s -d, -)
 TESTNET_SIZE=$(shell grep '^\[node.*\]' -c ../testnet.toml)
 INSTANCE_NAMES=$(shell grep '^\[node.*\]' ../testnet.toml | sed -e 's/^\[node\.\(.*\)]/"\1"/' | sort | paste -s -d, -)
 
@@ -23,6 +24,7 @@ apply: terraform.tfvars
 	terraform refresh \
 		-var='testnet_size=$(TESTNET_SIZE)' \
 		-var='ephemeral_size=$(EPHEMERAL_SIZE)' \
+		-var='ephemeral_names=["$(EPHEMERAL_NAMES)"]' \
 		-var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]' \
 		-var='instance_names=[$(INSTANCE_NAMES)]' && \
 	terraform validate && \
@@ -30,6 +32,7 @@ apply: terraform.tfvars
 		-parallelism=50 \
 		-var='testnet_size=$(TESTNET_SIZE)' \
 		-var='ephemeral_size=$(EPHEMERAL_SIZE)' \
+		-var='ephemeral_names=["$(EPHEMERAL_NAMES)"]' \
 		-var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]' \
 		-var='instance_names=[$(INSTANCE_NAMES)]'
 
@@ -39,5 +42,6 @@ destroy: terraform.tfvars
 		-parallelism=50 \
 		-var='testnet_size=$(TESTNET_SIZE)' \
 		-var='ephemeral_size=$(EPHEMERAL_SIZE)' \
+		-var='ephemeral_names=["$(EPHEMERAL_NAMES)"]' \
 		-var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]' \
 		-var='instance_names=[$(INSTANCE_NAMES)]'

@@ -83,9 +83,10 @@ while true; do
 	ephemeral-configs `echo $ADDRS`
 	ansible-playbook ./ansible/re-init-testapp.yaml -u root -i ./ansible/hosts --limit=ephemeral -e "testnet_dir=./rotating"
 
+	# Wait for all of the ephemeral hosts to complete blocksync.
 	oldIFS=$IFS
 	IFS=","; for addr in $ADDRS; do
-	IFS=$oldIFS
+		IFS=$oldIFS
 		while ! running $addr; do
 			sleep 2
 		done

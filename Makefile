@@ -42,6 +42,10 @@ prometheus-init:
 start-network:
 	cd ansible && ansible-playbook -i hosts -u root start-testapp.yaml -f 10
 
+.PHONY: stop-network
+stop-network:
+	cd ansible && ansible-playbook -i hosts -u root stop-testapp.yaml -f 10
+
 .PHONY: runload
 runload:
 	cd ansible &&  ansible-playbook runload.yaml -i hosts -u root -e endpoints=`ansible -i ./hosts --list-hosts validators | tail +2 | sed  "s/ //g" | sed 's/\(.*\)/ws:\/\/\1:26657\/websocket/' | paste -s -d, -` -vvv

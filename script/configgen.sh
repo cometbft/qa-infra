@@ -1,9 +1,9 @@
 #!/bin/bash
 set -euo pipefail
 
-INPLACE_SED_FLAG='-i ""'
-if sed --version | head -1 | grep GNU; then
-	INPLACE_SED_FLAG='-i'
+INPLACE_SED_FLAG='-i'
+if [[ $(uname) == "Darwin" ]]; then
+	INPLACE_SED_FLAG='-i ""'
 fi
 
 VERSION=$1

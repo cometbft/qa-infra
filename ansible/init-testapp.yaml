@@ -1,5 +1,5 @@
 - name: initialize app
-  hosts: validators
+  hosts: validators,ephemeral
   become: false
   gather_facts: yes
   vars:

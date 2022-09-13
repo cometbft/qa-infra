@@ -2,7 +2,6 @@
   hosts: validators
   become: false
   gather_facts: yes
-  hosts: validators
   vars:
     tm_home: /root/.testapp/
     ansible_host_key_checking: false

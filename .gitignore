@@ -3,5 +3,6 @@
 /tf/.terraform/*
 /tf/.terraform.lock.hcl
 /ansible/testnet/*
+/ansible/rotating/*
 /ansible/hosts
 /experiments

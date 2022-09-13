@@ -52,7 +52,7 @@ ephemeral-configs() {
 		# Enable blocksync
 		sed $INPLACE_SED_FLAG "430,440s/enable = false/enable = true/g" $f
 		# Enable prometheus
-		sed $INPLACE_SED_FLAG "430,440s/prometheus = .*/prometheus = true/g" $f
+		sed $INPLACE_SED_FLAG "s/prometheus = .*/prometheus = true/g" $f
 	done
 
 	rm -rf ./ansible/rotating

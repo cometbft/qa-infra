@@ -23,7 +23,7 @@ hosts:
 	echo "[loadrunners]" >> ./ansible/hosts
 	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "testnet-load" | tail -n+2 |  tr -s ' ' | cut -d' ' -f3   >> ./ansible/hosts
 	echo "[ephemeral]" >> ./ansible/hosts
-	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "ephemeral-node" | tail -n+2 |  tr -s ' ' | cut -d' ' -f3   >> ./ansible/hosts
+	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "ephemeral-node" | tail -n+2 |  tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' >> ./ansible/hosts
 
 .PHONY: configgen
 configgen:

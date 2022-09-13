@@ -29,3 +29,20 @@ scrape_configs:
       - targets: ['{{ hostvars[host].inventory_hostname }}:9100']
 
 {% endfor %}
+
+{% for host in groups['ephemeral'] %}
+  - job_name: {{ hostvars[host].name }}
+
+    scrape_interval: 5s
+
+    static_configs:
+      - targets: ['{{ hostvars[host].inventory_hostname }}:26660']
+
+  - job_name: {{ hostvars[host].name }}-node-exporter
+
+    scrape_interval: 5s
+
+    static_configs:
+      - targets: ['{{ hostvars[host].inventory_hostname }}:9100']
+
+{% endfor %}

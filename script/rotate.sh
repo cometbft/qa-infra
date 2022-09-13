@@ -15,7 +15,7 @@ ephemeral-configs() {
 
 	echo > ./rotating.toml
 	for i in `seq 1 $(expr $size)`; do
-		printf "[node.ephemeral%02d]" "$i" >> ./rotating.toml
+		printf "[node.ephemeral%03d]" "$i" >> ./rotating.toml
 		echo >> ./rotating.toml
 	done
 

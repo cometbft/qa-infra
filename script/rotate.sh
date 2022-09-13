@@ -25,12 +25,11 @@ ephemeral-configs() {
 	# Update the persistent peers for all of the ephemeral nodes to match the persistent peers
 	# of one of the validators.
 	for d in `find  ./rotating -maxdepth 1 -path './rotating/ephemeral*'  -type d | tr -d .`; do
-		num=`basename $d | sed 's/ephemeral\(.*\)/\1/'`
+		num=`basename $d | sed 's/ephemeral0*\([1-9][0-9]*\)/\1/'`
 		valconf=`find . -regex "./ansible/testnet/validator0*$num/config/config.toml"`
 		rotconf=".$d/config/config.toml"
 		persistent_peers=`grep 'persistent_peers = ".*' $valconf | tr -d '\n'`
 		sed $INPLACE_SED_FLAG "s/persistent_peers = .*/$persistent_peers/g" $rotconf
-		echo `grep 'persistent_peers = ".*' $rotconf`
 	done
 
 	# Copy over the genesis file from the current testnet to the ephemeral node directories.
@@ -45,7 +44,7 @@ ephemeral-configs() {
 		| sort -k1 \
 		| cut -d ' ' -f2`
 
-	for f in `find ./rotating/ -name config.toml`; do
+	for f in `find ./rotating/ -type f -name config.toml`; do
 		while read old <&3 && read new <&4; do
 			sed $INPLACE_SED_FLAG "s/$old/$new/g" $f
 		done 3< <(echo $old_ips | tr ' ' '\n') 4< <(echo $ADDRS | tr , '\n' )
@@ -81,7 +80,7 @@ blocksyncing() {
 
 while true; do
 	ephemeral-configs `echo $ADDRS`
-	ansible-playbook ./ansible/re-init-testapp.yaml -u root -i ./ansible/hosts --limit=ephemeral -e "testnet_dir=./rotating"
+	ansible-playbook ./ansible/re-init-testapp.yaml -u root -i ./ansible/hosts --limit=ephemeral -e "testnet_dir=./rotating" -f 100
 
 	# Wait for all of the ephemeral hosts to complete blocksync.
 	oldIFS=$IFS

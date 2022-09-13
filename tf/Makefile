@@ -6,7 +6,7 @@ ifndef EPHEMERAL_SIZE
 	$(error EPHEMERAL_SIZE is not set)
 endif
 
-EPHEMERAL_NAMES=$(shell for i in $$(seq 1 `expr $(EPHEMERAL_SIZE)`); do printf "ephemeral%02d\n" $$i; done | paste -s -d, -)
+EPHEMERAL_NAMES=$(shell for i in $$(seq 1 `expr $(EPHEMERAL_SIZE)`); do printf "ephemeral%03d\n" $$i; done | paste -s -d, -)
 TESTNET_SIZE=$(shell grep '^\[node.*\]' -c ../testnet.toml)
 INSTANCE_NAMES=$(shell grep '^\[node.*\]' ../testnet.toml | sed -e 's/^\[node\.\(.*\)]/"\1"/' | sort | paste -s -d, -)
 

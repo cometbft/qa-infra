@@ -22,6 +22,7 @@ apply: terraform.tfvars
 		-var='instance_names=[$(INSTANCE_NAMES)]' && \
 	terraform validate && \
 	terraform apply \
+		-parallelism=50 \
 		-var='testnet_size=$(TESTNET_SIZE)' \
 		-var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]' \
 		-var='instance_names=[$(INSTANCE_NAMES)]'
@@ -29,6 +30,7 @@ apply: terraform.tfvars
 .PHONY: destroy
 destroy: terraform.tfvars
 	terraform destroy \
+		-parallelism=50 \
 		-var='testnet_size=$(TESTNET_SIZE)' \
 		-var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]' \
 		-var='instance_names=[$(INSTANCE_NAMES)]'

@@ -46,6 +46,10 @@ start-network:
 runload:
 	cd ansible &&  ansible-playbook runload.yaml -i hosts -u root -e endpoints=`ansible -i ./hosts --list-hosts validators | tail +2 | sed  "s/ //g" | sed 's/\(.*\)/ws:\/\/\1:26657\/websocket/' | paste -s -d, -` -vvv
 
+.PHONY: rotate
+rotate:
+	./script/rotate.sh $(VERSION_TAG) `ansible all --list-hosts -i ./ansible/hosts --limit ephemeral | tail -n +2 | paste -s -d, | tr -d ' '`
+
 retrieve-data:
 	@DIR=`date "+%Y-%m-%d-%H_%M_%S%N"`; \
 	mkdir -p "./experiments/$${DIR}"; \

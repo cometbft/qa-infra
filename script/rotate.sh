@@ -71,7 +71,7 @@ running() {
 blocksyncing() {
 	addr=$1
 
-	if [ `curl $addr:26657/status | jq '.result.sync_info.catching_up'` = true ]; then
+	if [ `curl localhost:26657/status | sed -n 's/\"catching_up\": \(true\|false\)/\1/p'` = true ]; then
 		# in bash, 0 is true and 1 is false
 		return 0
 	fi

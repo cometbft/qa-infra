@@ -79,7 +79,7 @@ blocksyncing() {
 }
 
 while true; do
-	ephemeral-configs `echo $ADDRS`
+	ephemeral-configs `echo "$ADDRS"`
 	ansible-playbook ./ansible/re-init-testapp.yaml -u root -i ./ansible/hosts --limit=ephemeral -e "testnet_dir=./rotating" -f 100
 
 	# Wait for all of the ephemeral hosts to complete blocksync.

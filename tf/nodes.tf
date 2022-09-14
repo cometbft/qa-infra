@@ -22,7 +22,7 @@ variable "ephemeral_size" {
 }
 
 variable "ephemeral_names" {
-	type = list(string)
+  type = list(string)
 }
 
 resource "digitalocean_droplet" "testnet-node" {

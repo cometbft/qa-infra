@@ -1,7 +1,9 @@
+EPHEMERAL_SIZE ?= 0
 DO_INSTANCE_TAGNAME=v037-testnet
 LOAD_RUNNER_COMMIT_HASH ?= 51685158fe36869ab600527b852437ca0939d0cc
 LOAD_RUNNER_CMD=go run github.com/tendermint/tendermint/test/e2e/runner@$(LOAD_RUNNER_COMMIT_HASH)
 export DO_INSTANCE_TAGNAME
+export EPHEMERAL_SIZE
 VERSION_TAG=v0.37.x
 
 .PHONY: terraform-init
@@ -20,6 +22,8 @@ hosts:
 	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "testnet-observability" | tail -n+2 |  tr -s ' ' | cut -d' ' -f3   >> ./ansible/hosts
 	echo "[loadrunners]" >> ./ansible/hosts
 	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "testnet-load" | tail -n+2 |  tr -s ' ' | cut -d' ' -f3   >> ./ansible/hosts
+	echo "[ephemeral]" >> ./ansible/hosts
+	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "ephemeral-node" | tail -n+2 |  tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' >> ./ansible/hosts
 
 .PHONY: configgen
 configgen:
@@ -49,6 +53,10 @@ stop-network:
 .PHONY: runload
 runload:
 	cd ansible &&  ansible-playbook runload.yaml -i hosts -u root -e endpoints=`ansible -i ./hosts --list-hosts validators | tail +2 | sed  "s/ //g" | sed 's/\(.*\)/ws:\/\/\1:26657\/websocket/' | paste -s -d, -` -vvv
+
+.PHONY: rotate
+rotate:
+	./script/rotate.sh $(VERSION_TAG) `ansible all --list-hosts -i ./ansible/hosts --limit ephemeral | tail +2 | paste -s -d, | tr -d ' '`
 
 retrieve-data:
 	@DIR=`date "+%Y-%m-%d-%H_%M_%S%N"`; \

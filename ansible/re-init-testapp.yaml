@@ -1,0 +1,38 @@
+- name: re-init testapp
+  hosts: ephemeral,validators
+  become_method: sudo
+  gather_facts: yes
+  vars:
+    ansible_host_key_checking: false
+    tm_home: /root/.testapp/
+    testnet_dir: ./testnet
+
+  tasks:
+    - name: stop app
+      ansible.builtin.systemd:
+        name: testappd
+        state: stopped
+      become: yes
+
+    - name: delete tm data
+      ansible.builtin.file:
+        path: "{{ tm_home }}"
+        state: absent
+      become: yes
+
+    - name: delete app data
+      ansible.builtin.file:
+        path: "{{ ansible_user_dir }}/data"
+        state: absent
+      become: yes
+
+    - name: copy configuration files
+      ansible.builtin.copy:
+        src: "{{ testnet_dir }}/{{ hostvars[inventory_hostname].name }}/"
+        dest: "{{ tm_home }}/"
+
+    - name: start the systemd-unit
+      ansible.builtin.systemd:
+        name: testappd
+        state: started
+        enabled: yes

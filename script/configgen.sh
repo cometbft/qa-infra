@@ -30,6 +30,7 @@ for fname in `find . -path './testnet/seed*' -type f -name config.toml`; do
 
 	result=`echo "$persistentPeers" | paste -s -d, -`
 	sed $INPLACE_SED_FLAG "s/persistent_peers = .*/persistent-peers = \"$result\"/g" $fname
+	sed $INPLACE_SED_FLAG "s/max_num_inbound_peers = .*/max_num_inbound_peers = 210/g" $fname
 done
 
 for fname in `find './testnet/' -type f -name config.toml`; do

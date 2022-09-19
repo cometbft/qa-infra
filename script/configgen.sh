@@ -17,6 +17,8 @@ for file in `find ./testnet/ -name config.toml -type f`; do
 	while read old <&3 && read new <&4; do
 		sed $INPLACE_SED_FLAG "s/\b$old\b/$new/g" $file
 	done 3< <(echo $OLD_IPS | tr ' ' '\n') 4< <(echo $NEW_IPS | tr , '\n' )
+	sed $INPLACE_SED_FLAG "s/max_num_inbound_peers = .*/max_num_inbound_peers = 80/g" $file
+	sed $INPLACE_SED_FLAG "s/max_num_outbound_peers = .*/max_num_outbound = 20/g" $file
 done
 
 # Seed nodes end up with many outgoing persistent peers. Tendermint has an
@@ -29,8 +31,7 @@ for fname in `find . -path './testnet/seed*' -type f -name config.toml`; do
 		| grep "\($seedsSlashSeparated\)" || true`
 
 	result=`echo "$persistentPeers" | paste -s -d, -`
-	sed $INPLACE_SED_FLAG "s/persistent_peers = .*/persistent-peers = \"$result\"/g" $fname
-	sed $INPLACE_SED_FLAG "s/max_num_inbound_peers = .*/max_num_inbound_peers = 210/g" $fname
+	sed $INPLACE_SED_FLAG "s/persistent_peers = .*/persistent_peers = \"$result\"/g" $fname
 done
 
 for fname in `find './testnet/' -type f -name config.toml`; do

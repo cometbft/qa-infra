@@ -33,10 +33,10 @@ configgen:
 .PHONY: ansible-install
 ansible-install:
 	cd ansible && \
-		ansible-playbook -i hosts -u root base.yaml -f 10 && \
-		ansible-playbook -i hosts -u root prometheus-node-exporter.yaml -f 10 && \
-		ansible-playbook -i hosts -u root init-testapp.yaml -f 10 && \
-		ansible-playbook -i hosts -u root update-testapp.yaml -f 10 -e "version_tag=$(VERSION_TAG)"
+		ansible-playbook -i hosts -u root base.yaml -f 200 && \
+		ansible-playbook -i hosts -u root prometheus-node-exporter.yaml -f 200 && \
+		ansible-playbook -i hosts -u root init-testapp.yaml -f 200 && \
+		ansible-playbook -i hosts -u root update-testapp.yaml -f 200 -e "version_tag=$(VERSION_TAG)"
 
 .PHONY: prometheus-init
 prometheus-init:
@@ -44,7 +44,7 @@ prometheus-init:
 
 .PHONY: start-network
 start-network:
-	cd ansible && ansible-playbook -i hosts -u root start-testapp.yaml -f 10
+	cd ansible && ansible-playbook -i hosts -u root start-testapp.yaml -f 200
 
 .PHONY: stop-network
 stop-network:
@@ -52,7 +52,7 @@ stop-network:
 
 .PHONY: runload
 runload:
-	cd ansible &&  ansible-playbook runload.yaml -i hosts -u root -e endpoints=`ansible -i ./hosts --list-hosts validators | tail +2 | sed  "s/ //g" | sed 's/\(.*\)/ws:\/\/\1:26657\/websocket/' | paste -s -d, -` -vvv
+	cd ansible &&  ansible-playbook runload.yaml -i hosts -u root -e endpoints=`ansible -i ./hosts --list-hosts validators | tail +2 | sed  "s/ //g" | sed 's/\(.*\)/ws:\/\/\1:26657\/websocket/' | paste -s -d, -`
 
 .PHONY: rotate
 rotate:

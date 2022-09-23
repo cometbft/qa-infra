@@ -27,6 +27,8 @@ for file in `find ./testnet/ -name config.toml -type f`; do
 	while read old <&3 && read new <&4; do
 		eval sed $INPLACE_SED_FLAG \"s/$SED_BW$old$SED_EW/$new/g\" $file
 	done 3< <(echo $OLD_IPS | tr ' ' '\n') 4< <(echo $NEW_IPS | tr , '\n' )
+	eval sed $INPLACE_SED_FLAG \"s/unsafe = .*/unsafe = true/g\" $file
+	eval sed $INPLACE_SED_FLAG \"s/prometheus = .*/prometheus = true/g\" $file
 done
 
 # Seed nodes end up with many outgoing persistent peers. Tendermint has an
@@ -41,10 +43,6 @@ for fname in `find . -path './testnet/seed*' -type f -name config.toml`; do
 	result=`echo "$persistentPeers" | paste -s -d, -`
 	replace_str="s/persistent_peers = .*/persistent_peers = \\\"$result\\\"/g"
 	eval sed $INPLACE_SED_FLAG \"$replace_str\" $fname
-done
-
-for fname in `find './testnet/' -type f -name config.toml`; do
-	eval sed $INPLACE_SED_FLAG \"s/prometheus = .*/prometheus = true/g\" $fname
 done
 
 rm -rf ./ansible/testnet

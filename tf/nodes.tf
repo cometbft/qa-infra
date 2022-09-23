@@ -49,7 +49,7 @@ resource "digitalocean_droplet" "testnet-load-runner" {
   image    = "debian-11-x64"
   region   = "fra1"
   tags     = concat(var.instance_tags, ["testnet-load"])
-  size     = "s-4vcpu-8gb"
+  size     = "s-8vcpu-16gb"
   ssh_keys = var.ssh_keys
 }
 

@@ -1,7 +1,9 @@
 - name: start testapp
   hosts: validators
   gather_facts: yes
- 
+  vars:
+    ansible_host_key_checking: false
+
   tasks:
   - name: start the systemd-unit
     ansible.builtin.systemd:

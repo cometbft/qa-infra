@@ -18,7 +18,6 @@ for file in `find ./testnet/ -name config.toml -type f`; do
 		sed $INPLACE_SED_FLAG "s/\b$old\b/$new/g" $file
 	done 3< <(echo $OLD_IPS | tr ' ' '\n') 4< <(echo $NEW_IPS | tr , '\n' )
 	sed $INPLACE_SED_FLAG "s/unsafe = .*/unsafe = true/g" $file
-	sed $INPLACE_SED_FLAG "s/cache_size = .*/cache_size = 100000/g" $file
 	sed $INPLACE_SED_FLAG "s/prometheus = .*/prometheus = true/g" $file
 done
 

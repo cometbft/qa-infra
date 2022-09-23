@@ -17,13 +17,13 @@ terraform-apply:
 .PHONY: hosts
 hosts:
 	echo "[validators]" > ./ansible/hosts
-	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "testnet-node" | tail -n+2 |  tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' >> ./ansible/hosts
+	doctl compute droplet list --tag-name "testnet-node" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' >> ./ansible/hosts
 	echo "[prometheus]" >> ./ansible/hosts
-	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "testnet-observability" | tail -n+2 |  tr -s ' ' | cut -d' ' -f3   >> ./ansible/hosts
+	doctl compute droplet list --tag-name "testnet-observability" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f3   >> ./ansible/hosts
 	echo "[loadrunners]" >> ./ansible/hosts
-	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "testnet-load" | tail -n+2 |  tr -s ' ' | cut -d' ' -f3   >> ./ansible/hosts
+	doctl compute droplet list --tag-name "testnet-load" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f3   >> ./ansible/hosts
 	echo "[ephemeral]" >> ./ansible/hosts
-	doctl compute droplet list --tag-name $(DO_INSTANCE_TAGNAME) --tag-name "ephemeral-node" | tail -n+2 |  tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' >> ./ansible/hosts
+	doctl compute droplet list --tag-name "ephemeral-node" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' >> ./ansible/hosts
 
 .PHONY: configgen
 configgen:

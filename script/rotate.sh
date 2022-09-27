@@ -25,7 +25,8 @@ ephemeral-configs() {
 
 	echo > ./rotating.toml
 	for i in `seq 0 $(expr $size - 1)`; do
-		printf "[node.ephemeral%03d]" "$i" >> ./rotating.toml
+		printf "[node.ephemeral%03d]\n" "$i" >> ./rotating.toml
+		echo "mode = \"full\"" >> ./rotating.toml
 		echo >> ./rotating.toml
 	done
 
@@ -60,6 +61,8 @@ ephemeral-configs() {
 			eval sed $INPLACE_SED_FLAG \"s/$SED_BW$old$SED_EW/$new/g\" $f
 		done 3< <(echo $old_ips | tr ' ' '\n') 4< <(echo $ADDRS | tr , '\n' )
 		# Enable blocksync
+		# Enable blocksync
+		sed $INPLACE_SED_FLAG "20,30s/fast_sync = false/fast_sync = true/g" $f
 		sed $INPLACE_SED_FLAG "430,440s/enable = false/enable = true/g" $f
 		# Enable prometheus
 		sed $INPLACE_SED_FLAG "s/prometheus = .*/prometheus = true/g" $f
@@ -82,7 +85,7 @@ running() {
 blocksyncing() {
 	addr=$1
 
-	if [ `curl localhost:26657/status | sed -n 's/\"catching_up\": \(true\|false\)/\1/p'` = true ]; then
+	if [ X`curl localhost:26657/status | sed -n 's/\"catching_up\": \(true\|false\)/\1/p'` = Xtrue ]; then
 		# in bash, 0 is true and 1 is false
 		return 0
 	fi

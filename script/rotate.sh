@@ -25,7 +25,7 @@ ephemeral-configs() {
 	# Update the persistent peers for all of the ephemeral nodes to match the persistent peers
 	# of one of the validators.
 	for d in `find  ./rotating -maxdepth 1 -path './rotating/ephemeral*'  -type d | tr -d .`; do
-		num=`basename $d | sed 's/ephemeral0*\([1-9][0-9]*\)/\1/'`
+		num=`basename $d | sed 's/ephemeral0*\([0-9][0-9]*\)/\1/'`
 		valconf=`find . -regex "./ansible/testnet/validator0*$num/config/config.toml"`
 		rotconf=".$d/config/config.toml"
 		persistent_peers=`grep 'persistent_peers = ".*' $valconf | tr -d '\n'`

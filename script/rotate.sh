@@ -89,6 +89,31 @@ blocksyncing() {
 	return 1
 }
 
+heighest() {
+	addrs=$1
+	current="-1"
+	oldIFS=$IFS
+	IFS=","
+	for addr in $addrs; do 
+		a=`curl $addr:26657/status | sed -n 's/\"latest_block_height\": "\([0-9]*\)",/\1/p' | tr -d ' '`
+		if [ $a -ge $current ]; then
+			current=$a
+		fi
+	done
+	IFS=$oldIFS
+	echo $current
+}
+
+behind() {
+	addr=$1
+	heighest=$2
+	a=`curl $addr:26657/status | sed -n 's/\"latest_block_height\": "\([0-9]*\)",/\1/p' | tr -d ' '`
+	if [ $a -le `expr $heighest - 100` ]; then
+		return 0
+	fi
+	return 1
+}
+
 while true; do
 	ephemeral-configs `echo "$ADDRS"`
 	ansible-playbook ./ansible/re-init-testapp.yaml -u root -i ./ansible/hosts --limit=ephemeral -e "testnet_dir=./rotating" -f 100
@@ -100,7 +125,11 @@ while true; do
 		while ! running $addr; do
 			sleep 2
 		done
-		while blocksyncing $addr; do
+	done
+	h=$(heighest `ansible all --list-hosts -i ./ansible/hosts --limit validators | tail +2 | paste -s -d, | tr -d ' '`)
+	IFS=","; for addr in $ADDRS; do
+		IFS=$oldIFS
+		while behind $addr $h; do
 			sleep 2
 		done
 	done

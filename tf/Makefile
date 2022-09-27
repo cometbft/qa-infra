@@ -21,7 +21,6 @@ endif
 
 .PHONY: apply
 apply: terraform.tfvars
-	@echo $(EPHEMERAL_NAMES)
 	terraform refresh \
 		-var='testnet_size=$(TESTNET_SIZE)' \
 		-var='ephemeral_size=$(EPHEMERAL_SIZE)' \

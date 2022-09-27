@@ -44,6 +44,15 @@ resource "digitalocean_droplet" "testnet-prometheus" {
   ssh_keys = var.ssh_keys
 }
 
+resource "digitalocean_droplet" "testnet-load-runner" {
+  name     = "testnet-load-runner"
+  image    = "debian-11-x64"
+  region   = "fra1"
+  tags     = concat(var.instance_tags, ["testnet-load"])
+  size     = "s-8vcpu-16gb"
+  ssh_keys = var.ssh_keys
+}
+
 resource "digitalocean_droplet" "ephemeral-node" {
   count        = var.ephemeral_size
   name         = var.ephemeral_names[count.index]

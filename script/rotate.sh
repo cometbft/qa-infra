@@ -14,7 +14,7 @@ ephemeral-configs() {
 	size=`echo $ADDRS | tr , '\n' | wc -l`
 
 	echo > ./rotating.toml
-	for i in `seq 1 $(expr $size)`; do
+	for i in `seq 0 $(expr $size -1)`; do
 		printf "[node.ephemeral%03d]" "$i" >> ./rotating.toml
 		echo >> ./rotating.toml
 	done

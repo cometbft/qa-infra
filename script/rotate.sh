@@ -57,7 +57,7 @@ ephemeral-configs() {
 
 	for f in `find ./rotating/ -type f -name config.toml`; do
 		while read old <&3 && read new <&4; do
-			eval sed $INPLACE_SED_FLAG \"s/$SED_BW$old$SED_EW/$new/g\" $file
+			eval sed $INPLACE_SED_FLAG \"s/$SED_BW$old$SED_EW/$new/g\" $f
 		done 3< <(echo $old_ips | tr ' ' '\n') 4< <(echo $ADDRS | tr , '\n' )
 		# Enable blocksync
 		sed $INPLACE_SED_FLAG "430,440s/enable = false/enable = true/g" $f

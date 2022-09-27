@@ -24,12 +24,13 @@ ephemeral-configs() {
 
 	# Update the persistent peers for all of the ephemeral nodes to match the persistent peers
 	# of one of the validators.
+	seeds=`grep -REh 'seeds = "[0-9a-z]+' ./ansible/testnet | sort | uniq`
+	nseeds=`echo "$seeds" | wc -l`
 	for d in `find  ./rotating -maxdepth 1 -path './rotating/ephemeral*'  -type d | tr -d .`; do
-		num=`basename $d | sed 's/ephemeral0*\([0-9][0-9]*\)/\1/'`
-		valconf=`find . -regex "./ansible/testnet/validator0*$num/config/config.toml"`
+		offset=`expr $RANDOM % $nseeds + 1`
+		seed=`echo "$seeds" | sed -n ${offset}p`
 		rotconf=".$d/config/config.toml"
-		persistent_peers=`grep 'persistent_peers = ".*' $valconf | tr -d '\n'`
-		sed $INPLACE_SED_FLAG "s/persistent_peers = .*/$persistent_peers/g" $rotconf
+		sed $INPLACE_SED_FLAG "s/seeds = .*/$seed/g" $rotconf
 	done
 
 	# Copy over the genesis file from the current testnet to the ephemeral node directories.

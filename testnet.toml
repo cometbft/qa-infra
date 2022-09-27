@@ -1,10 +1,29 @@
 [node.validator00]
-seeds = ["seed01"]
+seeds = ["seed00"]
 [node.validator01]
-seeds = ["seed01"]
+seeds = ["seed00"]
 [node.validator02]
-seeds = ["seed01"]
+seeds = ["seed00"]
 [node.validator03]
+seeds = ["seed00"]
+
+[node.validator04]
 seeds = ["seed01"]
+[node.validator05]
+seeds = ["seed01"]
+[node.validator06]
+seeds = ["seed01"]
+
+[node.validator07]
+seeds = ["seed02"]
+[node.validator08]
+seeds = ["seed02"]
+[node.validator09]
+seeds = ["seed02"]
+
+[node.seed00]
+mode = "seed"
 [node.seed01]
+mode = "seed"
+[node.seed02]
 mode = "seed"

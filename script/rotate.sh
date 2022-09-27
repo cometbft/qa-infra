@@ -1,9 +1,19 @@
 #!/bin/bash
 set -euo pipefail
 
+# The functionality need from sed in this script is not covered by POSIX; it uses different syntax
+# in gnu sed and in BSD sed.
+# These helper variables have been introduced to deal with those differences.
+# Moreover, sed's in place mode requires flag '-i ""' in BSD sed, which makes the use of 'eval'
+# necessary every time 'sed -i' is called in order to re-interpret the flag's contents when stored
+# in a variable.
 INPLACE_SED_FLAG='-i'
+SED_BW='\b' # No difference needed between beginning of word and end of word in Linux
+SED_EW='\b'
 if [[ $(uname) == "Darwin" ]]; then
 	INPLACE_SED_FLAG='-i ""'
+	SED_BW='[[:<:]]' #Beginning of word in regex
+	SED_EW='[[:>:]]' #End of word in regex
 fi
 
 VERSION=$1
@@ -14,7 +24,7 @@ ephemeral-configs() {
 	size=`echo $ADDRS | tr , '\n' | wc -l`
 
 	echo > ./rotating.toml
-	for i in `seq 0 $(expr $size -1)`; do
+	for i in `seq 0 $(expr $size - 1)`; do
 		printf "[node.ephemeral%03d]" "$i" >> ./rotating.toml
 		echo >> ./rotating.toml
 	done
@@ -47,7 +57,7 @@ ephemeral-configs() {
 
 	for f in `find ./rotating/ -type f -name config.toml`; do
 		while read old <&3 && read new <&4; do
-			sed $INPLACE_SED_FLAG "s/$old/$new/g" $f
+			eval sed $INPLACE_SED_FLAG \"s/$SED_BW$old$SED_EW/$new/g\" $file
 		done 3< <(echo $old_ips | tr ' ' '\n') 4< <(echo $ADDRS | tr , '\n' )
 		# Enable blocksync
 		sed $INPLACE_SED_FLAG "430,440s/enable = false/enable = true/g" $f

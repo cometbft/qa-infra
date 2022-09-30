@@ -1,5 +1,5 @@
 - name: start testapp
-  hosts: validators
+  hosts: validators,ephemeral
   gather_facts: yes
   vars:
     ansible_host_key_checking: false

@@ -3,8 +3,7 @@ set -euo pipefail
 
 # The functionality need from sed in this script is not covered by POSIX; it uses different syntax
 # in gnu sed and in BSD sed.
-# These helper variables have been introduced to deal with those differences.
-# Moreover, sed's in place mode requires flag '-i ""' in BSD sed, which makes the use of 'eval'
+# These helper variables have been introduced to deal with those differences. Moreover, sed's in place mode requires flag '-i ""' in BSD sed, which makes the use of 'eval'
 # necessary every time 'sed -i' is called in order to re-interpret the flag's contents when stored
 # in a variable.
 INPLACE_SED_FLAG='-i'
@@ -24,6 +23,11 @@ ephemeral-configs() {
 	size=`echo $ADDRS | tr , '\n' | wc -l`
 
 	echo > ./rotating.toml
+	for i in `seq 0 15`; do
+		printf "[node.ab%03d]\n" "$i" >> ./rotating.toml
+		echo "mode = \"full\"" >> ./rotating.toml
+		echo >> ./rotating.toml
+	done
 	for i in `seq 0 $(expr $size - 1)`; do
 		printf "[node.ephemeral%03d]\n" "$i" >> ./rotating.toml
 		echo "mode = \"full\"" >> ./rotating.toml
@@ -33,15 +37,16 @@ ephemeral-configs() {
 	go run github.com/tendermint/tendermint/test/e2e/runner@$VERSION setup -f ./rotating.toml
 	rm ./rotating.toml
 
+	for d in `find  ./rotating -maxdepth 1 -path './rotating/ab*'  -type d`; do
+		rm -rf "$d"
+	done
+
 	# Update the persistent peers for all of the ephemeral nodes to match the persistent peers
 	# of one of the validators.
-	seeds=`grep -REh 'seeds = "[0-9a-z]+' ./ansible/testnet | sort | uniq`
-	nseeds=`echo "$seeds" | wc -l`
+	seeds=`grep -REh 'seeds = "[0-9a-z]+' ./ansible/testnet | sed -n 's/seeds = "\(.*\)"/\1/p' | sort | uniq | paste -s -d, -`
 	for d in `find  ./rotating -maxdepth 1 -path './rotating/ephemeral*'  -type d | tr -d .`; do
-		offset=`expr $RANDOM % $nseeds + 1`
-		seed=`echo "$seeds" | sed -n ${offset}p`
 		rotconf=".$d/config/config.toml"
-		sed $INPLACE_SED_FLAG "s/seeds = .*/$seed/g" $rotconf
+		sed $INPLACE_SED_FLAG "s/seeds = .*/seeds = \"$seeds\"/g" $rotconf
 	done
 
 	# Copy over the genesis file from the current testnet to the ephemeral node directories.
@@ -61,11 +66,11 @@ ephemeral-configs() {
 			eval sed $INPLACE_SED_FLAG \"s/$SED_BW$old$SED_EW/$new/g\" $f
 		done 3< <(echo $old_ips | tr ' ' '\n') 4< <(echo $ADDRS | tr , '\n' )
 		# Enable blocksync
-		# Enable blocksync
-		sed $INPLACE_SED_FLAG "20,30s/fast_sync = false/fast_sync = true/g" $f
+		sed $INPLACE_SED_FLAG "s/block_sync = false/block_sync = true/g" $f
 		sed $INPLACE_SED_FLAG "430,440s/enable = false/enable = true/g" $f
 		# Enable prometheus
 		sed $INPLACE_SED_FLAG "s/prometheus = .*/prometheus = true/g" $f
+		sed $INPLACE_SED_FLAG "s/persistent_peers = .*/persistent_peers = \"\"/g" $f
 	done
 
 	rm -rf ./ansible/rotating
@@ -112,6 +117,8 @@ behind() {
 	heighest=$2
 	a=`curl $addr:26657/status | sed -n 's/\"latest_block_height\": "\([0-9]*\)",/\1/p' | tr -d ' '`
 	if [ $a -le `expr $heighest - 100` ]; then
+		echo "behind"
+		echo $a
 		return 0
 	fi
 	return 1
@@ -122,19 +129,21 @@ while true; do
 	ansible-playbook ./ansible/re-init-testapp.yaml -u root -i ./ansible/hosts --limit=ephemeral -e "testnet_dir=./rotating" -f 100
 
 	# Wait for all of the ephemeral hosts to complete blocksync.
-	oldIFS=$IFS
-	IFS=","; for addr in $ADDRS; do
-		IFS=$oldIFS
+	addrs=( `echo $ADDRS | sed 's/,/ /g'`)
+	for addr in $addrs; do
 		while ! running $addr; do
 			sleep 2
 		done
 	done
 	h=$(heighest `ansible all --list-hosts -i ./ansible/hosts --limit validators | tail +2 | paste -s -d, | tr -d ' '`)
-	IFS=","; for addr in $ADDRS; do
-		IFS=$oldIFS
-		while behind $addr $h; do
-			sleep 2
+	addrs=( `echo $ADDRS | sed 's/,/ /g'`)
+	while [ ${#addrs[@]} -gt 0 ]; do
+		for addr in $addrs; do
+			if ! behind $addr $h; then
+				echo "not behind"
+				ansible-playbook ./ansible/stop-testapp.yaml -u root -i ./ansible/hosts --limit=$addr
+				addrs=(${addrs[@]/$addr})
+			fi
 		done
 	done
-	IFS=$oldIFS
 done

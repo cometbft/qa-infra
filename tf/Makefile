@@ -39,7 +39,8 @@ apply: terraform.tfvars
 .PHONY: destroy
 destroy: terraform.tfvars
 	terraform destroy \
-		-parallelism=50 \
+		-auto-approve \
+		-parallelism=12 \
 		-var='testnet_size=$(TESTNET_SIZE)' \
 		-var='ephemeral_size=$(EPHEMERAL_SIZE)' \
 		-var='ephemeral_names=[$(EPHEMERAL_NAMES)]' \

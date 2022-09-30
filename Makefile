@@ -54,6 +54,11 @@ stop-network:
 runload:
 	cd ansible &&  ansible-playbook runload.yaml -i hosts -u root -e endpoints=`ansible -i ./hosts --list-hosts validators | tail +2 | sed  "s/ //g" | sed 's/\(.*\)/ws:\/\/\1:26657\/websocket/' | paste -s -d, -`
 
+.PHONY: restart
+restart:
+	cd ansible &&  ansible-playbook restart-prometheus.yaml -i hosts -u root
+	cd ansible &&  ansible-playbook re-init-testapp.yaml -i hosts -u root -f 200
+
 .PHONY: rotate
 rotate:
 	./script/rotate.sh $(VERSION_TAG) `ansible all --list-hosts -i ./ansible/hosts --limit ephemeral | tail +2 | paste -s -d, | tr -d ' '`
@@ -61,7 +66,9 @@ rotate:
 retrieve-data:
 	@DIR=`date "+%Y-%m-%d-%H_%M_%S%N"`; \
 	mkdir -p "./experiments/$${DIR}"; \
-	cd ansible && ansible-playbook -i hosts -u root retrieve-blockstore.yaml -e "dir=../experiments/$${DIR}/"; \
+	echo $(VERSION_TAG) > "./experiments/$${DIR}"/version; \
+	echo "rotating" > "./experiments/$${DIR}"/experiment; \
+	cd ansible && ansible-playbook -i hosts -u root retrieve-blockstore.yaml -e "dir=../experiments/$${DIR}/" --limit 159.89.102.139; \
 	ansible-playbook -i hosts -u root retrieve-prometheus.yaml --limit `ansible -i hosts --list-hosts prometheus | tail -1 | sed  's/ //g'` -e "dir=../experiments/$${DIR}/";
 
 .PHONY: terraform-destroy

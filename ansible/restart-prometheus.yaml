@@ -1,4 +1,4 @@
-- name: restart prometheus
+- name: delete and restart prometheus
   hosts: prometheus
   become_method: sudo
   gather_facts: yes

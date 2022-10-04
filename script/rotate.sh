@@ -30,7 +30,14 @@ ephemeral-configs() {
 	size=`echo $ADDRS | tr , '\n' | wc -l`
 
 	echo > ./rotating.toml
-	for i in `seq 0 15`; do
+
+	# Add a set of dummy nodes. These nodes will not appear in the testnet
+	# The config script generates the same keys, so we need to generate a set
+	# of fake configurations, one for each node that exists in the testnet, so
+	# that the runner script will create keys that are not part of the existing
+	# network.
+	c=`grep "^\[.*\]$" ./testnet.toml | wc -l`
+	for i in `seq 1 $c`; do
 		printf "[node.ab%03d]\n" "$i" >> ./rotating.toml
 		echo "mode = \"full\"" >> ./rotating.toml
 		echo >> ./rotating.toml
@@ -75,7 +82,13 @@ ephemeral-configs() {
 		while read old <&3 && read new <&4; do
 			eval sed $INPLACE_SED_FLAG \"s/$SED_BW$old$SED_EW/$new/g\" $f
 		done 3< <(echo $old_ips | tr ' ' '\n') 4< <(echo $ADDRS | tr , '\n' )
+
+		# Enable blocksync / fastsync. In v0.37 the name was changed to blocksync
+		# so these two lines exist so that both v0.34 and v0.37 will correctly
+		# be updated by this script.
 		sed $INPLACE_SED_FLAG "20,30s/fast_sync = false/fast_sync = true/g" $f
+		sed $INPLACE_SED_FLAG "20,30s/block_sync = false/block_sync = true/g" $f
+
 		sed $INPLACE_SED_FLAG "430,440s/enable = false/enable = true/g" $f
 		sed $INPLACE_SED_FLAG "s/prometheus = .*/prometheus = true/g" $f
 
@@ -133,7 +146,7 @@ behind() {
 
 while true; do
 	ephemeral-configs `echo "$ADDRS"`
-	ansible-playbook ./ansible/re-init-testapp.yaml -u root -i ./ansible/hosts --limit=ephemeral -e "testnet_dir=./rotating" -f 100
+	ansible-playbook ./ansible/re-init-testapp.yaml -u root -i ./ansible/hosts --limit=ephemeral -e "testnet_dir=./rotating" -f 200
 
 	# Wait for all of the ephemeral hosts to be running.
 	addrs=( `echo $ADDRS | sed 's/,/ /g'`)
@@ -143,6 +156,7 @@ while true; do
 		done
 	done
 
+	echo "Ephemeral nodes are running"
 	# Once a node has completed blocksync, shut it down.
 	h=$(heighest `ansible all --list-hosts -i ./ansible/hosts --limit validators | tail +2 | paste -s -d, | tr -d ' '`)
 	addrs=( `echo $ADDRS | sed 's/,/ /g'`)
@@ -156,4 +170,5 @@ while true; do
 			fi
 		done
 	done
+	echo "Ephemeral have all completed blocksync"
 done

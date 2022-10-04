@@ -86,8 +86,8 @@ ephemeral-configs() {
 		# Enable blocksync / fastsync. In v0.37 the name was changed to blocksync
 		# so these two lines exist so that both v0.34 and v0.37 will correctly
 		# be updated by this script.
-		sed $INPLACE_SED_FLAG "20,30s/fast_sync = false/fast_sync = true/g" $f
-		sed $INPLACE_SED_FLAG "20,30s/block_sync = false/block_sync = true/g" $f
+		sed $INPLACE_SED_FLAG "s/fast_sync = false/fast_sync = true/g" $f
+		sed $INPLACE_SED_FLAG "s/block_sync = false/block_sync = true/g" $f
 
 		sed $INPLACE_SED_FLAG "430,440s/enable = false/enable = true/g" $f
 		sed $INPLACE_SED_FLAG "s/prometheus = .*/prometheus = true/g" $f

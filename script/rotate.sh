@@ -96,7 +96,7 @@ ephemeral-configs() {
 		# sets all nodes as persistent peers if no other peers are set. We
 		# override this behavior by providing a seeds for each node. We
 		# Want to bring up the ephemeral nodes and have them connect using
-		# seeds nodes instead of using persistent peers to simulate a real
+		# seed nodes instead of using persistent peers to simulate a real
 		# network.
 		sed $INPLACE_SED_FLAG "s/persistent_peers = .*/persistent_peers = \"\"/g" $f
 	done

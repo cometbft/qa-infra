@@ -10,6 +10,11 @@
       ansible.builtin.apt:
         update_cache: yes
         cache_valid_time: 60
+    - name: restart systemd journal
+      ansible.builtin.systemd:
+        name: systemd-journald
+        state: restarted
+      become: yes
     - name: install deps
       ansible.builtin.apt:
         name:

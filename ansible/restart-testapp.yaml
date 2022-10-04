@@ -1,5 +1,5 @@
 - name: update testapp
-  hosts: validators
+  hosts: validators,ephemeral
   become_method: sudo
   gather_facts: yes
  

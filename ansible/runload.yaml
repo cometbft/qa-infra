@@ -5,9 +5,9 @@
   vars:
     ansible_host_key_checking: false
     endpoints: ws://127.0.0.1:26656/websocket # comma separated list of endpoints
-    connections: 25
-    time_seconds: 60
-    tx_per_second: 1000
+    connections: 8
+    time_seconds: 1440
+    tx_per_second: 400
     size_bytes: 1024
 
   tasks:

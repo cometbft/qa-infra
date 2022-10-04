@@ -1,0 +1,33 @@
+- name: delete and restart prometheus
+  hosts: prometheus
+  become_method: sudo
+  gather_facts: yes
+  vars:
+    ansible_host_key_checking: false
+
+  tasks:
+    - name: stop prometheus
+      ansible.builtin.systemd:
+        name: prometheus
+        state: stopped
+      become: yes
+
+    - name: delete prom data
+      ansible.builtin.file:
+        path: /var/lib/prometheus/
+        state: absent
+      become: yes
+
+    - name: create prom dir
+      ansible.builtin.file:
+        path: /var/lib/prometheus/
+        state: directory
+        owner: prometheus
+        group: prometheus
+      become: yes
+
+    - name: start the systemd-unit
+      ansible.builtin.systemd:
+        name: prometheus
+        state: started
+        enabled: yes

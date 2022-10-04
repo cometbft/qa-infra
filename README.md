@@ -58,6 +58,20 @@ make start-network
 make runload
 ```
 
+## Additional Commands
+
+
+### Restart the network
+If you need to restart the running experiment, run the following command:
+
+```sh
+make restart
+```
+
+This command will delete all of the prometheus data, and re-initialize the nodes
+on the network. The nodes will restart with the same configuration files and
+IDs that they previously used, but all of their data will be deleted and reset.
+
 ## Metrics
 
 Once you've completed setting up the network, take a look at your

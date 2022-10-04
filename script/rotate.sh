@@ -94,7 +94,7 @@ ephemeral-configs() {
 
 		# Delete all persistent peers. The e2e runner code automatically
 		# sets all nodes as persistent peers if no other peers are set. We
-		# override this behavior by providing a seeds for each node. We
+		# override this behavior by providing a seed for each node. We
 		# Want to bring up the ephemeral nodes and have them connect using
 		# seed nodes instead of using persistent peers to simulate a real
 		# network.

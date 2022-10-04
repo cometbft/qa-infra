@@ -54,6 +54,11 @@ stop-network:
 runload:
 	cd ansible &&  ansible-playbook runload.yaml -i hosts -u root -e endpoints=`ansible -i ./hosts --list-hosts validators | tail +2 | sed  "s/ //g" | sed 's/\(.*\)/ws:\/\/\1:26657\/websocket/' | paste -s -d, -`
 
+.PHONY: restart
+restart:
+	cd ansible &&  ansible-playbook restart-prometheus.yaml -i hosts -u root
+	cd ansible &&  ansible-playbook re-init-testapp.yaml -i hosts -u root -f 200
+
 .PHONY: rotate
 rotate:
 	./script/rotate.sh $(VERSION_TAG) `ansible all --list-hosts -i ./ansible/hosts --limit ephemeral | tail +2 | paste -s -d, | tr -d ' '`

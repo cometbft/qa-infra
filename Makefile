@@ -2,6 +2,7 @@ EPHEMERAL_SIZE ?= 0
 DO_INSTANCE_TAGNAME=v037-testnet
 LOAD_RUNNER_COMMIT_HASH ?= 51685158fe36869ab600527b852437ca0939d0cc
 LOAD_RUNNER_CMD=go run github.com/tendermint/tendermint/test/e2e/runner@$(LOAD_RUNNER_COMMIT_HASH)
+ANSIBLE_FORKS=20
 export DO_INSTANCE_TAGNAME
 export EPHEMERAL_SIZE
 VERSION_TAG=v0.37.x
@@ -33,10 +34,10 @@ configgen:
 .PHONY: ansible-install
 ansible-install:
 	cd ansible && \
-		ansible-playbook -i hosts -u root base.yaml -f 200 && \
-		ansible-playbook -i hosts -u root prometheus-node-exporter.yaml -f 200 && \
-		ansible-playbook -i hosts -u root init-testapp.yaml -f 200 && \
-		ansible-playbook -i hosts -u root update-testapp.yaml -f 200 -e "version_tag=$(VERSION_TAG)"
+		ansible-playbook -i hosts -u root base.yaml -f $(ANSIBLE_FORKS) && \
+		ansible-playbook -i hosts -u root prometheus-node-exporter.yaml -f $(ANSIBLE_FORKS) && \
+		ansible-playbook -i hosts -u root init-testapp.yaml -f $(ANSIBLE_FORKS) && \
+		ansible-playbook -i hosts -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)"
 
 .PHONY: prometheus-init
 prometheus-init:
@@ -44,11 +45,11 @@ prometheus-init:
 
 .PHONY: start-network
 start-network:
-	cd ansible && ansible-playbook -i hosts -u root start-testapp.yaml -f 200
+	cd ansible && ansible-playbook -i hosts -u root start-testapp.yaml -f $(ANSIBLE_FORKS)
 
 .PHONY: stop-network
 stop-network:
-	cd ansible && ansible-playbook -i hosts -u root stop-testapp.yaml -f 10
+	cd ansible && ansible-playbook -i hosts -u root stop-testapp.yaml -f $(ANSIBLE_FORKS)
 
 .PHONY: runload
 runload:
@@ -57,7 +58,7 @@ runload:
 .PHONY: restart
 restart:
 	cd ansible &&  ansible-playbook restart-prometheus.yaml -i hosts -u root
-	cd ansible &&  ansible-playbook re-init-testapp.yaml -i hosts -u root -f 200
+	cd ansible &&  ansible-playbook re-init-testapp.yaml -i hosts -u root -f $(ANSIBLE_FORKS)
 
 .PHONY: rotate
 rotate:

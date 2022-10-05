@@ -42,6 +42,6 @@ destroy: terraform.tfvars
 		-parallelism=12 \
 		-var='testnet_size=$(TESTNET_SIZE)' \
 		-var='ephemeral_size=$(EPHEMERAL_SIZE)' \
-		-var='ephemeral_names=["$(EPHEMERAL_NAMES)"]' \
+		-var='ephemeral_names=[$(EPHEMERAL_NAMES)]' \
 		-var='instance_tags=["$(DO_INSTANCE_TAGNAME)"]' \
 		-var='instance_names=[$(INSTANCE_NAMES)]'

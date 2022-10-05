@@ -43,7 +43,7 @@ ephemeral-configs() {
 		echo >> ./rotating.toml
 	done
 
-	for i in `seq 0 $(expr $size - 1)`; do
+	for i in `seq 1 $size`; do
 		printf "[node.ephemeral%03d]\n" "$i" >> ./rotating.toml
 		echo "mode = \"full\"" >> ./rotating.toml
 		echo >> ./rotating.toml

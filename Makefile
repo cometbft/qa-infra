@@ -5,6 +5,9 @@ LOAD_RUNNER_CMD=go run github.com/tendermint/tendermint/test/e2e/runner@$(LOAD_R
 ANSIBLE_FORKS=20
 export DO_INSTANCE_TAGNAME
 export EPHEMERAL_SIZE
+ROTATE_CONNECTIONS ?= 4
+ROTATE_TX_RATE ?= 800
+ROTATE_TOTAL_TIME ?= 14400
 VERSION_TAG=v0.37.x
 
 .PHONY: terraform-init
@@ -54,6 +57,14 @@ stop-network:
 .PHONY: runload
 runload:
 	cd ansible &&  ansible-playbook runload.yaml -i hosts -u root -e endpoints=`ansible -i ./hosts --list-hosts validators | tail +2 | sed  "s/ //g" | sed 's/\(.*\)/ws:\/\/\1:26657\/websocket/' | paste -s -d, -`
+
+.PHONY: runload-rotate
+runload-rotate:
+	cd ansible &&  ansible-playbook runload.yaml -i hosts -u root \
+		-e endpoints=`ansible -i ./hosts --list-hosts validators | tail +2 | tail -1 | sed  "s/ //g" | sed 's/\(.*\)/ws:\/\/\1:26657\/websocket/' | paste -s -d, -` \
+		-e connections=$(ROTATE_CONNECTIONS) \
+		-e time_seconds=$(ROTATE_TOTAL_TIME) \
+		-e tx_per_second=$(ROTATE_TX_RATE)
 
 .PHONY: restart
 restart:

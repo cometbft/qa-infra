@@ -80,7 +80,7 @@ ephemeral-configs() {
 
 	for f in `find ./rotating/ -type f -name config.toml`; do
 		while read old <&3 && read new <&4; do
-			eval sed $INPLACE_SED_FLAG \"s/$SED_BW$old$SED_EW/$new/g\" $f
+			sed $INPLACE_SED_FLAG "s/$SED_BW$old$SED_EW/$new/g" $f
 		done 3< <(echo $old_ips | tr ' ' '\n') 4< <(echo $ADDRS | tr , '\n' )
 
 		# Enable blocksync / fastsync. In v0.37 the name was changed to blocksync
@@ -164,13 +164,16 @@ while true; do
 	while [ ${#addrs[@]} -gt 0 ]; do
 		echo "New iteration: addrs=${addrs[@]}"
 		addr=${addrs[0]}
-		if ! behind $addr $h; then
-			ansible-playbook ./ansible/stop-testapp.yaml -u root -i ./ansible/hosts --limit=$addr
-			addrs=(${addrs[@]/$addr})
-		else
-			addrs=(${addrs[@]/$addr} $addr)
+		addrs=( ${addrs[@]:1} )
+		if behind $addr $h; then
+		    if [ ${#addrs[@]} -gt 0 ]; then
+				addrs=( ${addrs[@]} $addr )
+			else
+				addrs=( $addr )
+			fi
 			sleep 1
 		fi
 	done
 	echo "Ephemeral have all completed blocksync"
+	ansible-playbook ./ansible/stop-testapp.yaml -u root -i ./ansible/hosts --limit=ephemeral
 done

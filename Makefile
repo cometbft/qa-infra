@@ -56,10 +56,6 @@ stop-network:
 
 .PHONY: runload
 runload:
-	cd ansible &&  ansible-playbook runload.yaml -i hosts -u root -e endpoints=`ansible -i ./hosts --list-hosts validators | tail +2 | sed  "s/ //g" | sed 's/\(.*\)/ws:\/\/\1:26657\/websocket/' | paste -s -d, -`
-
-.PHONY: runload-rotate
-runload-rotate:
 	cd ansible &&  ansible-playbook runload.yaml -i hosts -u root \
 		-e endpoints=`ansible -i ./hosts --list-hosts validators | tail +2 | tail -1 | sed  "s/ //g" | sed 's/\(.*\)/ws:\/\/\1:26657\/websocket/' | paste -s -d, -` \
 		-e connections=$(ROTATE_CONNECTIONS) \
@@ -68,15 +64,16 @@ runload-rotate:
 
 .PHONY: restart
 restart:
-	cd ansible &&  ansible-playbook restart-prometheus.yaml -i hosts -u root
-	cd ansible &&  ansible-playbook re-init-testapp.yaml -i hosts -u root -f $(ANSIBLE_FORKS)
+	cd ansible && ansible-playbook -i hosts -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)"
+	cd ansible && ansible-playbook restart-prometheus.yaml -i hosts -u root
+	cd ansible && ansible-playbook re-init-testapp.yaml -i hosts -u root -f $(ANSIBLE_FORKS)
 
 .PHONY: rotate
 rotate:
 	./script/rotate.sh $(VERSION_TAG) `ansible all --list-hosts -i ./ansible/hosts --limit ephemeral | tail +2 | paste -s -d, - | tr -d ' '`
 
 retrieve-data:
-	@DIR=`date "+%Y-%m-%d-%H_%M_%S%N"`; \
+	DIR=`date "+%Y-%m-%d-%H_%M_%S%N"`; \
 	mkdir -p "./experiments/$${DIR}"; \
 	cd ansible && ansible-playbook -i hosts -u root retrieve-blockstore.yaml -e "dir=../experiments/$${DIR}/"; \
 	ansible-playbook -i hosts -u root retrieve-prometheus.yaml --limit `ansible -i hosts --list-hosts prometheus | tail -1 | sed  's/ //g'` -e "dir=../experiments/$${DIR}/";

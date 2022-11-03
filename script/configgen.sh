@@ -16,33 +16,61 @@ if [[ $(uname) == "Darwin" ]]; then
 	SED_EW='[[:>:]]' #End of word in regex
 fi
 
-VERSION=$1
-NEW_IPS=$2
-SEED_IPS=$3
+# ifd-from-ansible is responsible for generating the 'infrastructure-data' that is
+# read by the testnet generator tool.
+ifd-from-ansible() {
+	HOST_PATH=$1
+	OUT_PATH=$2
+	
+	cat <<EOF > $OUT_PATH
+	{
+	  "provider": "digital-ocean",
+	  "network": "0.0.0.0/0",
+	  "instances": {
+EOF
+	
+	lines=`grep '^.*name=.*$' $HOST_PATH | tr " " : `;
+	count=`echo "$lines" | wc -l`
+	
+	i=1
+	for host in  $lines; do
+		ip=`echo $host | cut -d: -f1`
+		name=`echo $host | cut -d: -f2 | sed -n 's/name=\(.*\)/\1/p'`
+	cat <<EOF >> $OUT_PATH
+	    "$name": {
+	      "ip_address": "$ip"
+EOF
+		if [ $i -lt $count ]; then
+	cat <<EOF >> $OUT_PATH
+	    },
+EOF
+		else
+	cat <<EOF >> $OUT_PATH
+	    }
+EOF
+		fi
+		
+		i=`expr $i + 1`
+	done
+	cat <<EOF >> $OUT_PATH
+	  }
+	}
+EOF
+}
 
-go run github.com/tendermint/tendermint/test/e2e/runner@$VERSION setup -f ./testnet.toml
-OLD_IPS=`grep -E '(ipv4_address|container_name)' ./testnet/docker-compose.yml | sed 's/^.*ipv4_address: \(.*\)/\1/g' | sed 's/.*container_name: \(.*\)/\1/g' | paste -sd ' \n' - | sort -k1 | cut -d ' ' -f2`
+VERSION=$1
+HOST_PATH=$2
+IFD_PATH='./ifd.json'
+
+ifd-from-ansible $HOST_PATH $IFD_PATH
+
+go run github.com/tendermint/tendermint/test/e2e/runner@$VERSION setup -f ./testnet.toml --infrastructure-type digital-ocean --infrastructure-data ./ifd.json
+
+rm $IFD_PATH
 
 for file in `find ./testnet/ -name config.toml -type f`; do
-	while read old <&3 && read new <&4; do
-		sed $INPLACE_SED_FLAG "s/$SED_BW$old$SED_EW/$new/g" $file
-	done 3< <(echo $OLD_IPS | tr ' ' '\n') 4< <(echo $NEW_IPS | tr , '\n' )
 	sed $INPLACE_SED_FLAG "s/unsafe = .*/unsafe = true/g" $file
 	sed $INPLACE_SED_FLAG "s/prometheus = .*/prometheus = true/g" $file
-done
-
-# Seed nodes end up with many outgoing persistent peers. Tendermint has an
-# Upperbound on how many persistent peers it can have. We reduce the set of persistent
-# peers here to just the fellow seeds to not run afoul of this limit.
-seedsSlashSeparated=`echo $SEED_IPS | sed 's/,/\\\|/g'`
-for fname in `find . -path './testnet/seed*' -type f -name config.toml`; do
-	persistentPeers=`sed -rn 's/persistent_peers = "(.*)"/\1/p' $fname \
-		| tr , '\n' \
-		| grep "\($seedsSlashSeparated\)" || true`
-
-	result=`echo "$persistentPeers" | paste -s -d, -`
-	replace_str="s/persistent_peers = .*/persistent_peers = \\\"$result\\\"/g"
-	sed $INPLACE_SED_FLAG "$replace_str" $fname
 done
 
 rm -rf ./ansible/testnet

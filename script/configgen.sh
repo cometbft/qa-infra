@@ -29,7 +29,7 @@ ifd-from-ansible() {
 	"instances": {
 EOF
 	
-	lines=`grep '^.*name=.*$' $HOST_PATH | tr " " : `;
+	lines=`grep '^.*name=.*$' $HOST_PATH | tr " " : `
 	count=`echo "$lines" | wc -l`
 	
 	i=1

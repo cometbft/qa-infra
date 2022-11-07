@@ -23,10 +23,10 @@ ifd-from-ansible() {
 	OUT_PATH=$2
 	
 	cat <<EOF > $OUT_PATH
-	{
-	  "provider": "digital-ocean",
-	  "network": "0.0.0.0/0",
-	  "instances": {
+{
+	"provider": "digital-ocean",
+	"network": "0.0.0.0/0",
+	"instances": {
 EOF
 	
 	lines=`grep '^.*name=.*$' $HOST_PATH | tr " " : `;
@@ -36,25 +36,25 @@ EOF
 	for host in  $lines; do
 		ip=`echo $host | cut -d: -f1`
 		name=`echo $host | cut -d: -f2 | sed -n 's/name=\(.*\)/\1/p'`
-	cat <<EOF >> $OUT_PATH
-	    "$name": {
-	      "ip_address": "$ip"
+		cat <<EOF >> $OUT_PATH
+		"$name": {
+			"ip_address": "$ip"
 EOF
 		if [ $i -lt $count ]; then
-	cat <<EOF >> $OUT_PATH
-	    },
+			cat <<EOF >> $OUT_PATH
+		},
 EOF
 		else
-	cat <<EOF >> $OUT_PATH
-	    }
+			cat <<EOF >> $OUT_PATH
+		}
 EOF
 		fi
 		
 		i=`expr $i + 1`
 	done
 	cat <<EOF >> $OUT_PATH
-	  }
 	}
+}
 EOF
 }
 

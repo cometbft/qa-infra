@@ -59,7 +59,7 @@ EOF
 }
 
 VERSION=$1
-HOST_PATH=$2
+HOSTS_PATH=$2
 IFD_PATH='./ifd.json'
 
 ifd-from-ansible $HOST_PATH $IFD_PATH

@@ -62,7 +62,7 @@ VERSION=$1
 HOSTS_PATH=$2
 IFD_PATH='./ifd.json'
 
-ifd-from-ansible $HOST_PATH $IFD_PATH
+ifd-from-ansible $HOSTS_PATH $IFD_PATH
 
 go run github.com/tendermint/tendermint/test/e2e/runner@$VERSION setup -f ./testnet.toml --infrastructure-type digital-ocean --infrastructure-data ./ifd.json
 

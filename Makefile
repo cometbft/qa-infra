@@ -8,7 +8,7 @@ export EPHEMERAL_SIZE
 ROTATE_CONNECTIONS ?= 4
 ROTATE_TX_RATE ?= 800
 ROTATE_TOTAL_TIME ?= 14400
-VERSION_TAG=v0.37.x
+VERSION_TAG=main
 
 .PHONY: terraform-init
 terraform-init:
@@ -31,8 +31,7 @@ hosts:
 
 .PHONY: configgen
 configgen:
-	./script/configgen.sh $(VERSION_TAG) `ansible -i ./ansible/hosts --list-hosts validators | tail +2 | sed  's/ //g' | paste -s -d, -` \
-		`grep seed ./ansible/hosts | cut -d' ' -f1| paste -s -d, -`
+	./script/configgen.sh $(VERSION_TAG) ./ansible/hosts
 
 .PHONY: ansible-install
 ansible-install:

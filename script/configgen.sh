@@ -38,7 +38,8 @@ EOF
 		name=`echo $host | cut -d: -f2 | sed -n 's/name=\(.*\)/\1/p'`
 		cat <<EOF >> $OUT_PATH
 		"$name": {
-			"ip_address": "$ip"
+			"ip_address": "$ip",
+			"port": 26657
 EOF
 		if [ $i -lt $count ]; then
 			cat <<EOF >> $OUT_PATH
@@ -75,3 +76,4 @@ done
 
 rm -rf ./ansible/testnet
 mv ./testnet ./ansible
+mv $IFD_PATH ./ansible/testnet/infrastructure-data.json

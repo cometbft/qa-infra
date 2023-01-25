@@ -49,7 +49,7 @@ ephemeral-configs() {
 		echo >> ./rotating.toml
 	done
 
-	go run github.com/tendermint/tendermint/test/e2e/runner@$VERSION setup -f ./rotating.toml
+	go run github.com/cometbft/cometbft/test/e2e/runner@$VERSION setup -f ./rotating.toml
 	rm ./rotating.toml
 
 	for d in `find  ./rotating -maxdepth 1 -path './rotating/ab*'  -type d`; do

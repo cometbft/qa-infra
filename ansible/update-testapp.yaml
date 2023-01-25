@@ -3,17 +3,17 @@
   become_method: sudo
   gather_facts: yes
   vars:
-    tm_home: /root/.testapp/
+    cmt_home: /root/.testapp/
     ansible_host_key_checking: false
  
   tasks:
-    - name: clone tendermint repo
+    - name: clone cometbft repo
       ansible.builtin.git:
-        repo: https://github.com/tendermint/tendermint
-        dest: "{{ ansible_user_dir }}/tendermint"
+        repo: https://github.com/cometbft/cometbft
+        dest: "{{ ansible_user_dir }}/cometbft"
         version: "{{ version_tag }}"
     - name: rebuild testapp
-      shell: "cd tendermint/test/e2e/node && /usr/lib/go-1.17/bin/go install"
+      shell: "cd cometbft/test/e2e/node && /usr/lib/go-1.17/bin/go install"
     - name: update unit file
       template:
         src: templates/testappd.service.j2

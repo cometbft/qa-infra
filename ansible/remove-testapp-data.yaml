@@ -3,7 +3,7 @@
   become_method: sudo
   gather_facts: yes
   vars:
-    tm_home: /root/.testapp/
+    cmt_home: /root/.testapp/
  
   tasks:
     - name: stop app
@@ -11,9 +11,9 @@
         name: testappd
         state: stopped
       become: yes
-    - name: delete tm data
+    - name: delete cmt data
       ansible.builtin.file:
-        path: "{{ tm_home }}"
+        path: "{{ cmt_home }}"
         state: absent
       become: yes
     - name: delete app data

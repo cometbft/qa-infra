@@ -65,7 +65,7 @@ IFD_PATH='./ifd.json'
 
 ifd-from-ansible $HOSTS_PATH $IFD_PATH
 
-go run github.com/tendermint/tendermint/test/e2e/runner@$VERSION setup -f ./testnet.toml --infrastructure-type digital-ocean --infrastructure-data ./ifd.json
+go run github.com/cometbft/cometbft/test/e2e/runner@$VERSION setup -f ./testnet.toml --infrastructure-type digital-ocean --infrastructure-data ./ifd.json
 
 rm $IFD_PATH
 

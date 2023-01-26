@@ -9,7 +9,7 @@ variable "ssh_keys" {
 
 variable "instance_tags" {
 	type = list(string)
-	default = ["tendermint-testnet-default"]
+	default = ["cometbft-testnet-default"]
 }
 
 variable "instance_names" {

@@ -1,7 +1,6 @@
-# Tendermint Test Networks
+# CometBFT Test Networks
 
-This repo contains [Ansible] and [Terraform] scripts for spinning up Tendermint
-test networks on Digital Ocean (DO).
+This repo contains [Ansible] and [Terraform] scripts for spinning up CometBFT test networks on Digital Ocean (DO).
 
 ## Requirements
 

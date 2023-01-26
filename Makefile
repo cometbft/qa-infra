@@ -1,7 +1,7 @@
 EPHEMERAL_SIZE ?= 0
 DO_INSTANCE_TAGNAME=v037-testnet
 LOAD_RUNNER_COMMIT_HASH ?= 51685158fe36869ab600527b852437ca0939d0cc
-LOAD_RUNNER_CMD=go run github.com/tendermint/tendermint/test/e2e/runner@$(LOAD_RUNNER_COMMIT_HASH)
+LOAD_RUNNER_CMD=go run github.com/cometbft/cometbft/test/e2e/runner@$(LOAD_RUNNER_COMMIT_HASH)
 ANSIBLE_FORKS=20
 export DO_INSTANCE_TAGNAME
 export EPHEMERAL_SIZE

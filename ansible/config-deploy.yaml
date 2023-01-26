@@ -3,14 +3,14 @@
   become: false
   gather_facts: yes
   vars:
-    tm_home: /root/.testapp/
+    cmt_home: /root/.testapp/
     ansible_host_key_checking: false
  
   tasks:
     - name: copy configuration files
       ansible.builtin.copy:
         src: ./testnet/{{ hostvars[inventory_hostname].name }}/config/config.toml
-        dest: "{{ tm_home }}/config/config.toml"
+        dest: "{{ cmt_home }}/config/config.toml"
     - name: restart app
       ansible.builtin.systemd:
         name: testappd

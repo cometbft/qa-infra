@@ -40,7 +40,7 @@ ansible-install:
 		ansible-playbook -i hosts -u root base.yaml -f $(ANSIBLE_FORKS) && \
 		ansible-playbook -i hosts -u root prometheus-node-exporter.yaml -f $(ANSIBLE_FORKS) && \
 		ansible-playbook -i hosts -u root init-testapp.yaml -f $(ANSIBLE_FORKS) && \
-		ansible-playbook -i hosts -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+		ansible-playbook -i hosts -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)"
 
 .PHONY: prometheus-init
 prometheus-init:
@@ -64,7 +64,7 @@ runload:
 
 .PHONY: restart
 restart:
-	cd ansible && ansible-playbook -i hosts -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+	cd ansible && ansible-playbook -i hosts -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)"
 	cd ansible && ansible-playbook restart-prometheus.yaml -i hosts -u root
 	cd ansible && ansible-playbook re-init-testapp.yaml -i hosts -u root -f $(ANSIBLE_FORKS)
 

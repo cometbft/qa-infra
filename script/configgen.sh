@@ -67,7 +67,7 @@ ifd-from-ansible $HOSTS_PATH $IFD_PATH
 
 go run github.com/cometbft/cometbft/test/e2e/runner@$VERSION setup -f ./testnet.toml --infrastructure-type digital-ocean --infrastructure-data ./ifd.json
 
-#rm $IFD_PATH
+rm $IFD_PATH
 
 for file in `find ./testnet/ -name config.toml -type f`; do
 	sed $INPLACE_SED_FLAG "s/unsafe = .*/unsafe = true/g" $file

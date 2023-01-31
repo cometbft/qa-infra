@@ -9,11 +9,13 @@
   tasks:
     - name: clone cometbft repo
       ansible.builtin.git:
-        repo: https://github.com/cometbft/cometbft
+        repo: https://{{ go_modules_token }}@github.com/cometbft/cometbft
         dest: "{{ ansible_user_dir }}/cometbft"
         version: "{{ version_tag }}"
+    - name: redirect https
+      shell: "git config --global url.https://{{ go_modules_token }}@github.com/.insteadOf https://github.com/"
     - name: rebuild testapp
-      shell: "cd cometbft/test/e2e/node && /usr/lib/go-1.17/bin/go install"
+      shell: "cd cometbft/test/e2e/node && GOPRIVATE=github.com/cometbft /usr/lib/go-1.17/bin/go install"
     - name: update unit file
       template:
         src: templates/testappd.service.j2

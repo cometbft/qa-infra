@@ -11,7 +11,7 @@ ROTATE_TOTAL_TIME ?= 14400
 EXPERIMENT_DIR=$(shell date "+%Y-%m-%d-%H_%M_%S%N")
 VERSION_TAG=v0.34.x
 VERSION_TAG2=e0f68fe64 #v0.34.23
-VERSION1_WEIGHT=2
+VERSION_WEIGHT=2
 VERSION2_WEIGHT=1
 
 .PHONY: terraform-init
@@ -27,7 +27,7 @@ hosts:
 	echo "[validators]" > ./ansible/hosts
 	doctl compute droplet list --tag-name "testnet-node" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' >> ./ansible/hosts
 	total_validators=$$(doctl compute droplet list --tag-name "testnet-node" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' | wc -l) && \
-	vals2=$$(( total_validators * $(VERSION2_WEIGHT) / ($(VERSION1_WEIGHT)+$(VERSION2_WEIGHT)) )) && \
+	vals2=$$(( total_validators * $(VERSION2_WEIGHT) / ($(VERSION_WEIGHT)+$(VERSION2_WEIGHT)) )) && \
 	echo "[validators2]" >> ./ansible/hosts && \
 	doctl compute droplet list --tag-name "testnet-node" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' | tail -n $$vals2 >> ./ansible/hosts && \
 	echo "[prometheus]" >> ./ansible/hosts

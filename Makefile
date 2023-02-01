@@ -9,6 +9,7 @@ ROTATE_CONNECTIONS ?= 4
 ROTATE_TX_RATE ?= 800
 ROTATE_TOTAL_TIME ?= 14400
 EXPERIMENT_DIR=$(shell date "+%Y-%m-%d-%H_%M_%S%N")
+RETRIEVE_TARGET_HOST ?= validator01
 VERSION_TAG=main
 VERSION_TAG2=e0f68fe64 #v0.34.23
 VERSION_WEIGHT=2
@@ -81,10 +82,10 @@ restart:
 rotate:
 	./script/rotate.sh $(VERSION_TAG) `ansible all --list-hosts -i ./ansible/hosts --limit ephemeral | tail +2 | paste -s -d, - | tr -d ' '`
 
-.PHONY: retrieve-block-stores
-retrieve-block-stores:
+.PHONY: retrieve-block-store
+retrieve-block-store:
 	mkdir -p "./experiments/$(EXPERIMENT_DIR)"; \
-	cd ansible && ansible-playbook -i hosts -u root retrieve-blockstore.yaml -e "dir=../experiments/$(EXPERIMENT_DIR)/"
+	cd ansible && ansible-playbook -i hosts --limit $(RETRIEVE_TARGET_HOST) -u root retrieve-blockstore.yaml -e "dir=../experiments/$(EXPERIMENT_DIR)/"
 
 .PHONY: retrieve-prometheus-data
 retrieve-prometheus-data:
@@ -92,7 +93,7 @@ retrieve-prometheus-data:
 	cd ansible && ansible-playbook -i hosts -u root retrieve-prometheus.yaml --limit `ansible -i hosts --list-hosts prometheus | tail -1 | sed  's/ //g'` -e "dir=../experiments/$(EXPERIMENT_DIR)/";
 
 .PHONY: retrieve-data
-retrieve-data: retrieve-block-stores retrieve-prometheus-data
+retrieve-data: retrieve-block-store retrieve-prometheus-data
 
 .PHONY: terraform-destroy
 terraform-destroy:

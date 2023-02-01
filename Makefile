@@ -9,8 +9,11 @@ ROTATE_CONNECTIONS ?= 4
 ROTATE_TX_RATE ?= 800
 ROTATE_TOTAL_TIME ?= 14400
 
+# Set it to "all" to retrieve from all hosts
+# Set it to "any" to retrieve from one full node
+# Set it to the exact name of a validator to retrieve from it
+RETRIEVE_TARGET_HOST ?= any
 EXPERIMENT_DIR=$(shell date "+%Y-%m-%d-%H_%M_%S%N")
-RETRIEVE_TARGET_HOST ?= validator01
 
 VERSION_TAG ?= main
 VERSION_TAG2 ?= e0f68fe64 #v0.34.23
@@ -98,8 +101,15 @@ rotate:
 
 .PHONY: retrieve-block-store
 retrieve-block-store:
-	mkdir -p "./experiments/$(EXPERIMENT_DIR)"; \
-	cd ansible && ansible-playbook -i hosts --limit $(RETRIEVE_TARGET_HOST) -u root retrieve-blockstore.yaml -e "dir=../experiments/$(EXPERIMENT_DIR)/"
+	mkdir -p "./experiments/$(EXPERIMENT_DIR)"
+ifeq ($(RETRIEVE_TARGET_HOST), any)
+	cd ansible && \
+		retrieve_target_host=$$(ansible-inventory -i hosts --host $$(ansible -i hosts --list-hosts validators | tail -1) --yaml | sed 's/^name: //'); \
+		ansible-playbook -i hosts -u root retrieve-blockstore.yaml -e "dir=../experiments/$(EXPERIMENT_DIR)/" -e "target_host=$$retrieve_target_host"
+else
+	cd ansible && \
+		ansible-playbook -i hosts -u root retrieve-blockstore.yaml -e "dir=../experiments/$(EXPERIMENT_DIR)/" -e "target_host=$(RETRIEVE_TARGET_HOST)"
+endif
 
 .PHONY: retrieve-prometheus-data
 retrieve-prometheus-data:
@@ -107,7 +117,7 @@ retrieve-prometheus-data:
 	cd ansible && ansible-playbook -i hosts -u root retrieve-prometheus.yaml --limit `ansible -i hosts --list-hosts prometheus | tail -1 | sed  's/ //g'` -e "dir=../experiments/$(EXPERIMENT_DIR)/";
 
 .PHONY: retrieve-data
-retrieve-data: retrieve-block-store retrieve-prometheus-data
+retrieve-data: retrieve-prometheus-data retrieve-block-store
 
 .PHONY: terraform-destroy
 terraform-destroy:

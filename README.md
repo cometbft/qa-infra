@@ -62,16 +62,19 @@ make runload
 make stop-network
 
 # 13. Retrieve the data produced during the execution
+make retrieve-data
+
+#alternatively, you can retrieve the prometheus data and the block store independently
 # for the prometheus database
 make retrieve-prometheus-data
 
 # to retrieve the blockstore from a node
 #    The target node from which the data is retrieved can be changed via RETRIEVE_TARGET_HOST.
-#    The default value is "validator01"
+#    The default value is "any", which will pick one validator from the inventory.
+#    Set it to "all" to retrieve from all nodes (very slow!); set it to the exact name of
+#    a validator to retrieve from that particular validator.
+#    All this also applies to target retrieve-data
 make retrieve-block-store
-
-#alternatively, to retrieve everything in one shot
-make retrieve-data
 
 ```
 

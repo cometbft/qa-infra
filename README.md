@@ -54,13 +54,34 @@ make prometheus-init
 make start-network
 
 # 11. Execute a load test against the network
+#    This will start sending load until Ctrl-C is sent,
+#    so consider running this in its own terminal
 make runload
+
+# 12. Once the execution is over, stop the network
+make stop-network
+
+# 13. Retrieve the data produced during the execution
+#    This command retrieves both the prometheus database and the blockstore
+make retrieve-data
+
+#alternatively, you can retrieve the prometheus database and the blockstore independently
+make retrieve-prometheus-data
+
+# to retrieve the blockstore from a node
+#    The target node from which the data is retrieved can be changed via RETRIEVE_TARGET_HOST.
+#    The default value is "any", which will pick one validator from the inventory.
+#    Set it to "all" to retrieve from all nodes (very slow!); set it to the exact name of
+#    a validator to retrieve from that particular validator.
+#    All this also applies to target retrieve-data
+make retrieve-blockstore
+
 ```
 
 ## Additional Commands
 
-
 ### Restart the network
+
 If you need to restart the running experiment, run the following command:
 
 ```sh

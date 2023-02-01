@@ -5,28 +5,34 @@
   vars:
     cmt_home: /root/.testapp/
     ansible_host_key_checking: false
+    target_host: all
   tasks:
     - name: stop app
       ansible.builtin.systemd:
         name: testappd
         state: stopped
       become: yes
+      when: target_host == "all" or target_host == hostvars[inventory_hostname].name
     - name: Delete old zip
       ansible.builtin.file:
         path: "{{ cmt_home }}/data/blockstore.db.zip"
         state: absent
+      when: target_host == "all" or target_host == hostvars[inventory_hostname].name
     - name: Zip the blockstore directory
       archive:
         path: "{{ cmt_home }}/data/blockstore.db"
         format: zip
         dest: "{{ cmt_home }}/data/blockstore.db.zip"
+      when: target_host == "all" or target_host == hostvars[inventory_hostname].name
     - name: Fetch the blockstore
       ansible.builtin.fetch:
         src: "{{ cmt_home }}/data/blockstore.db.zip"
         dest: "{{dir}}/{{ hostvars[inventory_hostname].name }}/blockstore.db.zip"
         flat: yes
+      when: target_host == "all" or target_host == hostvars[inventory_hostname].name
     - name: start the systemd-unit
       ansible.builtin.systemd:
         name: testappd
         state: started
       become: yes
+      when: target_host == "all" or target_host == hostvars[inventory_hostname].name

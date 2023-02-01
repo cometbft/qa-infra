@@ -8,11 +8,21 @@ export EPHEMERAL_SIZE
 ROTATE_CONNECTIONS ?= 4
 ROTATE_TX_RATE ?= 800
 ROTATE_TOTAL_TIME ?= 14400
+
+# Set it to "all" to retrieve from all hosts
+# Set it to "any" to retrieve from one full node
+# Set it to the exact name of a validator to retrieve from it
+RETRIEVE_TARGET_HOST ?= any
 EXPERIMENT_DIR=$(shell date "+%Y-%m-%d-%H_%M_%S%N")
-VERSION_TAG=main
-VERSION_TAG2=e0f68fe64 #v0.34.23
-VERSION_WEIGHT=2
-VERSION2_WEIGHT=0
+
+VERSION_TAG ?= main
+VERSION_TAG2 ?= e0f68fe64 #v0.34.23
+VERSION_WEIGHT ?= 2
+VERSION2_WEIGHT ?= 0
+
+ifeq ($(VERSION_WEIGHT), 0)
+$(error VERSION_WEIGHT must be non-zero)
+endif
 
 .PHONY: terraform-init
 terraform-init:
@@ -26,10 +36,13 @@ terraform-apply:
 hosts:
 	echo "[validators]" > ./ansible/hosts
 	doctl compute droplet list --tag-name "testnet-node" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' >> ./ansible/hosts
+ifneq ($(VERSION2_WEIGHT), 0) #(num+den-1)/den is ceiling division
+	echo "[validators2]" >> ./ansible/hosts
 	total_validators=$$(doctl compute droplet list --tag-name "testnet-node" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' | wc -l) && \
-	vals2=$$(( total_validators * $(VERSION2_WEIGHT) / ($(VERSION_WEIGHT)+$(VERSION2_WEIGHT)) )) && \
-	echo "[validators2]" >> ./ansible/hosts && \
-	doctl compute droplet list --tag-name "testnet-node" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' | tail -n $$vals2 >> ./ansible/hosts && \
+	num=$$(( total_validators * $(VERSION2_WEIGHT) )) den=$$(( $(VERSION_WEIGHT)+$(VERSION2_WEIGHT) )) && \
+	vals2=$$(( (num+den-1)/den )) && \
+	doctl compute droplet list --tag-name "testnet-node" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' | tail -n $$vals2 >> ./ansible/hosts
+endif
 	echo "[prometheus]" >> ./ansible/hosts
 	doctl compute droplet list --tag-name "testnet-observability" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f3   >> ./ansible/hosts
 	echo "[loadrunners]" >> ./ansible/hosts
@@ -47,8 +60,11 @@ ansible-install:
 		ansible-playbook -i hosts -u root base.yaml -f $(ANSIBLE_FORKS) && \
 		ansible-playbook -i hosts -u root prometheus-node-exporter.yaml -f $(ANSIBLE_FORKS) && \
 		ansible-playbook -i hosts -u root init-testapp.yaml -f $(ANSIBLE_FORKS) && \
-		ansible-playbook -i hosts -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"  && \
+		ansible-playbook -i hosts -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+ifneq ($(VERSION2_WEIGHT), 0)
+	cd ansible && \
 		ansible-playbook -i hosts --limit validators2 -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG2)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+endif
 
 .PHONY: prometheus-init
 prometheus-init:
@@ -73,7 +89,9 @@ runload:
 .PHONY: restart
 restart:
 	cd ansible && ansible-playbook -i hosts -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+ifneq ($(VERSION2_WEIGHT), 0)
 	cd ansible && ansible-playbook -i hosts --limit validators2 -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG2)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+endif
 	cd ansible && ansible-playbook restart-prometheus.yaml -i hosts -u root
 	cd ansible && ansible-playbook re-init-testapp.yaml -i hosts -u root -f $(ANSIBLE_FORKS)
 
@@ -81,10 +99,17 @@ restart:
 rotate:
 	./script/rotate.sh $(VERSION_TAG) `ansible all --list-hosts -i ./ansible/hosts --limit ephemeral | tail +2 | paste -s -d, - | tr -d ' '`
 
-.PHONY: retrieve-block-stores
-retrieve-block-stores:
-	mkdir -p "./experiments/$(EXPERIMENT_DIR)"; \
-	cd ansible && ansible-playbook -i hosts -u root retrieve-blockstore.yaml -e "dir=../experiments/$(EXPERIMENT_DIR)/"
+.PHONY: retrieve-blockstore
+retrieve-blockstore:
+	mkdir -p "./experiments/$(EXPERIMENT_DIR)"
+ifeq ($(RETRIEVE_TARGET_HOST), any)
+	cd ansible && \
+		retrieve_target_host=$$(ansible-inventory -i hosts --host $$(ansible -i hosts --list-hosts validators | tail -1) --yaml | sed 's/^name: //'); \
+		ansible-playbook -i hosts -u root retrieve-blockstore.yaml -e "dir=../experiments/$(EXPERIMENT_DIR)/" -e "target_host=$$retrieve_target_host"
+else
+	cd ansible && \
+		ansible-playbook -i hosts -u root retrieve-blockstore.yaml -e "dir=../experiments/$(EXPERIMENT_DIR)/" -e "target_host=$(RETRIEVE_TARGET_HOST)"
+endif
 
 .PHONY: retrieve-prometheus-data
 retrieve-prometheus-data:
@@ -92,7 +117,7 @@ retrieve-prometheus-data:
 	cd ansible && ansible-playbook -i hosts -u root retrieve-prometheus.yaml --limit `ansible -i hosts --list-hosts prometheus | tail -1 | sed  's/ //g'` -e "dir=../experiments/$(EXPERIMENT_DIR)/";
 
 .PHONY: retrieve-data
-retrieve-data: retrieve-block-stores retrieve-prometheus-data
+retrieve-data: retrieve-prometheus-data retrieve-blockstore
 
 .PHONY: terraform-destroy
 terraform-destroy:

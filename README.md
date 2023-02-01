@@ -65,7 +65,6 @@ make stop-network
 make retrieve-data
 
 #alternatively, you can retrieve the prometheus data and the block store independently
-# for the prometheus database
 make retrieve-prometheus-data
 
 # to retrieve the blockstore from a node

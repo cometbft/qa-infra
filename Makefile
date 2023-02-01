@@ -8,8 +8,11 @@ export EPHEMERAL_SIZE
 ROTATE_CONNECTIONS ?= 4
 ROTATE_TX_RATE ?= 800
 ROTATE_TOTAL_TIME ?= 14400
-VERSION_TAG=main
 EXPERIMENT_DIR=$(shell date "+%Y-%m-%d-%H_%M_%S%N")
+VERSION_TAG=v0.34.x
+VERSION_TAG2=e0f68fe64 #v0.34.23
+VERSION1_WEIGHT=2
+VERSION2_WEIGHT=1
 
 .PHONY: terraform-init
 terraform-init:
@@ -23,6 +26,10 @@ terraform-apply:
 hosts:
 	echo "[validators]" > ./ansible/hosts
 	doctl compute droplet list --tag-name "testnet-node" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' >> ./ansible/hosts
+	total_validators=$$(doctl compute droplet list --tag-name "testnet-node" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' | wc -l) && \
+	vals2=$$(( total_validators * $(VERSION2_WEIGHT) / ($(VERSION1_WEIGHT)+$(VERSION2_WEIGHT)) )) && \
+	echo "[validators2]" >> ./ansible/hosts && \
+	doctl compute droplet list --tag-name "testnet-node" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f2,3 | sort -k1 | sed 's/\(.*\) \(.*\)/\2 name=\1/g' | tail -n $$vals2 >> ./ansible/hosts && \
 	echo "[prometheus]" >> ./ansible/hosts
 	doctl compute droplet list --tag-name "testnet-observability" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f3   >> ./ansible/hosts
 	echo "[loadrunners]" >> ./ansible/hosts
@@ -40,7 +47,8 @@ ansible-install:
 		ansible-playbook -i hosts -u root base.yaml -f $(ANSIBLE_FORKS) && \
 		ansible-playbook -i hosts -u root prometheus-node-exporter.yaml -f $(ANSIBLE_FORKS) && \
 		ansible-playbook -i hosts -u root init-testapp.yaml -f $(ANSIBLE_FORKS) && \
-		ansible-playbook -i hosts -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+		ansible-playbook -i hosts -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"  && \
+		ansible-playbook -i hosts --limit validators2 -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG2)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
 
 .PHONY: prometheus-init
 prometheus-init:
@@ -65,6 +73,7 @@ runload:
 .PHONY: restart
 restart:
 	cd ansible && ansible-playbook -i hosts -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+	cd ansible && ansible-playbook -i hosts --limit validators2 -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG2)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
 	cd ansible && ansible-playbook restart-prometheus.yaml -i hosts -u root
 	cd ansible && ansible-playbook re-init-testapp.yaml -i hosts -u root -f $(ANSIBLE_FORKS)
 

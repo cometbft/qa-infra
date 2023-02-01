@@ -62,9 +62,10 @@ make runload
 make stop-network
 
 # 13. Retrieve the data produced during the execution
+#    This command retrieves both the prometheus database and the blockstore
 make retrieve-data
 
-#alternatively, you can retrieve the prometheus data and the block store independently
+#alternatively, you can retrieve the prometheus database and the blockstore independently
 make retrieve-prometheus-data
 
 # to retrieve the blockstore from a node
@@ -73,7 +74,7 @@ make retrieve-prometheus-data
 #    Set it to "all" to retrieve from all nodes (very slow!); set it to the exact name of
 #    a validator to retrieve from that particular validator.
 #    All this also applies to target retrieve-data
-make retrieve-block-store
+make retrieve-blockstore
 
 ```
 

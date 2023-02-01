@@ -99,8 +99,8 @@ endif
 rotate:
 	./script/rotate.sh $(VERSION_TAG) `ansible all --list-hosts -i ./ansible/hosts --limit ephemeral | tail +2 | paste -s -d, - | tr -d ' '`
 
-.PHONY: retrieve-block-store
-retrieve-block-store:
+.PHONY: retrieve-blockstore
+retrieve-blockstore:
 	mkdir -p "./experiments/$(EXPERIMENT_DIR)"
 ifeq ($(RETRIEVE_TARGET_HOST), any)
 	cd ansible && \
@@ -117,7 +117,7 @@ retrieve-prometheus-data:
 	cd ansible && ansible-playbook -i hosts -u root retrieve-prometheus.yaml --limit `ansible -i hosts --list-hosts prometheus | tail -1 | sed  's/ //g'` -e "dir=../experiments/$(EXPERIMENT_DIR)/";
 
 .PHONY: retrieve-data
-retrieve-data: retrieve-prometheus-data retrieve-block-store
+retrieve-data: retrieve-prometheus-data retrieve-blockstore
 
 .PHONY: terraform-destroy
 terraform-destroy:

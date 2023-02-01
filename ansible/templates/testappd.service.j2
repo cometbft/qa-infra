@@ -8,6 +8,7 @@ Type=simple
 User={{ ansible_user_id }}
 WorkingDirectory={{ ansible_user_dir }}
 ExecStart={{ansible_user_dir }}/go/bin/node {{ cmt_home }}config/app.toml
+Environment=TMHOME={{ cmt_home }}
 Environment=CMTHOME={{ cmt_home }}
 Restart=on-failure
 RestartSec=3

@@ -5,9 +5,9 @@ LOAD_RUNNER_CMD=go run github.com/cometbft/cometbft/test/e2e/runner@$(LOAD_RUNNE
 ANSIBLE_FORKS=20
 export DO_INSTANCE_TAGNAME
 export EPHEMERAL_SIZE
-ROTATE_CONNECTIONS ?= 4
-ROTATE_TX_RATE ?= 800
-ROTATE_TOTAL_TIME ?= 14400
+ROTATE_CONNECTIONS ?= 2
+ROTATE_TX_RATE ?= 200
+ROTATE_TOTAL_TIME ?= 90
 
 # Set it to "all" to retrieve from all hosts
 # Set it to "any" to retrieve from one full node
@@ -15,8 +15,8 @@ ROTATE_TOTAL_TIME ?= 14400
 RETRIEVE_TARGET_HOST ?= any
 EXPERIMENT_DIR=$(shell date "+%Y-%m-%d-%H_%M_%S%N")
 
-VERSION_TAG ?= main
-VERSION_TAG2 ?= e0f68fe64 #v0.34.23
+VERSION_TAG ?= 3b783434f #v0.34.27 (cometbft/cometbft)
+VERSION_TAG2 ?= 66c2cb634 #v0.34.26 (informalsystems/tendermint)
 VERSION_WEIGHT ?= 2
 VERSION2_WEIGHT ?= 0
 

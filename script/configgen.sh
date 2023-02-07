@@ -71,6 +71,7 @@ go run github.com/cometbft/cometbft/test/e2e/runner@$VERSION setup -f ./testnet.
 for file in `find ./testnet/ -name config.toml -type f`; do
 	sed $INPLACE_SED_FLAG "s/unsafe = .*/unsafe = true/g" $file
 	sed $INPLACE_SED_FLAG "s/prometheus = .*/prometheus = true/g" $file
+	sed $INPLACE_SED_FLAG "s/cache_size = .*/cache_size = 200000/g" $file
 done
 
 rm -rf ./ansible/testnet

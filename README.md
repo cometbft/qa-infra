@@ -90,9 +90,8 @@ After you have all the prerequisites installed and have configured your
     ```
     For blockstore, use the following. Here, notice that the target node from which the data is retrieved can be changed via the environment variable `RETRIEVE_TARGET_HOST`. 
       - `"any"` (default) - retrieve from one random validator from the inventory. 
-      - "all" - retrieve from all nodes (very slow!); 
+      - `"all"` - retrieve from all nodes (very slow!); 
       - set it to the exact name of a validator to retrieve from that particular validator.
-    `retrieve-data` target is always `"all"`
     ```bash 
     make retrieve-blockstore
     ```

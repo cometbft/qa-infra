@@ -63,9 +63,8 @@ for (key,ax) in zip(groups.groups.keys(), [axes] if ncols == 1 else axes.flatten
 fig.suptitle('200-node testnet experiments - ' + release)
 
 plt.show()
+# Save the figure with subplots
 fig.savefig(os.path.join(parent,'all_experiments.png'))
-
-
 
 
 
@@ -83,8 +82,10 @@ for (key,ax) in zip(groups.groups.keys(), [axes] if ncols == 1 else axes.flatten
     group = groups.get_group(key)
     ax.set_ylabel('latency (s)')
     ax.set_xlabel('experiment time (s)')
-    ax.set_title(key)
     ax.grid(True)
+    (con,rate) = key
+    label = 'c='+str(con) + ' r='+ str(rate)
+    ax.set_title(label)
 
     #Group by experiment 
     paramGroups = group.groupby(['experiment_id'])
@@ -92,34 +93,34 @@ for (key,ax) in zip(groups.groups.keys(), [axes] if ncols == 1 else axes.flatten
         subGroup = paramGroups.get_group(subKey)
         startTime = subGroup['block_time'].min()
         subGroupMod = subGroup['block_time'].apply(lambda x: x - startTime)
-        ax.scatter(subGroupMod, subGroup.duration_ns, label=subKey)
-    ax.legend()
+        ax.scatter(subGroupMod, subGroup.duration_ns, label=label)
+    #ax.legend()
     
     #Save individual axes
     extent = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
-    (con,rate) = key
     fig.savefig(os.path.join(parent,'c'+str(con) + 'r'+ str(rate) + '.png'), bbox_inches=extent)
 
 fig.suptitle('200-node testnet configurations - ' + release)
 
+# Save the figure with subplots
 fig.savefig(os.path.join(parent,'all_configs.png'))
 plt.show()
 
 
-
 fig, axes = plt.subplots(nrows=nrows, ncols=ncols, figsize=(6*ncols, 4*nrows), sharey=True)
 fig.tight_layout(pad=5.0)
-
 
 #Plot configurations as subplots 
 for (key,ax) in zip(groups.groups.keys(), [axes] if ncols == 1 else axes.flatten()):
     group = groups.get_group(key)
     ax.set_ylabel('latency (s)')
     ax.set_xlabel('experiment time (s)')
-    ax.set_title(key)
     ax.grid(True)
+    (con,rate) = key
+    label = 'c='+str(con) + ' r='+ str(rate)
+    ax.set_title(label)
 
-    #Group by experiment 
+    #Group by experiment, but merge them as a single experiment
     paramGroups = group.groupby(['experiment_id'])
     for (subKey) in paramGroups.groups.keys():
         subGroup = paramGroups.get_group(subKey)
@@ -130,6 +131,6 @@ for (key,ax) in zip(groups.groups.keys(), [axes] if ncols == 1 else axes.flatten
     #Save individual axes
     extent = ax.get_window_extent().transformed(fig.dpi_scale_trans.inverted())
     (con,rate) = key
-    fig.savefig(os.path.join(parent,'c'+str(con) + 'r'+ str(rate) + '_together.png'), bbox_inches=extent)
+    fig.savefig(os.path.join(parent,'c'+str(con) + 'r'+ str(rate) + '_merged.png'), bbox_inches=extent)
 
 plt.show()

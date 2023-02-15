@@ -1,0 +1,15 @@
+- hosts: validators,prometheus,loadrunners,ephemeral
+  vars:
+    ansible_host_key_checking: false
+
+- name: Base playbook
+  ansible.builtin.import_playbook: base.yaml
+
+- name: Prometheus playbook
+  ansible.builtin.import_playbook: prometheus-node-exporter.yaml
+
+- name: Init test app playbook
+  ansible.builtin.import_playbook: init-testapp.yaml
+
+- name: Update test app playbook 
+  ansible.builtin.import_playbook: update-testapp.yaml

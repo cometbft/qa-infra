@@ -1,5 +1,5 @@
 EPHEMERAL_SIZE ?= 0
-DO_INSTANCE_TAGNAME=v037-testnet
+DO_INSTANCE_TAGNAME=v034-testnet
 LOAD_RUNNER_COMMIT_HASH ?= 51685158fe36869ab600527b852437ca0939d0cc
 LOAD_RUNNER_CMD=go run github.com/cometbft/cometbft/test/e2e/runner@$(LOAD_RUNNER_COMMIT_HASH)
 ANSIBLE_FORKS=20
@@ -16,9 +16,9 @@ RETRIEVE_TARGET_HOST ?= any
 EXPERIMENT_DIR=$(shell date "+%Y-%m-%d-%H_%M_%S%N")
 
 VERSION_TAG ?= 3b783434f #v0.34.27 (cometbft/cometbft)
-VERSION_TAG2 ?= 66c2cb634 #v0.34.26 (informalsystems/tendermint)
+VERSION2_TAG ?= 66c2cb634 #v0.34.26 (informalsystems/tendermint)
 VERSION_WEIGHT ?= 2
-VERSION2_WEIGHT ?= 0
+VERSION2_WEIGHT ?= 2
 
 ifeq ($(VERSION_WEIGHT), 0)
 $(error VERSION_WEIGHT must be non-zero)
@@ -57,30 +57,36 @@ configgen:
 .PHONY: ansible-install
 ansible-install:
 	cd ansible && \
-		ansible-playbook -i hosts -u root base.yaml -f $(ANSIBLE_FORKS) && \
-		ansible-playbook -i hosts -u root prometheus-node-exporter.yaml -f $(ANSIBLE_FORKS) && \
-		ansible-playbook -i hosts -u root init-testapp.yaml -f $(ANSIBLE_FORKS) && \
-		ansible-playbook -i hosts -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+		ANSIBLE_SSH_RETRIES=5 ansible-playbook -i hosts -u root install.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
 ifneq ($(VERSION2_WEIGHT), 0)
 	cd ansible && \
-		ansible-playbook -i hosts --limit validators2 -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG2)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+		ANSIBLE_SSH_RETRIES=5 ansible-playbook -i hosts --limit validators2 -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION2_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+endif
+
+.PHONY: ansible-install-retry
+ansible-install-retry:
+	cd ansible && \
+		ANSIBLE_SSH_RETRIES=5 ansible-playbook -i retry -u root install.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+ifneq ($(VERSION2_WEIGHT), 0)
+	cd ansible && \
+		ANSIBLE_SSH_RETRIES=5 ansible-playbook -i retry --limit validators2 -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION2_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
 endif
 
 .PHONY: prometheus-init
 prometheus-init:
-	cd ansible && ansible-playbook -i hosts  -u root prometheus.yaml -f 10
+	cd ansible && ANSIBLE_SSH_RETRIES=5 ansible-playbook -i hosts  -u root prometheus.yaml -f 10
 
 .PHONY: start-network
 start-network:
-	cd ansible && ansible-playbook -i hosts -u root start-testapp.yaml -f $(ANSIBLE_FORKS)
+	cd ansible && ANSIBLE_SSH_RETRIES=5 ansible-playbook -i hosts -u root start-testapp.yaml -f $(ANSIBLE_FORKS)
 
 .PHONY: stop-network
 stop-network:
-	cd ansible && ansible-playbook -i hosts -u root stop-testapp.yaml -f $(ANSIBLE_FORKS)
+	cd ansible && ANSIBLE_SSH_RETRIES=5 ansible-playbook -i hosts -u root stop-testapp.yaml -f $(ANSIBLE_FORKS)
 
 .PHONY: runload
 runload:
-	cd ansible &&  ansible-playbook runload.yaml -i hosts -u root \
+	cd ansible && ANSIBLE_SSH_RETRIES=5 ansible-playbook runload.yaml -i hosts -u root \
 		-e endpoints=`ansible -i ./hosts --list-hosts validators | tail +2 | tail -1 | sed  "s/ //g" | sed 's/\(.*\)/ws:\/\/\1:26657\/websocket/' | paste -s -d, -` \
 		-e connections=$(ROTATE_CONNECTIONS) \
 		-e time_seconds=$(ROTATE_TOTAL_TIME) \
@@ -88,12 +94,12 @@ runload:
 
 .PHONY: restart
 restart:
-	cd ansible && ansible-playbook -i hosts -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+	cd ansible && ANSIBLE_SSH_RETRIES=5 ansible-playbook -i hosts -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
 ifneq ($(VERSION2_WEIGHT), 0)
-	cd ansible && ansible-playbook -i hosts --limit validators2 -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG2)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+	cd ansible && ANSIBLE_SSH_RETRIES=5 ansible-playbook -i hosts --limit validators2 -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION2_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
 endif
-	cd ansible && ansible-playbook restart-prometheus.yaml -i hosts -u root
-	cd ansible && ansible-playbook re-init-testapp.yaml -i hosts -u root -f $(ANSIBLE_FORKS)
+	cd ansible && ANSIBLE_SSH_RETRIES=5 ansible-playbook restart-prometheus.yaml -i hosts -u root
+	cd ansible && ANSIBLE_SSH_RETRIES=5 ansible-playbook re-init-testapp.yaml -i hosts -u root -f $(ANSIBLE_FORKS)
 
 .PHONY: rotate
 rotate:

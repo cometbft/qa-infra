@@ -1,5 +1,5 @@
 EPHEMERAL_SIZE ?= 0
-DO_INSTANCE_TAGNAME=v034-testnet
+DO_INSTANCE_TAGNAME=v037-testnet
 LOAD_RUNNER_COMMIT_HASH ?= 51685158fe36869ab600527b852437ca0939d0cc
 LOAD_RUNNER_CMD=go run github.com/cometbft/cometbft/test/e2e/runner@$(LOAD_RUNNER_COMMIT_HASH)
 ANSIBLE_FORKS=20
@@ -15,10 +15,11 @@ ROTATE_TOTAL_TIME ?= 90
 RETRIEVE_TARGET_HOST ?= any
 EXPERIMENT_DIR=$(shell date "+%Y-%m-%d-%H_%M_%S%N")
 
-VERSION_TAG ?= 3b783434f #v0.34.27 (cometbft/cometbft)
+#VERSION_TAG ?= 3b783434f #v0.34.27 (cometbft/cometbft)
+VERSION_TAG ?= bef9a830e  #v0.37.alpha3 (cometbft/cometbft)
 VERSION2_TAG ?= 66c2cb634 #v0.34.26 (informalsystems/tendermint)
 VERSION_WEIGHT ?= 2
-VERSION2_WEIGHT ?= 2
+VERSION2_WEIGHT ?= 0
 
 ifeq ($(VERSION_WEIGHT), 0)
 $(error VERSION_WEIGHT must be non-zero)

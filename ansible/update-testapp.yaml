@@ -15,7 +15,7 @@
     - name: redirect https
       shell: "git config --global url.https://{{ go_modules_token }}@github.com/.insteadOf https://github.com/"
     - name: rebuild testapp
-      shell: "cd cometbft/test/e2e/node && GOPRIVATE=github.com/cometbft /usr/lib/go-1.17/bin/go install"
+      shell: "cd cometbft/test/e2e/node && GOPRIVATE=github.com/cometbft /usr/lib/go-1.19/bin/go install"
     - name: update unit file
       template:
         src: templates/testappd.service.j2

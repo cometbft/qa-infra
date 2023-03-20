@@ -17,7 +17,8 @@ RETRIEVE_TARGET_HOST ?= any
 EXPERIMENT_DIR=$(shell date "+%Y-%m-%d-%H_%M_%S%N")
 
 #VERSION_TAG ?= 3b783434f #v0.34.27 (cometbft/cometbft)
-VERSION_TAG ?= bef9a830e  #v0.37.alpha3 (cometbft/cometbft)
+#VERSION_TAG ?= bef9a830e  #v0.37.alpha3 (cometbft/cometbft)
+VERSION_TAG ?= 7d8c9d426 #main merged into feature/abci++vef + bugfixes
 VERSION2_TAG ?= 66c2cb634 #v0.34.26 (informalsystems/tendermint)
 VERSION_WEIGHT ?= 2
 VERSION2_WEIGHT ?= 0

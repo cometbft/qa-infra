@@ -20,7 +20,7 @@
         name:
           - git
           - gcc
-          - golang-1.17-go
+          - golang-1.19-go
           - prometheus
           - prometheus-node-exporter
           - ntp

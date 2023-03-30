@@ -12,6 +12,6 @@
 
   tasks:
     - name: install load tool
-      shell: "cd cometbft/test/loadtime/cmd/load/ && /usr/lib/go-1.17/bin/go install"
+      shell: "cd cometbft/test/loadtime/cmd/load/ && /usr/lib/go-1.19/bin/go install"
     - name: run the script
       shell: "/root/go/bin/load -c {{ connections }} -T {{ time_seconds }} -r {{ tx_per_second }} -s {{ size_bytes }} --broadcast-tx-method sync --endpoints {{endpoints}}"

@@ -1,3 +1,5 @@
+vote_extensions_enable_height = 1
+
 [node.seed0]
 mode = "seed"
 persistent_peers = ["seed1", "seed2", "seed3", "seed4"]

@@ -1,3 +1,5 @@
+vote_extensions_enable_height = 1
+
 [node.validator00]
 seeds = ["seed01"]
 [node.validator01]

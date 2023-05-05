@@ -65,15 +65,14 @@ IFD_PATH='./ifd.json'
 
 ifd-from-ansible $HOSTS_PATH $IFD_PATH
 
-go run github.com/cometbft/cometbft/test/e2e/runner@$VERSION setup -f ./testnet.toml --infrastructure-type digital-ocean --infrastructure-data ./ifd.json
+cp -p ./testnet.toml ./ansible
+go run github.com/cometbft/cometbft/test/e2e/runner@$VERSION setup -f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data $IFD_PATH
 
 
-for file in `find ./testnet/ -name config.toml -type f`; do
+for file in `find ./ansible/testnet/ -name config.toml -type f`; do
 	sed $INPLACE_SED_FLAG "s/unsafe = .*/unsafe = true/g" $file
 	sed $INPLACE_SED_FLAG "s/prometheus = .*/prometheus = true/g" $file
 	sed $INPLACE_SED_FLAG "s/cache_size = .*/cache_size = 200000/g" $file
 done
 
-rm -rf ./ansible/testnet
-mv ./testnet ./ansible
 mv $IFD_PATH ./ansible/testnet/infrastructure-data.json

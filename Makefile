@@ -81,11 +81,11 @@ prometheus-init:
 
 .PHONY: start-network
 start-network:
-	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts -u root start-testapp.yaml -f $(ANSIBLE_FORKS)
+	go run github.com/cometbft/cometbft/test/e2e/runner@$(VERSION_TAG) start -f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
 
 .PHONY: stop-network
 stop-network:
-	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts -u root stop-testapp.yaml -f $(ANSIBLE_FORKS)
+	go run github.com/cometbft/cometbft/test/e2e/runner@$(VERSION_TAG) stop -f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
 
 .PHONY: runload
 runload:

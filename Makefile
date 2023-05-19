@@ -6,9 +6,9 @@ LOAD_RUNNER_CMD=go run github.com/cometbft/cometbft/test/e2e/runner@$(LOAD_RUNNE
 ANSIBLE_FORKS=150
 export DO_INSTANCE_TAGNAME
 export EPHEMERAL_SIZE
-ROTATE_CONNECTIONS ?= 2
-ROTATE_TX_RATE ?= 200
-ROTATE_TOTAL_TIME ?= 90
+LOAD_CONNECTIONS ?= 2
+LOAD_TX_RATE ?= 200
+LOAD_TOTAL_TIME ?= 90
 
 # Set it to "all" to retrieve from all hosts
 # Set it to "any" to retrieve from one full node
@@ -96,9 +96,9 @@ stop-network:
 runload:
 	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook runload.yaml -i hosts -u root \
 		-e endpoints=`ansible -i ./hosts --list-hosts validators | tail +2 | tail -1 | sed  "s/ //g" | sed 's/\(.*\)/ws:\/\/\1:26657\/websocket/' | paste -s -d, -` \
-		-e connections=$(ROTATE_CONNECTIONS) \
-		-e time_seconds=$(ROTATE_TOTAL_TIME) \
-		-e tx_per_second=$(ROTATE_TX_RATE)
+		-e connections=$(LOAD_CONNECTIONS) \
+		-e time_seconds=$(LOAD_TOTAL_TIME) \
+		-e tx_per_second=$(LOAD_TX_RATE)
 
 .PHONY: restart
 restart:

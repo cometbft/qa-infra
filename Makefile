@@ -3,7 +3,7 @@ EPHEMERAL_SIZE ?= 0
 DO_INSTANCE_TAGNAME=v037-testnet
 LOAD_RUNNER_COMMIT_HASH ?= 51685158fe36869ab600527b852437ca0939d0cc
 LOAD_RUNNER_CMD=go run github.com/cometbft/cometbft/test/e2e/runner@$(LOAD_RUNNER_COMMIT_HASH)
-ANSIBLE_FORKS=20
+ANSIBLE_FORKS=150
 export DO_INSTANCE_TAGNAME
 export EPHEMERAL_SIZE
 ROTATE_CONNECTIONS ?= 2
@@ -18,7 +18,8 @@ EXPERIMENT_DIR=$(shell date "+%Y-%m-%d-%H_%M_%S%N")
 
 #VERSION_TAG ?= 3b783434f #v0.34.27 (cometbft/cometbft)
 #VERSION_TAG ?= bef9a830e  #v0.37.alpha3 (cometbft/cometbft)
-VERSION_TAG ?= 7d8c9d426 #main merged into feature/abci++vef + bugfixes
+#VERSION_TAG ?= 7d8c9d426 #main merged into feature/abci++vef + bugfixes
+VERSION_TAG ?= e9abb116e #v0.38.alpha2 (cometbft/cometbft)
 VERSION2_TAG ?= 66c2cb634 #v0.34.26 (informalsystems/tendermint)
 VERSION_WEIGHT ?= 2
 VERSION2_WEIGHT ?= 0

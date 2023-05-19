@@ -108,6 +108,10 @@ endif
 rotate:
 	./script/rotate.sh $(VERSION_TAG) `ansible all --list-hosts -i ./ansible/hosts --limit ephemeral | tail +2 | paste -s -d, - | tr -d ' '`
 
+.PHONY: perturb-nodes
+perturb-nodes:
+	go run github.com/cometbft/cometbft/test/e2e/runner@$(VERSION_TAG) perturb -f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
+
 .PHONY: retrieve-blockstore
 retrieve-blockstore:
 	mkdir -p "./experiments/$(EXPERIMENT_DIR)"

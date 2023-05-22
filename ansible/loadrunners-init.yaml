@@ -7,20 +7,21 @@
       ansible.builtin.apt:
         update_cache: yes
         cache_valid_time: 60
-    - name: install deps
+    - name: Install deps
       ansible.builtin.apt:
         name:
           - jq
           - tmux
         state: latest
       become: yes
-    - name: copy scripts
+    - name: Install load tool
+      ansible.builtin.command: /usr/lib/go-1.19/bin/go install
+        chdir: /root/cometbft/test/loadtime/cmd/load/
+    - name: Copy script files
       copy: 
         src: "{{ item.src }}" 
-        dest: "{{ item.dest }}"
+        dest: /root
       loop:
         - src: scripts/200-node-loadscript.sh
-          dest: /root
         - src: scripts/rotating-loadscript.sh
-          dest: /root
       become: yes

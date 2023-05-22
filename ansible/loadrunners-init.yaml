@@ -22,7 +22,7 @@
       ansible.builtin.command: /usr/lib/go-1.19/bin/go install
       args:
         chdir: /root/cometbft/test/loadtime/cmd/load/
-      when: load_tool.stat.exists
+      when: not load_tool.stat.exists
     - name: Copy script files
       copy: 
         src: "{{ item.src }}" 

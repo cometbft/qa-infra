@@ -1,0 +1,26 @@
+- name: initialize loadrunners
+  become: false
+  gather_facts: yes
+  hosts: loadrunners
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 60
+    - name: install deps
+      ansible.builtin.apt:
+        name:
+          - jq
+          - tmux
+        state: latest
+      become: yes
+    - name: copy scripts
+      copy: 
+        src: "{{ item.src }}" 
+        dest: "{{ item.dest }}"
+      loop:
+        - src: scripts/200-node-loadscript.sh
+          dest: /root
+        - src: scripts/rotating-loadscript.sh
+          dest: /root
+      become: yes

@@ -1,4 +1,4 @@
-- name: initialize loadrunners
+- name: Initialize loadrunners
   become: false
   gather_facts: yes
   hosts: loadrunners
@@ -14,9 +14,15 @@
           - tmux
         state: latest
       become: yes
+    - name: Check if load tool exists
+      stat:
+        path: /root/go/bin/load
+      register: load_tool
     - name: Install load tool
       ansible.builtin.command: /usr/lib/go-1.19/bin/go install
+      args:
         chdir: /root/cometbft/test/loadtime/cmd/load/
+      when: load_tool.stat.exists
     - name: Copy script files
       copy: 
         src: "{{ item.src }}" 

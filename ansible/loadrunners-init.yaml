@@ -1,21 +1,10 @@
 - name: Initialize loadrunners
   become: false
-  gather_facts: yes
+  gather_facts: true
   hosts: loadrunners
   tasks:
-    - name: Update apt cache
-      ansible.builtin.apt:
-        update_cache: yes
-        cache_valid_time: 60
-    - name: Install deps
-      ansible.builtin.apt:
-        name:
-          - jq
-          - tmux
-        state: latest
-      become: yes
     - name: Check if load tool exists
-      stat:
+      ansible.builtin.stat:
         path: /root/go/bin/load
       register: load_tool
     - name: Install load tool
@@ -23,11 +12,14 @@
       args:
         chdir: /root/cometbft/test/loadtime/cmd/load/
       when: not load_tool.stat.exists
+      register: result
+      changed_when: result.rc != 0
     - name: Copy script files
-      copy: 
-        src: "{{ item.src }}" 
+      ansible.builtin.copy:
+        src: "{{ item.src }}"
         dest: /root
       loop:
         - src: scripts/200-node-loadscript.sh
         - src: scripts/rotating-loadscript.sh
-      become: yes
+      become: true
+      mode: preserve

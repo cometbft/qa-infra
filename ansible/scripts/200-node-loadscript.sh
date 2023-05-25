@@ -20,7 +20,7 @@ for conn in ${CONNS[@]}; do
 		while mempoolfull; do
 			sleep 5;
 		done
-		sleep `expr 90 + $rate / 60`;
+		sleep `expr 120 + $rate / 60`;
 	done
 done
 echo "Experiments Complete"

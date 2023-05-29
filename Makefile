@@ -79,6 +79,10 @@ endif
 prometheus-init:
 	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts  -u root prometheus.yaml -f 10
 
+.PHONY: loadrunners-init
+loadrunners-init:
+	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts -u root loadrunners-init.yaml -f 10
+
 .PHONY: start-network
 start-network:
 	go run github.com/cometbft/cometbft/test/e2e/runner@$(VERSION_TAG) start -f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json

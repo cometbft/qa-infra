@@ -25,5 +25,7 @@
           - prometheus-node-exporter
           - ntp
           - ntpstat
+          - jq
+          - tmux
         state: latest
       become: yes

@@ -123,7 +123,7 @@ heighest() {
 	addresses=( `echo $1 | sed 's/,/ /g'`)
 	current="-1"
 	for a in $addresses; do 
-		ha=`curl --silent $a:26657/status | sed -n 's/\"latest_block_height\": "\([0-9]*\)",/\1/p' | tr -d ' '`
+		ha=`curl --silent $a:26657/status | jq '.result.sync_info.latest_block_height' | tr -d '"'`
 		if [ $ha -ge $current ]; then
 			current=$ha
 		fi
@@ -137,7 +137,7 @@ heighest() {
 behind() {
 	address=$1
 	heighest=$2
-	ch=`curl --silent $address:26657/status | sed -n 's/\"latest_block_height\": "\([0-9]*\)",/\1/p' | tr -d ' '`
+	ch=`curl --silent $address:26657/status | jq '.result.sync_info.latest_block_height' | tr -d '"'`
 	echo "distance($address): $ch --> $heighest"
 	if [ $ch -le `expr $heighest - 100` ]; then
 		return 0

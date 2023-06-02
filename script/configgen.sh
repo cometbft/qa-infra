@@ -72,8 +72,6 @@ for file in `find ./testnet/ -name config.toml -type f`; do
 	sed $INPLACE_SED_FLAG "s/unsafe = .*/unsafe = true/g" $file
 	sed $INPLACE_SED_FLAG "s/prometheus = .*/prometheus = true/g" $file
 	sed $INPLACE_SED_FLAG "s/cache_size = .*/cache_size = 200000/g" $file
-	sed $INPLACE_SED_FLAG "s/create_empty_blocks .*/create_empty_blocks = false/g" $file
-	sed $INPLACE_SED_FLAG "s/create_empty_blocks_interval .*/create_empty_blocks_interval = \"600s\"/g" $file
 done
 
 rm -rf ./ansible/testnet

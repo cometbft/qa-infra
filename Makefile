@@ -3,12 +3,12 @@ EPHEMERAL_SIZE ?= 0
 DO_INSTANCE_TAGNAME=v038-testnet
 LOAD_RUNNER_COMMIT_HASH ?= 51685158fe36869ab600527b852437ca0939d0cc
 LOAD_RUNNER_CMD=go run github.com/cometbft/cometbft/test/e2e/runner@$(LOAD_RUNNER_COMMIT_HASH)
-ANSIBLE_FORKS=20
+ANSIBLE_FORKS=150
 export DO_INSTANCE_TAGNAME
 export EPHEMERAL_SIZE
-ROTATE_CONNECTIONS ?= 1
-ROTATE_TX_RATE ?= 400
-ROTATE_TOTAL_TIME ?= 150
+LOAD_CONNECTIONS ?= 2
+LOAD_TX_RATE ?= 200
+LOAD_TOTAL_TIME ?= 90
 ITERATIONS ?= 5
 
 # Set it to "all" to retrieve from all hosts
@@ -20,6 +20,7 @@ EXPERIMENT_DIR=$(shell date "+%Y-%m-%d-%H_%M_%S%N")
 #VERSION_TAG ?= 3b783434f #v0.34.27 (cometbft/cometbft)
 #VERSION_TAG ?= bef9a830e  #v0.37.alpha3 (cometbft/cometbft)
 #VERSION_TAG ?= v0.38.0-alpha.2
+#VERSION_TAG ?= e9abb116e #v0.38.alpha2 (cometbft/cometbft)
 VERSION_TAG ?= 9fc711b6514f99b2dc0864fc703cb81214f01783 #vote extension sizes.
 #VERSION_TAG ?= 7d8c9d426 #main merged into feature/abci++vef + bugfixes
 #VERSION2_TAG ?= 66c2cb634 #v0.34.26 (informalsystems/tendermint)
@@ -82,21 +83,25 @@ endif
 prometheus-init:
 	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts  -u root prometheus.yaml -f 10
 
+.PHONY: loadrunners-init
+loadrunners-init:
+	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts -u root loadrunners-init.yaml -f 10
+
 .PHONY: start-network
 start-network:
-	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts -u root start-testapp.yaml -f $(ANSIBLE_FORKS)
+	go run github.com/cometbft/cometbft/test/e2e/runner@$(VERSION_TAG) start -f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
 
 .PHONY: stop-network
 stop-network:
-	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts -u root stop-testapp.yaml -f $(ANSIBLE_FORKS)
+	go run github.com/cometbft/cometbft/test/e2e/runner@$(VERSION_TAG) stop -f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
 
 .PHONY: runload
 runload:
 	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook runload.yaml -i hosts -u root \
 		-e endpoints=`ansible -i ./hosts --list-hosts validators | tail +2 | tail -1 | sed  "s/ //g" | sed 's/\(.*\)/ws:\/\/\1:26657\/websocket/' | paste -s -d, -` \
-		-e connections=$(ROTATE_CONNECTIONS) \
-		-e time_seconds=$(ROTATE_TOTAL_TIME) \
-		-e tx_per_second=$(ROTATE_TX_RATE) \
+		-e connections=$(LOAD_CONNECTIONS) \
+		-e time_seconds=$(LOAD_TOTAL_TIME) \
+		-e tx_per_second=$(LOAD_TX_RATE) \
 		-e iterations=$(ITERATIONS)
 
 .PHONY: restart
@@ -111,6 +116,10 @@ endif
 .PHONY: rotate
 rotate:
 	./script/rotate.sh $(VERSION_TAG) `ansible all --list-hosts -i ./ansible/hosts --limit ephemeral | tail +2 | paste -s -d, - | tr -d ' '`
+
+.PHONY: perturb-nodes
+perturb-nodes:
+	go run github.com/cometbft/cometbft/test/e2e/runner@$(VERSION_TAG) perturb -f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
 
 .PHONY: retrieve-blockstore
 retrieve-blockstore:

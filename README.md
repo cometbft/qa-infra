@@ -20,7 +20,8 @@ After you have all the prerequisites installed and have configured your
     doctl auth init
     ```
 
-    If you have previously used another token, you may need to force the use of the one you just generated here.
+    If you have executed this and the following steps before, you may be able to skip to step 5.
+    And if your token expired, you may need to force the use of the one you just generated here by using `doctl auth init -t <new token>` instead.
 
     ```bash
     doctl auth init -t dop_v1_0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef

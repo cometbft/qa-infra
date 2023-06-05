@@ -1,6 +1,6 @@
 ANSIBLE_SSH_RETRIES=5
 EPHEMERAL_SIZE ?= 0
-DO_INSTANCE_TAGNAME=v037-testnet
+DO_INSTANCE_TAGNAME=v038-testnet
 LOAD_RUNNER_COMMIT_HASH ?= 51685158fe36869ab600527b852437ca0939d0cc
 LOAD_RUNNER_CMD=go run github.com/cometbft/cometbft/test/e2e/runner@$(LOAD_RUNNER_COMMIT_HASH)
 ANSIBLE_FORKS=150
@@ -9,6 +9,7 @@ export EPHEMERAL_SIZE
 LOAD_CONNECTIONS ?= 2
 LOAD_TX_RATE ?= 200
 LOAD_TOTAL_TIME ?= 90
+ITERATIONS ?= 5
 
 # Set it to "all" to retrieve from all hosts
 # Set it to "any" to retrieve from one full node
@@ -18,9 +19,11 @@ EXPERIMENT_DIR=$(shell date "+%Y-%m-%d-%H_%M_%S%N")
 
 #VERSION_TAG ?= 3b783434f #v0.34.27 (cometbft/cometbft)
 #VERSION_TAG ?= bef9a830e  #v0.37.alpha3 (cometbft/cometbft)
+#VERSION_TAG ?= v0.38.0-alpha.2
+#VERSION_TAG ?= e9abb116e #v0.38.alpha2 (cometbft/cometbft)
+VERSION_TAG ?= 9fc711b6514f99b2dc0864fc703cb81214f01783 #vote extension sizes.
 #VERSION_TAG ?= 7d8c9d426 #main merged into feature/abci++vef + bugfixes
-VERSION_TAG ?= e9abb116e #v0.38.alpha2 (cometbft/cometbft)
-VERSION2_TAG ?= 66c2cb634 #v0.34.26 (informalsystems/tendermint)
+#VERSION2_TAG ?= 66c2cb634 #v0.34.26 (informalsystems/tendermint)
 VERSION_WEIGHT ?= 2
 VERSION2_WEIGHT ?= 0
 
@@ -98,7 +101,8 @@ runload:
 		-e endpoints=`ansible -i ./hosts --list-hosts validators | tail +2 | tail -1 | sed  "s/ //g" | sed 's/\(.*\)/ws:\/\/\1:26657\/websocket/' | paste -s -d, -` \
 		-e connections=$(LOAD_CONNECTIONS) \
 		-e time_seconds=$(LOAD_TOTAL_TIME) \
-		-e tx_per_second=$(LOAD_TX_RATE)
+		-e tx_per_second=$(LOAD_TX_RATE) \
+		-e iterations=$(ITERATIONS)
 
 .PHONY: restart
 restart:
@@ -140,4 +144,3 @@ retrieve-data: retrieve-prometheus-data retrieve-blockstore
 .PHONY: terraform-destroy
 terraform-destroy:
 	$(MAKE) -C ./tf/ destroy
-

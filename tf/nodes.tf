@@ -25,6 +25,12 @@ variable "ephemeral_names" {
   type = list(string)
 }
 
+resource "digitalocean_vpc" "testnet-vpc" {
+  name   = "testnet-vpc-cometbft"
+  region = "fra1"
+  ip_range = "172.19.96.0/20"
+}
+
 resource "digitalocean_droplet" "testnet-node" {
   count    = var.testnet_size
   name     = var.instance_names[count.index]
@@ -32,6 +38,7 @@ resource "digitalocean_droplet" "testnet-node" {
   region   = "fra1"
   tags     = concat(var.instance_tags, ["testnet-node"])
   size     = "s-4vcpu-8gb"
+  vpc_uuid = digitalocean_vpc.testnet-vpc.id
   ssh_keys = var.ssh_keys
 }
 
@@ -41,6 +48,7 @@ resource "digitalocean_droplet" "testnet-prometheus" {
   region   = "fra1"
   tags     = concat(var.instance_tags, ["testnet-observability"])
   size     = "s-4vcpu-8gb"
+  vpc_uuid = digitalocean_vpc.testnet-vpc.id
   ssh_keys = var.ssh_keys
 }
 
@@ -50,6 +58,7 @@ resource "digitalocean_droplet" "testnet-load-runner" {
   region   = "fra1"
   tags     = concat(var.instance_tags, ["testnet-load"])
   size     = "s-8vcpu-16gb"
+  vpc_uuid = digitalocean_vpc.testnet-vpc.id
   ssh_keys = var.ssh_keys
 }
 
@@ -60,5 +69,6 @@ resource "digitalocean_droplet" "ephemeral-node" {
   region       = "fra1"
   tags         = concat(var.instance_tags, ["ephemeral-node"])
   size         = "s-4vcpu-8gb"
+  vpc_uuid     = digitalocean_vpc.testnet-vpc.id
   ssh_keys     = var.ssh_keys
 }

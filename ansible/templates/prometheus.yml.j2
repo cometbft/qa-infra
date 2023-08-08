@@ -9,14 +9,14 @@ scrape_configs:
     scrape_interval: 5s
 
     static_configs:
-      - targets: ['{{ hostvars[host].inventory_hostname }}:26660']
+      - targets: ['{{ hostvars[host].internal_ip }}:26660']
 
   - job_name: {{ hostvars[host].name }}-node-exporter
 
     scrape_interval: 5s
 
     static_configs:
-      - targets: ['{{ hostvars[host].inventory_hostname }}:9100']
+      - targets: ['{{ hostvars[host].internal_ip }}:9100']
 
 {% endfor %}
 
@@ -26,7 +26,7 @@ scrape_configs:
     scrape_interval: 5s
 
     static_configs:
-      - targets: ['{{ hostvars[host].inventory_hostname }}:9100']
+      - targets: ['{{ hostvars[host].internal_ip }}:9100']
 
 {% endfor %}
 
@@ -36,13 +36,13 @@ scrape_configs:
     scrape_interval: 5s
 
     static_configs:
-      - targets: ['{{ hostvars[host].inventory_hostname }}:26660']
+      - targets: ['{{ hostvars[host].internal_ip }}:26660']
 
   - job_name: {{ hostvars[host].name }}-node-exporter
 
     scrape_interval: 5s
 
     static_configs:
-      - targets: ['{{ hostvars[host].inventory_hostname }}:9100']
+      - targets: ['{{ hostvars[host].internal_ip }}:9100']
 
 {% endfor %}

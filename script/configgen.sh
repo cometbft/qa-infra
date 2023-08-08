@@ -25,7 +25,7 @@ ifd-from-ansible() {
 	cat <<EOF > $OUT_PATH
 {
 	"provider": "digital-ocean",
-	"network": "0.0.0.0/0",
+	"network": "172.19.96.0/20",
 	"instances": {
 EOF
 	
@@ -34,10 +34,12 @@ EOF
 	
 	i=1
 	for host in  $lines; do
-		ip=`echo $host | cut -d: -f1`
+		ext_ip=`echo $host | cut -d: -f1`
+		ip=`echo $host | cut -d: -f3 | cut -d= -f2`
 		name=`echo $host | cut -d: -f2 | sed -n 's/name=\(.*\)/\1/p'`
 		cat <<EOF >> $OUT_PATH
 		"$name": {
+			"ext_ip_address": "$ext_ip",
 			"ip_address": "$ip",
 			"port": 26657
 EOF

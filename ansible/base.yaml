@@ -96,6 +96,14 @@
         to_port: 26657
         proto: tcp
       become: yes
+    - name: ufw - rate-limit incoming Comet gRPC
+      community.general.ufw:
+        rule: limit
+        direction: in
+        to: 0.0.0.0/0
+        to_port: 26670
+        proto: tcp
+      become: yes
     - name: ufw - enable
       community.general.ufw:
         state: enabled

@@ -27,9 +27,9 @@
         state: restarted
         daemon_reload: yes
         enabled: yes
-    - name: ufw - rate-limit incoming prometheus http
+    - name: ufw - allow incoming prometheus http
       community.general.ufw:
-        rule: limit
+        rule: allow
         direction: in
         to: 0.0.0.0/0
         to_port: '9090'

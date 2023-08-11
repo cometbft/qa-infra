@@ -80,25 +80,25 @@
         to: 0.0.0.0/0
         name: dns
       become: yes
-    - name: ufw - rate-limit incoming ssh
+    - name: ufw - allow incoming ssh
       community.general.ufw:
-        rule: limit
+        rule: allow
         direction: in
         to: 0.0.0.0/0
         to_port: ssh
         proto: tcp
       become: yes
-    - name: ufw - rate-limit incoming Comet RPC
+    - name: ufw - allow incoming Comet RPC
       community.general.ufw:
-        rule: limit
+        rule: allow
         direction: in
         to: 0.0.0.0/0
         to_port: 26657
         proto: tcp
       become: yes
-    - name: ufw - rate-limit incoming Comet gRPC
+    - name: ufw - allow incoming Comet gRPC
       community.general.ufw:
-        rule: limit
+        rule: allow
         direction: in
         to: 0.0.0.0/0
         to_port: 26670

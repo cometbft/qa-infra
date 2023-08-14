@@ -31,20 +31,6 @@
           - tmux
         state: latest
       become: yes
-    - name: ufw - reset
-      community.general.ufw:
-        state: reset
-      become: yes
-    - name: ufw - default deny incoming traffic
-      community.general.ufw:
-        default: deny
-        direction: incoming
-      become: yes
-    - name: ufw - default deny outgoing traffic
-      community.general.ufw:
-        default: deny
-        direction: outgoing
-      become: yes
     - name: ufw - allow all incoming traffic from private IPs
       community.general.ufw:
         rule: allow
@@ -107,4 +93,14 @@
     - name: ufw - enable
       community.general.ufw:
         state: enabled
+      become: yes
+    - name: ufw - default deny incoming traffic
+      community.general.ufw:
+        default: deny
+        direction: incoming
+      become: yes
+    - name: ufw - default deny outgoing traffic
+      community.general.ufw:
+        default: deny
+        direction: outgoing
       become: yes

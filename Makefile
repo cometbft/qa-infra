@@ -99,8 +99,9 @@ stop-network:
 runload:
 	cd ansible && \
 		last_val=$$(ansible -i hosts --list-hosts validators | tail -1 | sed  "s/ //g") && \
+		endpoints=$$(ansible-inventory -i hosts -y --host $$last_val | grep 'internal_ip' | cut -d ' ' -f2 | sed 's/\(.*\)/ws:\/\/\1:26657\/websocket/' | paste -s -d, -) && \
 		ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook runload.yaml -i hosts -u root \
-			-e endpoints=$$(ansible-inventory -i hosts -y --host $$last_val | grep 'internal_ip' | cut -d ' ' -f2 | sed 's/\(.*\)/ws:\/\/\1:26657\/websocket/' | paste -s -d, -) \
+			-e endpoints=$$endpoints \
 			-e connections=$(LOAD_CONNECTIONS) \
 			-e time_seconds=$(LOAD_TOTAL_TIME) \
 			-e tx_per_second=$(LOAD_TX_RATE) \
@@ -129,7 +130,7 @@ retrieve-blockstore:
 ifeq ($(RETRIEVE_TARGET_HOST), any)
 	cd ansible && \
 		last_val=$$(ansible -i hosts --list-hosts validators | tail -1 | sed  "s/ //g") && \
-		retrieve_target_host=$$(ansible-inventory -i hosts -y --host $$last_val | grep 'name' | cut -d ' ' -f2); \
+		retrieve_target_host=$$(ansible-inventory -i hosts -y --host $$last_val | grep 'name' | cut -d ' ' -f2) && \
 		ansible-playbook -i hosts -u root retrieve-blockstore.yaml -e "dir=../experiments/$(EXPERIMENT_DIR)/" -e "target_host=$$retrieve_target_host"
 else
 	cd ansible && \

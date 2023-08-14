@@ -25,10 +25,14 @@ variable "ephemeral_names" {
   type = list(string)
 }
 
+variable "vpc_subnet" {
+  type = string
+}
+
 resource "digitalocean_vpc" "testnet-vpc" {
-  name   = "testnet-vpc-cometbft"
-  region = "fra1"
-  ip_range = "172.19.96.0/20"
+  name     = "testnet-vpc-cometbft-sergio"
+  region   = "fra1"
+  ip_range = var.vpc_subnet
 }
 
 resource "digitalocean_droplet" "testnet-node" {

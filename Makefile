@@ -1,10 +1,12 @@
 ANSIBLE_SSH_RETRIES=5
 EPHEMERAL_SIZE ?= 0
 DO_INSTANCE_TAGNAME=v038-testnet
+DO_VPC_SUBNET=172.19.144.0/20
 LOAD_RUNNER_COMMIT_HASH ?= 51685158fe36869ab600527b852437ca0939d0cc
 LOAD_RUNNER_CMD=go run github.com/cometbft/cometbft/test/e2e/runner@$(LOAD_RUNNER_COMMIT_HASH)
 ANSIBLE_FORKS=150
 export DO_INSTANCE_TAGNAME
+export DO_VPC_SUBNET
 export EPHEMERAL_SIZE
 LOAD_CONNECTIONS ?= 2
 LOAD_TX_RATE ?= 200
@@ -59,12 +61,12 @@ endif
 
 .PHONY: configgen
 configgen:
-	./script/configgen.sh $(VERSION_TAG) ./ansible/hosts
+	./script/configgen.sh $(VERSION_TAG) ./ansible/hosts $(DO_VPC_SUBNET)
 
 .PHONY: ansible-install
 ansible-install:
 	cd ansible && \
-		ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts -u root install.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+		ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts -u root install.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)" -e "vpc_subnet=$(DO_VPC_SUBNET)"
 ifneq ($(VERSION2_WEIGHT), 0)
 	cd ansible && \
 		ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts --limit validators2 -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION2_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
@@ -73,7 +75,7 @@ endif
 .PHONY: ansible-install-retry
 ansible-install-retry:
 	cd ansible && \
-		ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i retry -u root install.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+		ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i retry -u root install.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)" -e "vpc_subnet=$(DO_VPC_SUBNET)"
 ifneq ($(VERSION2_WEIGHT), 0)
 	cd ansible && \
 		ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i retry --limit validators2 -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION2_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"

@@ -30,7 +30,7 @@ variable "vpc_subnet" {
 }
 
 resource "digitalocean_vpc" "testnet-vpc" {
-  name     = "testnet-vpc-cometbft-sergio"
+  name     = replace("vpc-cometbft-${var.vpc_subnet}", "/[/.]/", "-")
   region   = "fra1"
   ip_range = var.vpc_subnet
 }

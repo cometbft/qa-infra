@@ -21,11 +21,12 @@ fi
 ifd-from-ansible() {
 	HOST_PATH=$1
 	OUT_PATH=$2
+	VPC_SUBNET=$3
 	
 	cat <<EOF > $OUT_PATH
 {
 	"provider": "digital-ocean",
-	"network": "0.0.0.0/0",
+	"network": "$VPC_SUBNET",
 	"instances": {
 EOF
 	
@@ -34,10 +35,12 @@ EOF
 	
 	i=1
 	for host in  $lines; do
-		ip=`echo $host | cut -d: -f1`
+		ext_ip=`echo $host | cut -d: -f1`
+		ip=`echo $host | cut -d: -f3 | cut -d= -f2`
 		name=`echo $host | cut -d: -f2 | sed -n 's/name=\(.*\)/\1/p'`
 		cat <<EOF >> $OUT_PATH
 		"$name": {
+			"ext_ip_address": "$ext_ip",
 			"ip_address": "$ip",
 			"port": 26657
 EOF
@@ -61,9 +64,10 @@ EOF
 
 VERSION=$1
 HOSTS_PATH=$2
+VPC_SUBNET=$3
 IFD_PATH='./ifd.json'
 
-ifd-from-ansible $HOSTS_PATH $IFD_PATH
+ifd-from-ansible $HOSTS_PATH $IFD_PATH $VPC_SUBNET
 
 cp -p ./testnet.toml ./ansible
 rm -rf ./ansible/testnet

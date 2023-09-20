@@ -9,8 +9,8 @@ export DO_INSTANCE_TAGNAME
 export DO_VPC_SUBNET
 export EPHEMERAL_SIZE
 LOAD_CONNECTIONS ?= 1
-LOAD_TX_RATE ?= 200
-LOAD_TOTAL_TIME ?= 90
+LOAD_TX_RATE ?= 400
+LOAD_TOTAL_TIME ?= 300
 ITERATIONS ?= 5
 
 # Set it to "all" to retrieve from all hosts
@@ -109,13 +109,20 @@ runload:
 			-e tx_per_second=$(LOAD_TX_RATE) \
 			-e iterations=$(ITERATIONS)
 
+.PHONY: restart-prometheus
+restart-prometheus:
+	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook restart-prometheus.yaml -i hosts -u root
+
+.PHONY: rotate
+rotate:
+	./script/rotate.sh $(VERSION_TAG) `ansible all --list-hosts -i ./ansible/hosts --limit ephemeral | tail +2 | paste -s -d, - | tr -d ' '`
+
 .PHONY: restart
 restart:
 	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
 ifneq ($(VERSION2_WEIGHT), 0)
 	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts --limit validators2 -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION2_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
 endif
-	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook restart-prometheus.yaml -i hosts -u root
 	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook re-init-testapp.yaml -i hosts -u root -f $(ANSIBLE_FORKS)
 
 .PHONY: rotate

@@ -1,0 +1,24 @@
+---
+grafana:
+  host: localhost
+  port: "3000"
+  
+  admin_user: admin
+  # IMPORTANT: This is the default password for the admin user. If you are
+  # deploying in a public network, it is strongly suggested to change the
+  # password and store it in an encrypted vault.
+  admin_password: admin
+
+  config:
+    ini_path: /etc/grafana/grafana.ini
+    db_path: /var/lib/grafana/grafana.db
+
+datasource:
+  name: PrometheusLocal
+  url: http://localhost:9090
+
+dashboard:
+  title: CometBFT
+  json_template_file: dashboard_cometbft.json.j2
+
+homebrew_dir: /opt/homebrew

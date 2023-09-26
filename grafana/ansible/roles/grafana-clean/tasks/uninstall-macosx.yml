@@ -1,0 +1,15 @@
+- name: Stop Grafana server
+  ansible.builtin.command: brew services stop grafana
+
+- name: Uninstall Grafana
+  ansible.builtin.homebrew:
+    name: grafana
+    state: uninstalled
+
+- name: Remove config and data files
+  ansible.builtin.file:
+    state: absent
+    path: "{{ item }}"
+  with_items:
+    - "{{ homebrew_dir }}/{{ grafana.config.ini_path }}"
+    - "{{ homebrew_dir }}/{{ grafana.config.db_path }}"

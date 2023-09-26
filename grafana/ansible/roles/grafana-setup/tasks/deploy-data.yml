@@ -1,0 +1,85 @@
+---
+- name: Create Prometheus data source
+  ansible.builtin.uri: 
+    url: "{{ grafana.url }}/api/datasources"
+    user: "{{ grafana.admin_user }}"
+    password: "{{ grafana.admin_password }}"
+    force_basic_auth: yes
+    method: POST
+    headers:
+      Accept: application/json
+      Content-Type: application/json
+    body: 
+      type: "prometheus"
+      name: "{{ datasource.name }}"
+      url: "{{ datasource.url }}"
+      access: "proxy"
+    body_format: json
+    status_code:
+      - 200
+      - 201 # created
+      - 409 # conflict (already exists)
+  register: ds_created
+
+- name: Get existing data source id
+  when: ds_created.json.datasource.id is not defined
+  ansible.builtin.uri: 
+    url: "{{ grafana.url }}/api/datasources/name/{{ datasource.name }}"
+    user: "{{ grafana.admin_user }}"
+    password: "{{ grafana.admin_password }}"
+    force_basic_auth: yes
+    method: GET
+    headers:
+      Accept: application/json
+      Content-Type: application/json
+    status_code: [200,404] # 404=Not Found
+  register: ds_exists
+
+- name: Set variables with data source id
+  ansible.builtin.set_fact:
+    ds_id: "{{ ds_exists.json.id if ds_exists.json.id is defined else ds_created.json.datasource.id }}"
+    ds_uid: "{{ ds_exists.json.uid if ds_exists.json.uid is defined else ds_created.json.datasource.uid }}"
+
+- name: Check if dashboard exists and get metadata
+  ansible.builtin.uri: 
+    url: "{{ grafana.url }}/api/search?query={{ dashboard.title }}"
+    user: "{{ grafana.admin_user }}"
+    password: "{{ grafana.admin_password }}"
+    force_basic_auth: yes
+    method: GET
+    headers:
+      Accept: application/json
+      Content-Type: application/json
+    status_code: [200,404] # 404=Not Found
+  register: db_exists
+
+- name: Generate dashboard json content
+  when: db_exists.json[0].uid is not defined
+  ansible.builtin.command: >
+    jq -c \
+      --arg title "{{ dashboard.title }}" \
+      --arg sourcename "{{ datasource.name }}" \
+      --arg sourceuid "{{ ds_uid }}" \
+      '.dashboard.title = $title | .dashboard.templating.list[0].current |= (.text = $sourcename | .value = $sourceuid)' \ 
+      "{{ role_path }}/templates/{{ dashboard.json_template_file }}"
+  register: dashboard_json
+  no_log: true
+
+- name: Create dashboard
+  when: dashboard_json.stdout is defined
+  ansible.builtin.uri: 
+    url: "{{ grafana.url }}/api/dashboards/db"
+    user: "{{ grafana.admin_user }}"
+    password: "{{ grafana.admin_password }}"
+    force_basic_auth: yes
+    method: POST
+    headers:
+      Accept: application/json
+      Content-Type: application/json
+    body: "{{ dashboard_json.stdout }}"
+    body_format: json
+  register: db_created
+
+- debug: 
+    msg: 
+      dashboard_url: "{{ grafana.url + db_created.json.url if db_created.json is defined else grafana.url + db_exists.json[0].url }}"

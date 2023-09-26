@@ -1,0 +1,11 @@
+---
+- ansible.builtin.set_fact:
+    platform: "{{ 'macosx' if ansible_os_family == 'Darwin' else 'debian' if ansible_os_family == 'Debian' else '' }}"
+
+- name: Check platform
+  when: platform is not defined or platform == ''
+  fail:
+    msg: "Could not set platform"
+
+- ansible.builtin.set_fact:
+    grafana: "{{ grafana | combine ({ 'url': 'http://' + grafana.host + ':' + grafana.port })}}"

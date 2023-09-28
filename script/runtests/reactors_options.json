@@ -1,0 +1,279 @@
+{
+   "comment": "Entries are processed sequentially",
+   "sequences": [
+      {
+         "name": "flood skip",
+         "comment": "Configurations are combined",
+         "configurations": [
+            {
+               "name": "reactor",
+               "zip_vars": [
+                  {
+                     "tmpl_file": "reactors_testnet_tmpl.toml",
+                     "output_file": "testnet.toml",
+                     "tag": "{{REACTOR}}",
+                     "values": [
+                        "flood_skip"
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "skip rate and tx",
+               "comment": "Propagation rates. Values must have the same cardinality",
+               "zip_vars": [
+                  {
+                     "tmpl_file": "reactors_testnet_tmpl.toml",
+                     "output_file": "testnet.toml",
+                     "tag": "{{FLOOD_SKIP_RATE}}",
+                     "values": [
+                        0,
+                        10,
+                        20,
+                        30,
+                        40
+                     ]
+                  },
+                  {
+                     "tmpl_file": "reactors_Makefile_tmpl",
+                     "output_file": "Makefile",
+                     "tag": "{{LOAD_TX_RATE}}",
+                     "values": [
+                        400,
+                        445,
+                        500,
+                        572,
+                        667
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "sleep times",
+               "comment": "Time to sleep between broadcasting transactions",
+               "zip_vars": [
+                  {
+                     "tmpl_file": "reactors_testnet_tmpl.toml",
+                     "output_file": "testnet.toml",
+                     "tag": "{{FLOOD_RANDOM_SLEEP}}",
+                     "values": [
+                        0
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "concurrency limit ",
+               "comment": "Maximum number o send routines to run in parallel",
+               "zip_vars": [
+                  {
+                     "tmpl_file": "reactors_testnet_tmpl.toml",
+                     "output_file": "testnet.toml",
+                     "tag": "{{FLOOD_LIMIT_CONCURRENCY}}",
+                     "values": [
+                        0
+                     ]
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "name": "flood sleep",
+         "comment": "Entries are zipped together",
+         "configurations": [
+            {
+               "name": "reactor",
+               "comment": "The reactors to be used",
+               "zip_vars": [
+                  {
+                     "tmpl_file": "reactors_testnet_tmpl.toml",
+                     "output_file": "testnet.toml",
+                     "tag": "{{REACTOR}}",
+                     "values": [
+                        "flood_sleep"
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "rate",
+               "comment": "Propagation rates. Values must have the same cardinality",
+               "zip_vars": [
+                  {
+                     "tmpl_file": "reactors_testnet_tmpl.toml",
+                     "output_file": "testnet.toml",
+                     "tag": "{{FLOOD_SKIP_RATE}}",
+                     "values": [
+                        0
+                     ]
+                  },
+                  {
+                     "tmpl_file": "reactors_Makefile_tmpl",
+                     "output_file": "Makefile",
+                     "tag": "{{LOAD_TX_RATE}}",
+                     "values": [
+                        400
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "sleep times",
+               "comment": "Time to sleep between broadcasting transactions",
+               "zip_vars": [
+                  {
+                     "tmpl_file": "reactors_testnet_tmpl.toml",
+                     "output_file": "testnet.toml",
+                     "tag": "{{FLOOD_RANDOM_SLEEP}}",
+                     "values": [
+                        4,
+                        8,
+                       16,
+                       32 
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "concurrency limit ",
+               "comment": "Maximum number o send routines to run in parallel",
+               "zip_vars": [
+                  {
+                     "tmpl_file": "reactors_testnet_tmpl.toml",
+                     "output_file": "testnet.toml",
+                     "tag": "{{FLOOD_LIMIT_CONCURRENCY}}",
+                     "values": [
+                        0
+                     ]
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "name": "flood limit concurrency",
+         "comment": "Entries are zipped together",
+         "configurations": [
+            {
+               "name": "reactor",
+               "comment": "The reactors to be used",
+               "zip_vars": [
+                  {
+                     "tmpl_file": "reactors_testnet_tmpl.toml",
+                     "output_file": "testnet.toml",
+                     "tag": "{{REACTOR}}",
+                     "values": [
+                        "flood_limit_concurrency"
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "rate",
+               "comment": "Propagation rates. Values must have the same cardinality",
+               "zip_vars": [
+                  {
+                     "tmpl_file": "reactors_testnet_tmpl.toml",
+                     "output_file": "testnet.toml",
+                     "tag": "{{FLOOD_SKIP_RATE}}",
+                     "values": [
+                        0
+                     ]
+                  },
+                  {
+                     "tmpl_file": "reactors_Makefile_tmpl",
+                     "output_file": "Makefile",
+                     "tag": "{{LOAD_TX_RATE}}",
+                     "values": [
+                        400
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "sleep times",
+               "comment": "Time to sleep between broadcasting transactions",
+               "zip_vars": [
+                  {
+                     "tmpl_file": "reactors_testnet_tmpl.toml",
+                     "output_file": "testnet.toml",
+                     "tag": "{{FLOOD_RANDOM_SLEEP}}",
+                     "values": [
+                        0
+                     ]
+                  }
+               ]
+            },
+            {
+               "name": "concurrency limit ",
+               "comment": "Maximum number o send routines to run in parallel",
+               "zip_vars": [
+                  {
+                     "tmpl_file": "reactors_testnet_tmpl.toml",
+                     "output_file": "testnet.toml",
+                     "tag": "{{FLOOD_LIMIT_CONCURRENCY}}",
+                     "values": [
+                        5,
+                        10,
+                        20
+                     ]
+                  }
+               ]
+            }
+         ]
+      },
+      {
+         "name": "cat",
+         "comment": "Entries are zipped together",
+         "configurations": [
+            {
+               "name": "reactors",
+               "comment": "The reactors to be used",
+               "zip_vars": [
+                  {
+                     "tmpl_file": "reactors_testnet_tmpl.toml",
+                     "output_file": "testnet.toml",
+                     "tag": "{{REACTOR}}",
+                     "values": [
+                        "cat"
+                     ]
+                  },
+                  {
+                     "tmpl_file": "reactors_Makefile_tmpl",
+                     "output_file": "Makefile",
+                     "tag": "{{LOAD_TX_RATE}}",
+                     "values": [
+                        400
+                     ]
+                  },
+                  {
+                     "tmpl_file": "reactors_testnet_tmpl.toml",
+                     "output_file": "testnet.toml",
+                     "tag": "{{FLOOD_SKIP_RATE}}",
+                     "values": [
+                        0
+                     ]
+                  },
+                  {
+                     "tmpl_file": "reactors_testnet_tmpl.toml",
+                     "output_file": "testnet.toml",
+                     "tag": "{{FLOOD_RANDOM_SLEEP}}",
+                     "values": [
+                        0
+                     ]
+                  },
+                  {
+                     "tmpl_file": "reactors_testnet_tmpl.toml",
+                     "output_file": "testnet.toml",
+                     "tag": "{{FLOOD_LIMIT_CONCURRENCY}}",
+                     "values": [
+                        0
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

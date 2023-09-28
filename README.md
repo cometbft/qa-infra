@@ -48,7 +48,7 @@ After you have all the prerequisites installed and have configured your
     make terraform-init
     ```
 
-5. Create the VMs for the validators and Prometheus as specified in `./testnet.toml`   
+5. Create the VMs for the validators and Prometheus as specified in `./testnet.toml`
     Be sure to use your actual DO token and SSH key fingerprints for the `do_token` and `do_ssh_keys` variables.
 
     ```bash
@@ -85,7 +85,7 @@ After you have all the prerequisites installed and have configured your
     make start-network
     ```
 
-11. Execute a load test against the network   
+11. Execute a load test against the network
     This will start sending load until Ctrl-C is sent, so consider running this in its own terminal
 
     ```bash
@@ -98,7 +98,7 @@ After you have all the prerequisites installed and have configured your
     make stop-network
     ```
 
-13. Retrieve the data produced during the execution.    
+13. Retrieve the data produced during the execution.
     You can either use the following command to retrieve both the prometheus and the blockstore databases together
 
     ```bash
@@ -131,17 +131,17 @@ If you need to restart the running experiment, run the following command:
 make configgen #update the configuration files locally
 make restart    #update the configuration files and restart CometBFT in the nodes
 make restart-prometheus #reset and restart prometheus
-``` 
+```
 
 This command will delete all of the prometheus data, and re-initialize the nodes
-on the network. The nodes will restart with the new configuration and all of their 
+on the network. The nodes will restart with the new configuration and all of their
 data will be deleted and reset, but they will use the same IDs that they previously used.
 
 If you do not want to update the configuration files and rerun experiments with same
-configuration, you can ommit the `make configgen` step.
+configuration, you can omit the `make configgen` step.
 
 If you are want to collect the metrics of multiple experiments on the same prometheus database
-you can ommit the `make restart-prometheus` command.
+you can omit the `make restart-prometheus` command.
 
 ### Destroy the network
 

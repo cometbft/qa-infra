@@ -266,13 +266,25 @@ def main():
 
             if retrieve:
                 bash.sendline("make retrieve-blockstore")
+                index = bash.expect([pexpect.TIMEOUT, COMMAND_PROMPT])
+                if index == 0:
+                   log.error('Timeout!!')
+                   exit()
+                elif index == 1:
+                   log.info('Could not retrieve the blockstore')
 
             if interactive:
                 input("Experiment ended.\nPress Enter to continue...")
 
     # Collect the prometheus database and associate with the log file.
     if retrieve:
-        bash.sendline("make retrieve-data")
+        bash.sendline("make retrieve-prometheus-data")
+        index = bash.expect([pexpect.TIMEOUT, COMMAND_PROMPT])
+        if index == 0:
+             log.error('Timeout!!')
+             exit()
+        elif index == 1:
+             log.info('Could not retrieve the prometheus data')
 
     # optionally destroy the network.
     if destroy:

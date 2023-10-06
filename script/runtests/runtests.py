@@ -17,6 +17,7 @@ from __future__ import absolute_import
 import os
 import sys
 import time
+from datetime import datetime
 import getopt
 import pexpect
 import pathlib
@@ -46,6 +47,10 @@ def exit_with_usage():
     ''')
     os._exit(1)
 
+def date_string_to_datetime(date_str):
+    date_format = "%Y%m%d.%H%M%S"
+    date_obj = datetime.strptime(date_str, date_format)
+    return date_obj
 
 def explode(var):
     result = []
@@ -74,8 +79,14 @@ def tag(begin, end, annotation):
         "text":annotation
     }
 
-    response = requests.post(url='http://localhost:3000/api/annotations', json=request_body)
-    print(response)
+    access_token = open(".grafana_token", "r").read().splitlines()[0]
+
+    response = requests.post(
+	url='http://localhost:3000/api/annotations', 
+	headers={'Content-Type':'application/json',
+                 'Authorization': 'Bearer {}'.format(access_token)},
+        json=request_body)
+    return response
 
 
 
@@ -271,7 +282,7 @@ def main():
                    log.error('Timeout!!')
                    exit()
                 elif index == 1:
-                   log.info('Could not retrieve the blockstore')
+                   log.info('Retrieved the blockstore')
 
             if interactive:
                 input("Experiment ended.\nPress Enter to continue...")
@@ -284,7 +295,7 @@ def main():
              log.error('Timeout!!')
              exit()
         elif index == 1:
-             log.info('Could not retrieve the prometheus data')
+             log.info('Retrieved the prometheus data')
 
     # optionally destroy the network.
     if destroy:

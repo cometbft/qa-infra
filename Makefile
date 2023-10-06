@@ -10,8 +10,10 @@ export DO_VPC_SUBNET
 export EPHEMERAL_SIZE
 LOAD_CONNECTIONS ?= 1
 LOAD_TX_RATE ?= 400
-LOAD_TOTAL_TIME ?= 300
-ITERATIONS ?= 5
+LOAD_TX_COUNT ?= 100000
+LOAD_TOTAL_TIME ?= 301
+ITERATIONS ?= 3
+
 
 # Set it to "all" to retrieve from all hosts
 # Set it to "any" to retrieve from one full node
@@ -24,7 +26,7 @@ EXPERIMENT_DIR=$(shell date "+%Y-%m-%d-%H_%M_%S%N")
 #VERSION_TAG ?= v0.38.0-alpha.2
 #VERSION_TAG ?= e9abb116e #v0.38.alpha2 (cometbft/cometbft)
 #VERSION_TAG ?= 9fc711b6514f99b2dc0864fc703cb81214f01783 #vote extension sizes.
-VERSION_TAG ?= d6a7f098a7449bda4495af1e552c12312dd1add9 #skip + sleep + cat + limited
+VERSION_TAG ?= 47ffd93c4913c5212d87074939d9869e035e9f43 #skip + sleep + cat + limited
 #VERSION_TAG ?= 7d8c9d426 #main merged into feature/abci++vef + bugfixes
 #VERSION2_TAG ?= 66c2cb634 #v0.34.26 (informalsystems/tendermint)
 VERSION_WEIGHT ?= 2
@@ -107,7 +109,8 @@ runload:
 			-e connections=$(LOAD_CONNECTIONS) \
 			-e time_seconds=$(LOAD_TOTAL_TIME) \
 			-e tx_per_second=$(LOAD_TX_RATE) \
-			-e iterations=$(ITERATIONS)
+			-e iterations=$(ITERATIONS) \
+                        -e count=$(LOAD_TX_COUNT)
 
 .PHONY: restart-prometheus
 restart-prometheus:

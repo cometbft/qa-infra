@@ -1,7 +1,7 @@
 ---
 grafana:
   host: localhost
-  port: "3000"
+  port: "3000" # should be a string
   
   admin_user: admin
   # IMPORTANT: This is the default password for the admin user. If you are

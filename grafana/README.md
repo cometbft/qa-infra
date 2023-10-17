@@ -1,11 +1,15 @@
-# Setting up a Grafana server and dashboard
+# Setting up a Grafana server and dashboards
 
-These are the instructions to install a Grafana server and to deploy a Grafana
-dashboard connected to an existing Prometheus server.
+These Ansible scripts will:
+- install a Grafana server,
+- deploy a Grafana data source connected to an existing Prometheus server, and
+- deploy a list of Grafana dashboards (defined in `ansible/group_vars/all.yml`).
 
 ## Requirements
 
 - `ansible` v2.14+
+
+The scripts have been tested in MacOSX and Ubuntu 22.04.
 
 ## Installation
 
@@ -17,4 +21,4 @@ parameters to the ansible playbooks.
     > Grafana in a public network, be sure to change and store the password in a
     > secure location.
 
-2. Run `make` to install the Grafana server and to deploy the dashboard.
+2. Run `make` to install the Grafana server and to deploy the dashboards.

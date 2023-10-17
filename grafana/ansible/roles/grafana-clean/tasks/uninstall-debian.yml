@@ -1,0 +1,20 @@
+- name: Stop Grafana server
+  ansible.builtin.service:
+    name: grafana-server
+    state: stopped
+  become: true
+
+- name: Uninstall Grafana
+  ansible.builtin.apt: 
+    name: grafana
+    state: absent
+  become: true
+
+- name: Remove config and data files
+  ansible.builtin.file:
+    state: absent
+    path: "{{ item }}"
+  with_items:
+    - "{{ grafana.config.ini_path }}"
+    - "{{ grafana.config.db_path }}"
+  become: true

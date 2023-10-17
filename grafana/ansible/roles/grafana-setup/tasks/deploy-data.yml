@@ -1,0 +1,9 @@
+---
+- name: Deploy data sources
+  ansible.builtin.include_tasks: "deploy-datasource.yml"
+
+- name: Deploy dashboards
+  ansible.builtin.include_tasks: "deploy-dashboard.yml"
+  loop: "{{ dashboards }}"
+  loop_control:
+    loop_var: dashboard

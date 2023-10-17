@@ -1,0 +1,6 @@
+---
+- name: Set up Grafana server and dashboard
+  hosts: all
+  roles:
+    - common
+    - grafana-setup

@@ -1,0 +1,7 @@
+## For debugging creation tasks.
+---
+- name: Remove all Grafana components
+  hosts: all
+  roles:
+    - common
+    - grafana-clean

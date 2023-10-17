@@ -1,0 +1,8 @@
+---
+- name: "Install for {{ platform }}"
+  ansible.builtin.include_tasks: "install-{{ platform }}.yml"
+  tags: [install]
+
+- name: Deploy data
+  ansible.builtin.import_tasks: deploy-data.yml
+  tags: [data]

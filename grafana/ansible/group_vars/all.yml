@@ -17,8 +17,10 @@ datasource:
   name: PrometheusLocal
   url: http://localhost:9090
 
-dashboard:
-  title: CometBFT
-  json_template_file: dashboard_cometbft.json.j2
+dashboards:
+  - title: Main
+    json_template_file: dashboard_main.json.j2
+  - title: Mempool [compact]
+    json_template_file: dashboard_mempool_compact.json.j2
 
 homebrew_dir: /opt/homebrew

@@ -11,12 +11,11 @@
       {
         "collapsed": false,
         "gridPos": {
-          "h": 1,
+          "h": 8,
           "w": 24,
           "x": 0,
           "y": 0
         },
-        "panels": [],
         "title": "Consensus",
         "type": "row"
       },
@@ -33,11 +32,9 @@
             "custom": {
               "axisCenteredZero": false,
               "axisColorMode": "text",
-              "axisLabel": "",
               "axisPlacement": "auto",
-              "barAlignment": 0,
+              "axisWidth": 80,
               "drawStyle": "line",
-              "fillOpacity": 0,
               "gradientMode": "none",
               "hideFrom": {
                 "legend": false,
@@ -61,7 +58,6 @@
                 "mode": "off"
               }
             },
-            "mappings": [],
             "thresholds": {
               "mode": "absolute",
               "steps": [
@@ -105,7 +101,7 @@
         },
         "gridPos": {
           "h": 7,
-          "w": 22,
+          "w": 18,
           "x": 0,
           "y": 1
         },
@@ -115,7 +111,8 @@
               "last"
             ],
             "displayMode": "list",
-            "placement": "bottom",
+            "placement": "right",
+            "width": 200,
             "showLegend": true
           },
           "tooltip": {
@@ -132,23 +129,11 @@
             "editorMode": "code",
             "expr": "cometbft_consensus_height",
             "format": "time_series",
+            "hide": false,
             "interval": "500ms",
             "legendFormat": "{{job}}",
             "range": true,
             "refId": "A"
-          },
-          {
-            "datasource": {
-              "type": "prometheus",
-              "uid": "$datasource"
-            },
-            "editorMode": "code",
-            "expr": "cometbft_blocksync_latest_block_height",
-            "hide": false,
-            "interval": "500ms",
-            "legendFormat": "syncing:{{job}}",
-            "range": true,
-            "refId": "B"
           },
           {
             "datasource": {
@@ -162,7 +147,7 @@
             "interval": "500ms",
             "legendFormat": "mean",
             "range": true,
-            "refId": "C"
+            "refId": "B"
           }
         ],
         "title": "Chain height",
@@ -183,6 +168,7 @@
               "axisColorMode": "text",
               "axisLabel": "",
               "axisPlacement": "auto",
+              "axisWidth": 80,
               "barAlignment": 0,
               "drawStyle": "line",
               "fillOpacity": 0,
@@ -228,7 +214,7 @@
         },
         "gridPos": {
           "h": 6,
-          "w": 22,
+          "w": 18,
           "x": 0,
           "y": 8
         },
@@ -236,7 +222,8 @@
           "legend": {
             "calcs": [],
             "displayMode": "list",
-            "placement": "bottom",
+            "placement": "right",
+            "width": 200,
             "showLegend": true
           },
           "tooltip": {
@@ -251,13 +238,13 @@
               "uid": "$datasource"
             },
             "editorMode": "code",
-            "expr": "rate(cometbft_consensus_total_txs[$__rate_interval])",
+            "expr": "cometbft_consensus_total_txs",
             "legendFormat": "{{job}}",
             "range": true,
             "refId": "A"
           }
         ],
-        "title": "Total txs (rate)",
+        "title": "Chain size (#txs)",
         "type": "timeseries"
       },
       {
@@ -275,6 +262,7 @@
               "axisColorMode": "text",
               "axisLabel": "",
               "axisPlacement": "auto",
+              "axisWidth": 80,
               "barAlignment": 0,
               "drawStyle": "line",
               "fillOpacity": 0,
@@ -320,7 +308,7 @@
         },
         "gridPos": {
           "h": 5,
-          "w": 22,
+          "w": 18,
           "x": 0,
           "y": 14
         },
@@ -328,7 +316,8 @@
           "legend": {
             "calcs": [],
             "displayMode": "list",
-            "placement": "bottom",
+            "placement": "right",
+            "width": 200,
             "showLegend": true
           },
           "tooltip": {
@@ -343,13 +332,13 @@
               "uid": "$datasource"
             },
             "editorMode": "builder",
-            "expr": "cometbft_consensus_block_size_bytes",
+            "expr": "cometbft_consensus_block_size_bytes/1024",
             "legendFormat": "{{job}}",
             "range": true,
             "refId": "A"
           }
         ],
-        "title": "Block size bytes",
+        "title": "Block size (kb)",
         "type": "timeseries"
       },
       {
@@ -367,6 +356,7 @@
               "axisColorMode": "text",
               "axisLabel": "",
               "axisPlacement": "auto",
+              "axisWidth": 80,
               "barAlignment": 0,
               "drawStyle": "line",
               "fillOpacity": 0,
@@ -412,7 +402,7 @@
         },
         "gridPos": {
           "h": 5,
-          "w": 22,
+          "w": 18,
           "x": 0,
           "y": 19
         },
@@ -420,7 +410,8 @@
           "legend": {
             "calcs": [],
             "displayMode": "list",
-            "placement": "bottom",
+            "placement": "right",
+            "width": 200,
             "showLegend": true
           },
           "tooltip": {
@@ -468,6 +459,7 @@
                   "axisColorMode": "text",
                   "axisLabel": "",
                   "axisPlacement": "auto",
+                  "axisWidth": 80,
                   "barAlignment": 0,
                   "drawStyle": "line",
                   "fillOpacity": 0,
@@ -543,7 +535,7 @@
             },
             "gridPos": {
               "h": 8,
-              "w": 22,
+              "w": 18,
               "x": 0,
               "y": 2
             },
@@ -551,7 +543,8 @@
               "legend": {
                 "calcs": [],
                 "displayMode": "list",
-                "placement": "bottom",
+                "placement": "right",
+                "width": 200,
                 "showLegend": true
               },
               "tooltip": {
@@ -566,13 +559,13 @@
                   "uid": "$datasource"
                 },
                 "editorMode": "code",
-                "expr": "sum(rate(cometbft_p2p_message_send_bytes_total[1m])) by (message_type)",
+                "expr": "(sum(rate(cometbft_p2p_message_send_bytes_total[1m])) by (message_type))/1024",
                 "legendFormat": "__auto",
                 "range": true,
                 "refId": "A"
               }
             ],
-            "title": "Sent bytes per message",
+            "title": "Sent kb per message type",
             "type": "timeseries"
           },
           {
@@ -590,6 +583,7 @@
                   "axisColorMode": "text",
                   "axisLabel": "",
                   "axisPlacement": "auto",
+                  "axisWidth": 80,
                   "barAlignment": 0,
                   "drawStyle": "line",
                   "fillOpacity": 0,
@@ -665,7 +659,7 @@
             },
             "gridPos": {
               "h": 8,
-              "w": 22,
+              "w": 18,
               "x": 0,
               "y": 10
             },
@@ -673,7 +667,8 @@
               "legend": {
                 "calcs": [],
                 "displayMode": "list",
-                "placement": "bottom",
+                "placement": "right",
+                "width": 200,
                 "showLegend": true
               },
               "tooltip": {
@@ -688,13 +683,13 @@
                   "uid": "$datasource"
                 },
                 "editorMode": "code",
-                "expr": "sum(rate(cometbft_p2p_message_receive_bytes_total[1m])) by (message_type)",
+                "expr": "(sum(rate(cometbft_p2p_message_receive_bytes_total[1m])) by (message_type))/1024",
                 "legendFormat": "__auto",
                 "range": true,
                 "refId": "A"
               }
             ],
-            "title": "Received bytes per message",
+            "title": "Received kb per message type",
             "type": "timeseries"
           },
           {
@@ -712,6 +707,7 @@
                   "axisColorMode": "text",
                   "axisLabel": "",
                   "axisPlacement": "auto",
+                  "axisWidth": 80,
                   "barAlignment": 0,
                   "drawStyle": "line",
                   "fillOpacity": 0,
@@ -756,7 +752,7 @@
             },
             "gridPos": {
               "h": 8,
-              "w": 22,
+              "w": 18,
               "x": 0,
               "y": 18
             },
@@ -764,7 +760,8 @@
               "legend": {
                 "calcs": [],
                 "displayMode": "list",
-                "placement": "bottom",
+                "placement": "right",
+                "width": 200,
                 "showLegend": true
               },
               "tooltip": {
@@ -785,7 +782,7 @@
                 "refId": "A"
               }
             ],
-            "title": "Peers",
+            "title": "Number of peers",
             "type": "timeseries"
           }
         ],
@@ -816,6 +813,7 @@
                   "axisColorMode": "text",
                   "axisLabel": "",
                   "axisPlacement": "auto",
+                  "axisWidth": 80,
                   "barAlignment": 0,
                   "drawStyle": "line",
                   "fillOpacity": 0,
@@ -859,8 +857,8 @@
               "overrides": []
             },
             "gridPos": {
-              "h": 7,
-              "w": 22,
+              "h": 8,
+              "w": 18,
               "x": 0,
               "y": 3
             },
@@ -870,7 +868,8 @@
                   "mean"
                 ],
                 "displayMode": "list",
-                "placement": "bottom",
+                "placement": "right",
+                "width": 200,
                 "showLegend": true
               },
               "tooltip": {
@@ -893,7 +892,7 @@
                 "refId": "A"
               }
             ],
-            "title": "Mempool size",
+            "title": "Mempool size (#txs)",
             "type": "timeseries"
           },
           {
@@ -911,6 +910,7 @@
                   "axisColorMode": "text",
                   "axisLabel": "",
                   "axisPlacement": "auto",
+                  "axisWidth": 80,
                   "barAlignment": 0,
                   "drawStyle": "line",
                   "fillOpacity": 0,
@@ -954,8 +954,8 @@
               "overrides": []
             },
             "gridPos": {
-              "h": 7,
-              "w": 22,
+              "h": 8,
+              "w": 18,
               "x": 0,
               "y": 10
             },
@@ -963,7 +963,8 @@
               "legend": {
                 "calcs": [],
                 "displayMode": "list",
-                "placement": "bottom",
+                "placement": "right",
+                "width": 200,
                 "showLegend": true
               },
               "tooltip": {
@@ -978,13 +979,13 @@
                   "uid": "$datasource"
                 },
                 "editorMode": "builder",
-                "expr": "rate(cometbft_mempool_tx_size_bytes_count[$__rate_interval])",
+                "expr": "rate(cometbft_mempool_tx_size_bytes_sum[$__rate_interval])/2014",
                 "legendFormat": "{{job}}",
                 "range": true,
                 "refId": "A"
               }
             ],
-            "title": "Mempool tx size (in bytes) rate",
+            "title": "Size of txs (kb) added to the mempool",
             "type": "timeseries"
           },
           {
@@ -1002,6 +1003,7 @@
                   "axisColorMode": "text",
                   "axisLabel": "",
                   "axisPlacement": "auto",
+                  "axisWidth": 80,
                   "barAlignment": 0,
                   "drawStyle": "line",
                   "fillOpacity": 0,
@@ -1045,8 +1047,8 @@
               "overrides": []
             },
             "gridPos": {
-              "h": 7,
-              "w": 22,
+              "h": 8,
+              "w": 18,
               "x": 0,
               "y": 17
             },
@@ -1054,7 +1056,8 @@
               "legend": {
                 "calcs": [],
                 "displayMode": "list",
-                "placement": "bottom",
+                "placement": "right",
+                "width": 200,
                 "showLegend": true
               },
               "tooltip": {
@@ -1069,14 +1072,14 @@
                   "uid": "$datasource"
                 },
                 "editorMode": "code",
-                "expr": "rate(cometbft_p2p_message_receive_bytes_total{message_type=~\"mempool_Txs|mempool_Message|mempool_WantTx|mempool_SeenTx\"}[$__rate_interval])",
+                "expr": "rate(cometbft_p2p_message_receive_bytes_total{message_type=~\"mempool_Txs|mempool_Message|mempool_WantTx|mempool_SeenTx\"}[$__rate_interval])/1024",
                 "hide": false,
-                "legendFormat": "recv:{{job}}",
+                "legendFormat": "{{job}}",
                 "range": true,
                 "refId": "B"
               }
             ],
-            "title": "Mempool Txs received bytes",
+            "title": "Received kb (only mempool messages)",
             "type": "timeseries"
           },
           {
@@ -1094,6 +1097,7 @@
                   "axisColorMode": "text",
                   "axisLabel": "",
                   "axisPlacement": "auto",
+                  "axisWidth": 80,
                   "barAlignment": 0,
                   "drawStyle": "line",
                   "fillOpacity": 0,
@@ -1137,8 +1141,8 @@
               "overrides": []
             },
             "gridPos": {
-              "h": 7,
-              "w": 22,
+              "h": 8,
+              "w": 18,
               "x": 0,
               "y": 24
             },
@@ -1146,7 +1150,8 @@
               "legend": {
                 "calcs": [],
                 "displayMode": "list",
-                "placement": "bottom",
+                "placement": "right",
+                "width": 200,
                 "showLegend": true
               },
               "tooltip": {
@@ -1161,13 +1166,13 @@
                   "uid": "$datasource"
                 },
                 "editorMode": "code",
-                "expr": "rate(cometbft_p2p_message_send_bytes_total{message_type=~\"mempool_Txs|mempool_Message|mempool_SeenTx|mempool_WantTx\"}[$__rate_interval])",
-                "legendFormat": "send:{{job}}",
+                "expr": "rate(cometbft_p2p_message_send_bytes_total{message_type=~\"mempool_Txs|mempool_Message|mempool_SeenTx|mempool_WantTx\"}[$__rate_interval])/1024",
+                "legendFormat": "{{job}}",
                 "range": true,
                 "refId": "A"
               }
             ],
-            "title": "Mempool Txs sent bytes",
+            "title": "Sent kb (only mempool messages)",
             "type": "timeseries"
           },
           {
@@ -1185,6 +1190,7 @@
                   "axisColorMode": "text",
                   "axisLabel": "",
                   "axisPlacement": "auto",
+                  "axisWidth": 80,
                   "barAlignment": 0,
                   "drawStyle": "line",
                   "fillOpacity": 0,
@@ -1228,8 +1234,8 @@
               "overrides": []
             },
             "gridPos": {
-              "h": 7,
-              "w": 22,
+              "h": 8,
+              "w": 18,
               "x": 0,
               "y": 31
             },
@@ -1237,7 +1243,8 @@
               "legend": {
                 "calcs": [],
                 "displayMode": "list",
-                "placement": "bottom",
+                "placement": "right",
+                "width": 200,
                 "showLegend": true
               },
               "tooltip": {
@@ -1258,7 +1265,7 @@
                 "refId": "A"
               }
             ],
-            "title": "Mempool recheck rate",
+            "title": "Recheck rate",
             "type": "timeseries"
           },
           {
@@ -1276,6 +1283,7 @@
                   "axisColorMode": "text",
                   "axisLabel": "",
                   "axisPlacement": "auto",
+                  "axisWidth": 80,
                   "barAlignment": 0,
                   "drawStyle": "line",
                   "fillOpacity": 0,
@@ -1319,8 +1327,8 @@
               "overrides": []
             },
             "gridPos": {
-              "h": 5,
-              "w": 22,
+              "h": 8,
+              "w": 18,
               "x": 0,
               "y": 38
             },
@@ -1328,7 +1336,8 @@
               "legend": {
                 "calcs": [],
                 "displayMode": "list",
-                "placement": "bottom",
+                "placement": "right",
+                "width": 200,
                 "showLegend": true
               },
               "tooltip": {
@@ -1367,6 +1376,7 @@
                   "axisColorMode": "text",
                   "axisLabel": "",
                   "axisPlacement": "auto",
+                  "axisWidth": 80,
                   "barAlignment": 0,
                   "drawStyle": "line",
                   "fillOpacity": 0,
@@ -1410,8 +1420,8 @@
               "overrides": []
             },
             "gridPos": {
-              "h": 7,
-              "w": 22,
+              "h": 8,
+              "w": 18,
               "x": 0,
               "y": 73
             },
@@ -1419,7 +1429,8 @@
               "legend": {
                 "calcs": [],
                 "displayMode": "list",
-                "placement": "bottom",
+                "placement": "right",
+                "width": 200,
                 "showLegend": true
               },
               "tooltip": {
@@ -1440,7 +1451,7 @@
                 "refId": "A"
               }
             ],
-            "title": "Percentage of txs rejected by the app",
+            "title": "Txs rejected by the app (%)",
             "type": "timeseries"
           }
         ],
@@ -1471,6 +1482,7 @@
                   "axisColorMode": "text",
                   "axisLabel": "",
                   "axisPlacement": "auto",
+                  "axisWidth": 80,
                   "barAlignment": 0,
                   "drawStyle": "line",
                   "fillOpacity": 0,
@@ -1514,8 +1526,8 @@
               "overrides": []
             },
             "gridPos": {
-              "h": 5,
-              "w": 22,
+              "h": 8,
+              "w": 18,
               "x": 0,
               "y": 4
             },
@@ -1523,7 +1535,8 @@
               "legend": {
                 "calcs": [],
                 "displayMode": "list",
-                "placement": "bottom",
+                "placement": "right",
+                "width": 200,
                 "showLegend": true
               },
               "tooltip": {

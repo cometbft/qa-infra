@@ -1,22 +1,15 @@
 # TODO: pre-task: check if homebrew is installed
 ---
-- name: Check if packages are installed
-  ansible.builtin.homebrew: name={{ item }} state=present
-  with_items:
-    - grafana
-  register: installed
-
 - name: Update Homebrew
-  when: installed.stat.exist is defined
   ignore_errors: true
   ansible.builtin.homebrew:
     update_homebrew: true
 
-- name: Install Grafana
-  when: installed.stat.exist is defined
-  ansible.builtin.homebrew:
-    name: grafana
-    state: present
+- name: Install packages
+  ansible.builtin.homebrew: name={{ item }} state=present
+  with_items:
+    - grafana
+    - jq
 
 - name: (Re)start Grafana
   ansible.builtin.command: brew services restart grafana

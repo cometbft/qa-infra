@@ -1,13 +1,7 @@
 ---
-- name: Remove dashboards
-  ansible.builtin.include_tasks: "remove-dashboard.yml"
-  loop: "{{ dashboards }}"
-  loop_control:
-    loop_var: dashboard
-
-- name: Get data source id
+- name: Get dashboard uid
   ansible.builtin.uri: 
-    url: "{{ grafana.url }}/api/datasources/name/{{ datasource.name }}"
+    url: "{{ grafana.url }}/api/search?query={{ dashboard.title }}&"
     user: "{{ grafana.admin_user }}"
     password: "{{ grafana.admin_password }}"
     force_basic_auth: yes
@@ -16,12 +10,12 @@
       Accept: application/json
       Content-Type: application/json
     status_code: [-1,200,404] # -1=server is down; 404=Not Found
-  register: ds
+  register: db
 
-- name: Remove data source
-  when: ds.json.id is defined
+- name: Remove dashboard
+  when: db.json[0].uid is defined
   ansible.builtin.uri: 
-    url: "{{ grafana.url }}/api/datasources/{{ ds.json.id }}"
+    url: "{{ grafana.url }}/api/dashboards/uid/{{ db.json[0].uid }}"
     user: "{{ grafana.admin_user }}"
     password: "{{ grafana.admin_password }}"
     force_basic_auth: yes

@@ -1,5 +1,5 @@
 The `runtests.py` allows you to configure and execute a series of experiments in sequence, on the same DO setup, to make comparisons fair.
-This is achieved by replacing tags on template files for the `../../testnet.toml` and `../../Makefile` by combinations of the values specified
+This is achieved by replacing tags on template files for the `../../testnet.toml` and `../../experiment.mk` by combinations of the values specified
 in an `options` file.
 For each combination, the `runtests.py` scripts invokes the make commands in Makefile` to recreate the node configuration,
 clean up the nodes (not the prometheus server), push the new configuration, and run the experiments., 

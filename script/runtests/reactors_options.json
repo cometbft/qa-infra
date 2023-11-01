@@ -35,8 +35,8 @@
                      ]
                   },
                   {
-                     "tmpl_file": "reactors_Makefile_tmpl",
-                     "output_file": "Makefile",
+                     "tmpl_file": "reactors_experiment.mk_tmpl",
+                     "output_file": "experiment.mk",
                      "tag": "{{LOAD_TX_RATE}}",
                      "values": [
                         400,
@@ -109,8 +109,8 @@
                      ]
                   },
                   {
-                     "tmpl_file": "reactors_Makefile_tmpl",
-                     "output_file": "Makefile",
+                     "tmpl_file": "reactors_experiment.mk_tmpl",
+                     "output_file": "experiment.mk",
                      "tag": "{{LOAD_TX_RATE}}",
                      "values": [
                         400
@@ -182,8 +182,8 @@
                      ]
                   },
                   {
-                     "tmpl_file": "reactors_Makefile_tmpl",
-                     "output_file": "Makefile",
+                     "tmpl_file": "reactors_experiment.mk_tmpl",
+                     "output_file": "experiment.mk",
                      "tag": "{{LOAD_TX_RATE}}",
                      "values": [
                         400
@@ -240,8 +240,8 @@
                      ]
                   },
                   {
-                     "tmpl_file": "reactors_Makefile_tmpl",
-                     "output_file": "Makefile",
+                     "tmpl_file": "reactors_experiment.mk_tmpl",
+                     "output_file": "experiment.mk",
                      "tag": "{{LOAD_TX_RATE}}",
                      "values": [
                         400

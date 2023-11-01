@@ -6,3 +6,4 @@
 /ansible/rotating/*
 /ansible/hosts
 /experiments
+**/.DS_Store

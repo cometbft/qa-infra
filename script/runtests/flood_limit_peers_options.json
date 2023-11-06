@@ -14,11 +14,11 @@
                      "output_file": "testnet.toml",
                      "tag": "{{MAX_PEERS}}",
                      "values": [
-                        0,
-			5,
-                        10,
+                        20,
                         15,
-                        20
+                        10,
+                        5,
+                        0
                      ]
                   }
                ]

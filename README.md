@@ -48,6 +48,10 @@ After you have all the prerequisites installed and have configured your
     make terraform-init
     ```
 
+41. If you are using `scripts/runtests.py`, execut it now to update your `./testnet.toml` according to your templates. 
+    Use the `-s` flag to run it just once, as in `python3 runtests.py -l log.log -o flood_options.json -s`
+    Otherwise, ensure that your `./testnet.toml` is correct.
+
 5. Create the VMs for the validators and Prometheus as specified in `./testnet.toml`
     Be sure to use your actual DO token and SSH key fingerprints for the `do_token` and `do_ssh_keys` variables.
 
@@ -79,6 +83,8 @@ After you have all the prerequisites installed and have configured your
     make prometheus-init
     ```
 
+91. If you are using `script/runtests.py`, do it now and skip to step 12 once you are done. Otherwise, execute steps 10 and 11.
+
 10. Start the test application on all of the validators
 
     ```bash
@@ -99,7 +105,8 @@ After you have all the prerequisites installed and have configured your
     ```
 
 13. Retrieve the data produced during the execution.
-    You can either use the following command to retrieve both the prometheus and the blockstore databases together
+    If you have use `runtests.py`, the data may have been retrieved already. 
+    Otherwise, you can either use the following command to retrieve both the prometheus and the blockstore databases together
 
     ```bash
     make retrieve-data

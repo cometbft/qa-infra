@@ -6,7 +6,7 @@ pex = false
 log_level = "info"
 #log_level = "mempool:debug,*:info"
 
-mempool_max_outbound_peers = {{MAX_PEERS}}
+experimental_max_used_outbound_peers = {{MAX_PEERS}}
 
 [node.validator001]
 persistent_peers = ["validator002", "validator006", "validator011", "validator015", "validator016", "validator017", "validator025", "validator026", "validator030", "validator031", "validator032", "validator034", "validator035", "validator039", "validator042", "validator049", "validator050", "validator055", "validator073", "validator077", "validator079", "validator085", "validator095", "validator096", "validator103", "validator107", "validator110", "validator115", "validator124", "validator137", "validator139", "validator141", "validator150", "validator152", "validator164", "validator166", "validator171", "validator173"]

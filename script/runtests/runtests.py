@@ -28,13 +28,14 @@ import requests
 
 global_pexpect_instance = None  # Used by signal handler
 global_output_folder = str(pathlib.Path(__file__).parents[2])
-
+global_COMMAND_PROMPT = r"\[PEXPECT\]\$ "
 
 def exit_with_usage():
 
     print(globals()['__doc__'])
     print(
-    '''Usage: this_script.py [-l|--log logFile] [o|--options optionsFile] [-i|--interactive] [-a|--append] [-r|--retrieve [-d|--destroy]] [-t|--tag-experiment] 
+    '''Usage: this_script.py [-s|--single-pass] [-l|--log logFile] [o|--options optionsFile] [-i|--interactive] [-a|--append] [-r|--retrieve [-d|--destroy]] [-t|--tag-experiment] 
+        -s: applies configuration once and quit 
         -l: output log file
         -o: tag replacements file
         -i: pause on some key steps
@@ -88,7 +89,32 @@ def tag(begin, end, annotation):
         json=request_body)
     return response
 
+def setup_shell(log_file):
+    sh = pexpect.spawn(
+        "/bin/sh", cwd=global_output_folder, timeout=None)
+    sh.logfile = log_file
 
+    sh.sendline(r"PS1='[PEXPECT]\$ '")  # In case of sh-style
+    i = sh.expect([pexpect.TIMEOUT, global_COMMAND_PROMPT], timeout=10)
+    if i == 0:
+        print("# Couldn't set sh-style prompt -- trying csh-style.")
+        sh.sendline(r"set prompt='[PEXPECT]\$ '")
+        i = sh.expect([pexpect.TIMEOUT, global_COMMAND_PROMPT], timeout=10)
+        if i == 0:
+            print("Failed to set command prompt using sh or csh style.")
+            print("Response was:")
+            print(sh.before)
+            sys.exit(1)
+
+    sh.sendline('pwd')
+    index = sh.expect([pexpect.TIMEOUT, global_COMMAND_PROMPT])
+    if index == 0:
+        log.error('Timeout!!')
+        exit()
+    elif index == 1:
+        log.info('Working directory')
+
+    return sh
 
 def main():
 
@@ -96,8 +122,8 @@ def main():
     # Parse the options, arguments, get ready, etc.
     ######################################################################
     try:
-        optlist, args = getopt.getopt(sys.argv[1:], 'hal:o:virt', [
-                                      'help', 'append', 'log', 'options', 'interactive', 'retrieve', 'tag-experiments'])
+        optlist, args = getopt.getopt(sys.argv[1:], 'hal:o:virts', [
+                                      'help', 'append', 'log', 'options', 'interactive', 'retrieve', 'tag-experiments', 'single-pass'])
     except Exception as e:
         log.error("ERROR: %s", str(e))
         exit_with_usage()
@@ -111,6 +137,7 @@ def main():
     destroy = False
     retrieve = False
     tag_experiment = False
+    single_pass = False
 
     for k, v in options.items():
         if k in ('-h', '--help'):
@@ -135,7 +162,9 @@ def main():
         elif k in ('-r', '--retrieve'):
             retrieve = True
         elif k in ('-t', '--tag-experiments'):
-            ta_experiment = True
+            tag_experiment = True
+        elif k in ('-s', '--single-pass'):
+            single_pass = True
         else:
             assert False, 'unhandled option'
 
@@ -157,30 +186,7 @@ def main():
     # Interpret the options file.
     options = json.load(fopt)
 
-    bash = pexpect.spawn(
-        "/bin/sh", cwd=global_output_folder, timeout=None)
-    bash.logfile = log_file
-
-    COMMAND_PROMPT = r"\[PEXPECT\]\$ "
-    bash.sendline(r"PS1='[PEXPECT]\$ '")  # In case of sh-style
-    i = bash.expect([pexpect.TIMEOUT, COMMAND_PROMPT], timeout=10)
-    if i == 0:
-        print("# Couldn't set sh-style prompt -- trying csh-style.")
-        bash.sendline(r"set prompt='[PEXPECT]\$ '")
-        i = bash.expect([pexpect.TIMEOUT, COMMAND_PROMPT], timeout=10)
-        if i == 0:
-            print("Failed to set command prompt using sh or csh style.")
-            print("Response was:")
-            print(bash.before)
-            sys.exit(1)
-
-    bash.sendline('pwd')
-    index = bash.expect([pexpect.TIMEOUT, COMMAND_PROMPT])
-    if index == 0:
-        log.error('Timeout!!')
-        exit()
-    elif index == 1:
-        log.info('Working directory')
+    bash = setup_shell(log_file)
 
     for seq in options['sequences']:
         log.info("Sequence entry: %s", seq['name'])
@@ -226,15 +232,19 @@ def main():
                     file.write(updated_contents)
             
 
+            if single_pass:
+                input("First pass generating configuration files is done.")
+                exit(0)
+
             if interactive:
-                input("Configuration files generated.\nPress Enter to continue...")
+                input("Configuration files generated.\nPress Enter to continue execution with them")
 
             ######################################################################
             # Assume network has been started but no experiments are being executed.
             # Execute the combinations and store the logs (specially timestamps)
             ######################################################################
             bash.sendline("make configgen")
-            index = bash.expect([pexpect.TIMEOUT, COMMAND_PROMPT])
+            index = bash.expect([pexpect.TIMEOUT, global_COMMAND_PROMPT])
             if index == 0:
                 log.error('Timeout!!')
                 exit()
@@ -242,7 +252,7 @@ def main():
                 log.info('Configurations updated')
 
             bash.sendline("make restart")
-            index = bash.expect([pexpect.TIMEOUT, COMMAND_PROMPT])
+            index = bash.expect([pexpect.TIMEOUT, global_COMMAND_PROMPT])
             if index == 0:
                 log.error('Timeout!!')
                 exit()
@@ -260,7 +270,7 @@ def main():
             log.info("# Configuration: %s ", conf)
 
             bash.sendline("make runload")
-            index = bash.expect([pexpect.TIMEOUT, COMMAND_PROMPT])
+            index = bash.expect([pexpect.TIMEOUT, global_COMMAND_PROMPT])
             if index == 0:
                 log.error('Timeout!!')
                 exit()
@@ -277,7 +287,7 @@ def main():
 
             if retrieve:
                 bash.sendline("make retrieve-blockstore")
-                index = bash.expect([pexpect.TIMEOUT, COMMAND_PROMPT])
+                index = bash.expect([pexpect.TIMEOUT, global_COMMAND_PROMPT])
                 if index == 0:
                    log.error('Timeout!!')
                    exit()
@@ -290,7 +300,7 @@ def main():
     # Collect the prometheus database and associate with the log file.
     if retrieve:
         bash.sendline("make retrieve-prometheus-data")
-        index = bash.expect([pexpect.TIMEOUT, COMMAND_PROMPT])
+        index = bash.expect([pexpect.TIMEOUT, global_COMMAND_PROMPT])
         if index == 0:
              log.error('Timeout!!')
              exit()
@@ -306,7 +316,7 @@ def main():
             exit()
         elif index == 1:
             bash.sendline("yes")
-            index = bash.expect([pexpect.TIMEOUT, COMMAND_PROMPT])
+            index = bash.expect([pexpect.TIMEOUT, global_COMMAND_PROMPT])
             if index == 0:
                 log.error('Timeout!!')
                 exit()

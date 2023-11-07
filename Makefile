@@ -106,8 +106,8 @@ runload:
 			-e iterations=$(ITERATIONS) 
 			#-e count=$(LOAD_TX_COUNT)
 
-.PHONY: restart-prometheus
-restart-prometheus:
+.PHONY: prometheus-restart
+prometheus-restart:
 	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook restart-prometheus.yaml -i hosts -u root
 
 .PHONY: restart

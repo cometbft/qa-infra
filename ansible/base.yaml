@@ -24,7 +24,6 @@
           - golang-1.21-go
           - prometheus
           - prometheus-node-exporter
-          - ntp
           - ntpstat
           - jq
           - ufw

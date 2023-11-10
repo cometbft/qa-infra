@@ -8,7 +8,7 @@
         path: /root/go/bin/load
       register: load_tool
     - name: Install load tool
-      ansible.builtin.command: /usr/lib/go-1.19/bin/go install
+      ansible.builtin.command: /usr/lib/go-1.21/bin/go install
       args:
         chdir: /root/cometbft/test/loadtime/cmd/load/
       when: not load_tool.stat.exists

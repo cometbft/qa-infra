@@ -104,7 +104,6 @@ runload:
 			-e time_seconds=$(LOAD_TOTAL_TIME) \
 			-e tx_per_second=$(LOAD_TX_RATE) \
 			-e iterations=$(ITERATIONS) 
-			#-e count=$(LOAD_TX_COUNT)
 
 .PHONY: prometheus-restart
 prometheus-restart:

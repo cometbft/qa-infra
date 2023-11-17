@@ -1,0 +1,20 @@
+# TODO: pre-task: check if homebrew is installed
+---
+- name: Update Homebrew
+  ignore_errors: true
+  ansible.builtin.homebrew:
+    update_homebrew: true
+
+- name: Install packages
+  ansible.builtin.homebrew: name={{ item }} state=present
+  with_items:
+    - grafana
+    - jq
+
+- name: (Re)start Grafana
+  ansible.builtin.command: brew services restart grafana
+
+- name: Wait for Grafana port
+  ansible.builtin.wait_for:
+    port: "{{ grafana.port }}"
+    timeout: 30

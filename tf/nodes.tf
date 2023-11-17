@@ -38,7 +38,7 @@ resource "digitalocean_vpc" "testnet-vpc" {
 resource "digitalocean_droplet" "testnet-node" {
   count    = var.testnet_size
   name     = var.instance_names[count.index]
-  image    = "debian-11-x64"
+  image    = "debian-12-x64"
   region   = "fra1"
   tags     = concat(var.instance_tags, ["testnet-node"])
   size     = "s-4vcpu-8gb"
@@ -48,7 +48,7 @@ resource "digitalocean_droplet" "testnet-node" {
 
 resource "digitalocean_droplet" "testnet-prometheus" {
   name     = "testnet-prometheus"
-  image    = "debian-11-x64"
+  image    = "debian-12-x64"
   region   = "fra1"
   tags     = concat(var.instance_tags, ["testnet-observability"])
   size     = "s-4vcpu-8gb"
@@ -58,7 +58,7 @@ resource "digitalocean_droplet" "testnet-prometheus" {
 
 resource "digitalocean_droplet" "testnet-load-runner" {
   name     = "testnet-load-runner"
-  image    = "debian-11-x64"
+  image    = "debian-12-x64"
   region   = "fra1"
   tags     = concat(var.instance_tags, ["testnet-load"])
   size     = "s-8vcpu-16gb"
@@ -69,7 +69,7 @@ resource "digitalocean_droplet" "testnet-load-runner" {
 resource "digitalocean_droplet" "ephemeral-node" {
   count        = var.ephemeral_size
   name         = var.ephemeral_names[count.index]
-  image        = "debian-11-x64"
+  image        = "debian-12-x64"
   region       = "fra1"
   tags         = concat(var.instance_tags, ["ephemeral-node"])
   size         = "s-4vcpu-8gb"

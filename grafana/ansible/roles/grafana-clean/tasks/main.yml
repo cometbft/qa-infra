@@ -1,0 +1,6 @@
+---
+- name: Remove data
+  ansible.builtin.import_tasks: remove-data.yml
+
+- name: "Uninstall Grafana for {{ platform }}"
+  ansible.builtin.include_tasks: "uninstall-{{ platform }}.yml"

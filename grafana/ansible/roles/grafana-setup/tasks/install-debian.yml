@@ -1,0 +1,48 @@
+---
+- name: Install dependencies
+  ansible.builtin.apt: 
+    pkg: "{{ grafana_required_libs }}"
+    state: present
+  become: true
+
+- name: Add apt repository key
+  ansible.builtin.get_url:
+    url: "{{ grafana_gpg_key_url }}"
+    dest: /etc/apt/trusted.gpg.d/grafana.asc
+    mode: '0644'
+    force: true
+  become: true
+
+- name: Add Grafana repo 
+  ansible.builtin.apt_repository:
+    repo: "{{ grafana_repo }}"
+    state: present
+    filename: grafana
+    update_cache: true
+
+- name: Install Grafana
+  ansible.builtin.apt: 
+    name: grafana
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Start Grafana service
+  ansible.builtin.systemd:
+    name: grafana-server
+    state: started
+    enabled: yes
+  become: true
+
+- name: "Allow incoming HTTP on port {{ grafana.port }}"
+  community.general.ufw:
+    rule: allow
+    direction: in
+    to: 0.0.0.0/0
+    to_port: '"{{ grafana.port }}"'
+    proto: tcp
+
+- name: Wait for Grafana port
+  ansible.builtin.wait_for:
+    port: "{{ grafana.port }}"
+    timeout: 30

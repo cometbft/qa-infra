@@ -1,0 +1,43 @@
+---
+- name: Create Prometheus data source
+  ansible.builtin.uri: 
+    url: "{{ grafana.url }}/api/datasources"
+    user: "{{ grafana.admin_user }}"
+    password: "{{ grafana.admin_password }}"
+    force_basic_auth: yes
+    method: POST
+    headers:
+      Accept: application/json
+      Content-Type: application/json
+    body: 
+      type: "prometheus"
+      name: "{{ datasource.name }}"
+      url: "{{ datasource.url }}"
+      access: "proxy"
+      jsonData:
+        timeInterval: 1s # data scrape frequency
+    body_format: json
+    status_code:
+      - 200 # ok
+      - 201 # created
+      - 409 # conflict (already exists)
+  register: ds_created
+
+- name: Get existing data source id
+  when: ds_created.json.datasource.id is not defined
+  ansible.builtin.uri: 
+    url: "{{ grafana.url }}/api/datasources/name/{{ datasource.name }}"
+    user: "{{ grafana.admin_user }}"
+    password: "{{ grafana.admin_password }}"
+    force_basic_auth: yes
+    method: GET
+    headers:
+      Accept: application/json
+      Content-Type: application/json
+    status_code: [200,404] # 404=Not Found
+  register: ds_exists
+
+- name: Set variables with data source id
+  ansible.builtin.set_fact:
+    datasource_id: "{{ ds_exists.json.id if ds_exists.json.id is defined else ds_created.json.datasource.id }}"
+    datasource_uid: "{{ ds_exists.json.uid if ds_exists.json.uid is defined else ds_created.json.datasource.uid }}"

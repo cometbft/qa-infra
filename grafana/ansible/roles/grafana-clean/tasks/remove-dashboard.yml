@@ -1,0 +1,25 @@
+---
+- name: Get dashboard uid
+  ansible.builtin.uri: 
+    url: "{{ grafana.url }}/api/search?query={{ dashboard.title }}&"
+    user: "{{ grafana.admin_user }}"
+    password: "{{ grafana.admin_password }}"
+    force_basic_auth: yes
+    method: GET
+    headers:
+      Accept: application/json
+      Content-Type: application/json
+    status_code: [-1,200,404] # -1=server is down; 404=Not Found
+  register: db
+
+- name: Remove dashboard
+  when: db.json[0].uid is defined
+  ansible.builtin.uri: 
+    url: "{{ grafana.url }}/api/dashboards/uid/{{ db.json[0].uid }}"
+    user: "{{ grafana.admin_user }}"
+    password: "{{ grafana.admin_password }}"
+    force_basic_auth: yes
+    method: DELETE
+    headers:
+      Accept: application/json
+      Content-Type: application/json

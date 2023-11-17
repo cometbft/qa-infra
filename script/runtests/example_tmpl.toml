@@ -1,5 +1,5 @@
-config = {{conf 1 var 2}}config = "{{conf 1 var 1}}"
-
+config = {{conf 1 var 2}}
+config = "{{conf 1 var 1}}"
 
 config = {{conf 2 var 1}}
 config = {{conf 2 var 2}}

@@ -8,7 +8,7 @@
                     "name": "conf 1",
                     "zip_vars": [
                         {
-                            "tmpl_file": "sampl_tmpl.toml",
+                            "tmpl_file": "example_tmpl.toml",
                             "output_file": "sampl.out",
                             "tag": "conf 1 var 1",
                             "values": [
@@ -17,7 +17,7 @@
                             ]
                         },
                         {
-                            "tmpl_file": "sampl_tmpl.toml",
+                            "tmpl_file": "example_tmpl.toml",
                             "output_file": "sampl.out",
                             "tag": "conf 1 var 2",
                             "values": [
@@ -31,7 +31,7 @@
                     "name": "conf 2",
                     "zip_vars": [
                         {
-                            "tmpl_file": "sampl_tmpl.toml",
+                            "tmpl_file": "example_tmpl.toml",
                             "output_file": "sampl.out",
                             "tag": "conf 2 var 1",
                             "values": [
@@ -40,7 +40,7 @@
                             ]
                         },
                         {
-                            "tmpl_file": "sampl_tmpl.toml",
+                            "tmpl_file": "example_tmpl.toml",
                             "output_file": "sampl.out",
                             "tag": "conf 2 var 2",
                             "values": [
@@ -60,7 +60,7 @@
                     "name": "conf 1",
                     "zip_vars": [
                         {
-                            "tmpl_file": "sampl_tmpl.toml",
+                            "tmpl_file": "example_tmpl.toml",
                             "output_file": "sampl.out",
                             "tag": "conf 1 var 1",
                             "values": [
@@ -69,7 +69,7 @@
                             ]
                         },
                         {
-                            "tmpl_file": "sampl_tmpl.toml",
+                            "tmpl_file": "example_tmpl.toml",
                             "output_file": "sampl.out",
                             "tag": "conf 1 var 2",
                             "values": [
@@ -83,7 +83,7 @@
                     "name": "conf 2",
                     "zip_vars": [
                         {
-                            "tmpl_file": "sampl_tmpl.toml",
+                            "tmpl_file": "example_tmpl.toml",
                             "output_file": "sampl.out",
                             "tag": "conf 2 var 1",
                             "values": [
@@ -92,7 +92,7 @@
                             ]
                         },
                         {
-                            "tmpl_file": "sampl_tmpl.toml",
+                            "tmpl_file": "example_tmpl.toml",
                             "output_file": "sampl.out",
                             "tag": "conf 2 var 2",
                             "values": [
@@ -101,8 +101,8 @@
                             ]
                         },
                         {
-                            "tmpl_file": "sampl_tmpl.toml",
-                            "output_file": "sampl.out",
+                            "tmpl_file": "exampleb_tmpl.toml",
+                            "output_file": "samplb.out",
                             "tag": "conf 2 var 3",
                             "values": [
                                 "c2v3 0",

@@ -1,8 +1,8 @@
 ANSIBLE_SSH_RETRIES=5
 EPHEMERAL_SIZE ?= 0
-DO_INSTANCE_TAGNAME=v038-testnet
+DO_INSTANCE_TAGNAME=main-testnet
 DO_VPC_SUBNET=172.19.144.0/20
-LOAD_RUNNER_COMMIT_HASH ?= 51685158fe36869ab600527b852437ca0939d0cc
+LOAD_RUNNER_COMMIT_HASH ?= 15b76b5 # tag of main on 23.11.2023
 LOAD_RUNNER_CMD=go run github.com/cometbft/cometbft/test/e2e/runner@$(LOAD_RUNNER_COMMIT_HASH)
 ANSIBLE_FORKS=150
 export DO_INSTANCE_TAGNAME
@@ -19,11 +19,12 @@ ITERATIONS ?= 5
 RETRIEVE_TARGET_HOST ?= any
 EXPERIMENT_DIR=$(shell date "+%Y-%m-%d-%H_%M_%S%N")
 
+VERSION_TAG ?= 15b76b5 # tag of main on 23.11.2023
 #VERSION_TAG ?= 3b783434f #v0.34.27 (cometbft/cometbft)
 #VERSION_TAG ?= bef9a830e  #v0.37.alpha3 (cometbft/cometbft)
 #VERSION_TAG ?= v0.38.0-alpha.2
 #VERSION_TAG ?= e9abb116e #v0.38.alpha2 (cometbft/cometbft)
-VERSION_TAG ?= 9fc711b6514f99b2dc0864fc703cb81214f01783 #vote extension sizes.
+#VERSION_TAG ?= 9fc711b6514f99b2dc0864fc703cb81214f01783 #vote extension sizes.
 #VERSION_TAG ?= 7d8c9d426 #main merged into feature/abci++vef + bugfixes
 #VERSION2_TAG ?= 66c2cb634 #v0.34.26 (informalsystems/tendermint)
 VERSION_WEIGHT ?= 2
@@ -91,11 +92,11 @@ loadrunners-init:
 
 .PHONY: start-network
 start-network:
-	go run github.com/cometbft/cometbft/test/e2e/runner@$(VERSION_TAG) start -f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
+	go run github.com/cometbft/cometbft/test/e2e/runner@$(LOAD_RUNNER_COMMIT_HASH) start -f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
 
 .PHONY: stop-network
 stop-network:
-	go run github.com/cometbft/cometbft/test/e2e/runner@$(VERSION_TAG) stop -f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
+	go run github.com/cometbft/cometbft/test/e2e/runner@$(LOAD_RUNNER_COMMIT_HASH) stop -f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
 
 .PHONY: runload
 runload:
@@ -124,7 +125,7 @@ rotate:
 
 .PHONY: perturb-nodes
 perturb-nodes:
-	go run github.com/cometbft/cometbft/test/e2e/runner@$(VERSION_TAG) perturb -f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
+	go run github.com/cometbft/cometbft/test/e2e/runner@$(LOAD_RUNNER_COMMIT_HASH) perturb -f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
 
 .PHONY: retrieve-blockstore
 retrieve-blockstore:

@@ -42,7 +42,7 @@ EOF
 		"$name": {
 			"ext_ip_address": "$ext_ip",
 			"ip_address": "$ip",
-			"port": 26657
+			"rpc_port": 26657
 EOF
 		if [ $i -lt $count ]; then
 			cat <<EOF >> $OUT_PATH

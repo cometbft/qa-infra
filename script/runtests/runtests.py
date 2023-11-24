@@ -34,7 +34,7 @@ def exit_with_usage():
 
     print(globals()['__doc__'])
     print(
-    '''Usage: this_script.py [-s|--single-pass] [-l|--log logFile] [o|--options optionsFile] [-i|--interactive] [-a|--append] [-r|--retrieve [-d|--destroy]] [-t|--tag-experiment] 
+    '''Usage: runtests.py [-s|--single-pass] [-l|--log logFile] [o|--options optionsFile] [-i|--interactive] [-a|--append] [-r|--retrieve [-d|--destroy]] [-t|--tag-experiment] 
         -s: applies configuration once and quit 
         -l: output log file
         -o: tag replacements file

@@ -134,10 +134,13 @@ After you have all the prerequisites installed and have configured your
 If you need to restart the running experiment, run the following command:
 
 ```sh
-#modify your testnet.toml file
-make configgen #update the configuration files locally
-make restart    #update the configuration files and restart CometBFT in the nodes
-make restart-prometheus #reset and restart prometheus
+# Modify your testnet.toml file
+# Update the configuration files locally
+make configgen
+# Update the configuration files and restart CometBFT in the nodes
+make restart
+# Reset and restart prometheus
+make restart-prometheus
 ```
 
 This command will delete all of the prometheus data, and re-initialize the nodes

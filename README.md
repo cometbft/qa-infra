@@ -48,77 +48,77 @@ After you have all the prerequisites installed and have configured your
     make terraform-init
     ```
 
-41. If you are using `scripts/runtests.py`, execut it now to update your `./testnet.toml` according to your templates. 
+5. If you are using `scripts/runtests.py`, execute it now to update your `./testnet.toml` according to your templates. 
     Use the `-s` flag to run it just once, as in `python3 runtests.py -l log.log -o flood_options.json -s`
     Otherwise, ensure that your `./testnet.toml` is correct.
 
-5. Create the VMs for the validators and Prometheus as specified in `./testnet.toml`
+6. Create the VMs for the validators and Prometheus as specified in `./testnet.toml`
     Be sure to use your actual DO token and SSH key fingerprints for the `do_token` and `do_ssh_keys` variables.
 
     ```bash
     make terraform-apply
     ```
 
-6. Retrieve the IP addresses of the hosts for Ansible
+7. Retrieve the IP addresses of the hosts for Ansible
 
     ```bash
     make hosts
     ```
 
-7. Generate the testnet configuration
+8. Generate the testnet configuration
 
     ```bash
     make configgen
     ```
 
-8. Install all necessary software on the created VMs using Ansible
+9. Install all necessary software on the created VMs using Ansible
 
     ```bash
     make ansible-install
     ```
 
-9. Initialize the Prometheus instance
+10. Initialize the Prometheus instance
 
     ```bash
     make prometheus-init
     ```
 
-91. If you are using `script/runtests.py`, do it now and skip to step 12 once you are done. Otherwise, execute steps 10 and 11.
+11. If you are using `script/runtests.py`, do it now and skip to step 14 once you are done. Otherwise, execute steps 12 and 13.
 
-10. Start the test application on all of the validators
+12. Start the test application on all of the validators
 
     ```bash
     make start-network
     ```
 
-11. Execute a load test against the network
+13. Execute a load test against the network
     This will start sending load until Ctrl-C is sent, so consider running this in its own terminal
 
     ```bash
     make runload
     ```
 
-12. Once the execution is over, stop the network
+14. Once the execution is over, stop the network
 
     ```bash
     make stop-network
     ```
 
-13. Retrieve the data produced during the execution.
-    If you have use `runtests.py`, the data may have been retrieved already. 
+15. Retrieve the data produced during the execution.
+    If you have used `runtests.py`, the data may have been retrieved already. 
     Otherwise, you can either use the following command to retrieve both the prometheus and the blockstore databases together
 
     ```bash
     make retrieve-data
     ```
 
-    To retrieve them independently use the following for prometheus, which will retrieve the data from all nodes.
+    or, to retrieve them independentlyi, use the following for prometheus, which will retrieve the data from all nodes,
 
     ```bash
     make retrieve-prometheus-data
     ```
 
-    For blockstore, use the following. Here, notice that the target node from which the data is retrieved can be changed via the environment variable `RETRIEVE_TARGET_HOST`.
+    and, for the blockstore, use the following. Here, notice that the target node from which the data is retrieved can be changed via the environment variable `RETRIEVE_TARGET_HOST`.
       - `"any"` (default) - retrieve from one random validator from the inventory.
       - `"all"` - retrieve from all nodes (very slow!);
       - set it to the exact name of a validator to retrieve from that particular validator.

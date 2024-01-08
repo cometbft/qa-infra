@@ -112,7 +112,7 @@ After you have all the prerequisites installed and have configured your
     make retrieve-data
     ```
 
-    or, to retrieve them independentlyi, use the following for prometheus, which will retrieve the data from all nodes,
+    or, to retrieve them independently, use the following for prometheus, which will retrieve the data from all nodes,
 
     ```bash
     make retrieve-prometheus-data

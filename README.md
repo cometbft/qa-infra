@@ -48,77 +48,70 @@ After you have all the prerequisites installed and have configured your
     make terraform-init
     ```
 
-5. If you are using `scripts/runtests.py`, execute it now to update your `./testnet.toml` according to your templates. 
-    Use the `-s` flag to run it just once, as in `python3 runtests.py -l log.log -o flood_options.json -s`
-    Otherwise, ensure that your `./testnet.toml` is correct.
-
-6. Create the VMs for the validators and Prometheus as specified in `./testnet.toml`
+5. Create the VMs for the validators and Prometheus as specified in `./testnet.toml`   
     Be sure to use your actual DO token and SSH key fingerprints for the `do_token` and `do_ssh_keys` variables.
 
     ```bash
     make terraform-apply
     ```
 
-7. Retrieve the IP addresses of the hosts for Ansible
+6. Retrieve the IP addresses of the hosts for Ansible
 
     ```bash
     make hosts
     ```
 
-8. Generate the testnet configuration
+7. Generate the testnet configuration
 
     ```bash
     make configgen
     ```
 
-9. Install all necessary software on the created VMs using Ansible
+8. Install all necessary software on the created VMs using Ansible
 
     ```bash
     make ansible-install
     ```
 
-10. Initialize the Prometheus instance
+9. Initialize the Prometheus instance
 
     ```bash
     make prometheus-init
     ```
 
-11. If you are using `script/runtests.py`, do it now and skip to step 14 once you are done. Otherwise, execute steps 12 and 13.
-
-12. Start the test application on all of the validators
+10. Start the test application on all of the validators
 
     ```bash
     make start-network
     ```
 
-13. Execute a load test against the network
+11. Execute a load test against the network   
     This will start sending load until Ctrl-C is sent, so consider running this in its own terminal
 
     ```bash
     make runload
     ```
 
-14. Once the execution is over, stop the network
+12. Once the execution is over, stop the network
 
     ```bash
     make stop-network
     ```
 
-15. Retrieve the data produced during the execution.
-    If you have used `runtests.py`, the data may have been retrieved already. 
-    Otherwise, you can either use the following command to retrieve both the prometheus and the blockstore databases together
+13. Retrieve the data produced during the execution.    
+    You can either use the following command to retrieve both the prometheus and the blockstore databases together
 
     ```bash
     make retrieve-data
     ```
 
-    or, to retrieve them independentlyi, use the following for prometheus, which will retrieve the data from all nodes,
+    To retrieve them independently use the following for prometheus, which will retrieve the data from all nodes.
 
     ```bash
     make retrieve-prometheus-data
     ```
 
-    and, for the blockstore, use the following. Here, notice that the target node from which the data is retrieved can be changed via the environment variable `RETRIEVE_TARGET_HOST`.
+    For blockstore, use the following. Here, notice that the target node from which the data is retrieved can be changed via the environment variable `RETRIEVE_TARGET_HOST`.
       - `"any"` (default) - retrieve from one random validator from the inventory.
       - `"all"` - retrieve from all nodes (very slow!);
       - set it to the exact name of a validator to retrieve from that particular validator.
@@ -134,24 +127,12 @@ After you have all the prerequisites installed and have configured your
 If you need to restart the running experiment, run the following command:
 
 ```sh
-# Modify your testnet.toml file
-# Update the configuration files locally
-make configgen
-# Update the configuration files and restart CometBFT in the nodes
 make restart
-# Reset and restart prometheus
-make restart-prometheus
 ```
 
 This command will delete all of the prometheus data, and re-initialize the nodes
-on the network. The nodes will restart with the new configuration and all of their
-data will be deleted and reset, but they will use the same IDs that they previously used.
-
-If you do not want to update the configuration files and rerun experiments with same
-configuration, you can omit the `make configgen` step.
-
-If you are want to collect the metrics of multiple experiments on the same prometheus database
-you can omit the `make restart-prometheus` command.
+on the network. The nodes will restart with the same configuration files and
+IDs that they previously used, but all of their data will be deleted and reset.
 
 ### Destroy the network
 

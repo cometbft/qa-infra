@@ -1,12 +1,10 @@
 EPHEMERAL_SIZE ?= 0
 DO_INSTANCE_TAGNAME=main-testnet
 
-LOAD_CONNECTIONS ?= 1
-LOAD_TX_RATE ?= 600
-LOAD_TX_COUNT ?= 100000
-LOAD_TOTAL_TIME ?= 401
-ITERATIONS ?= 3
-
+LOAD_CONNECTIONS ?= 2
+LOAD_TX_RATE ?= 200
+LOAD_TOTAL_TIME ?= 91
+ITERATIONS ?= 5
 
 # Set it to "all" to retrieve from all hosts
 # Set it to "any" to retrieve from one full node

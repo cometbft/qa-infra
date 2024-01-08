@@ -104,11 +104,7 @@ runload:
 			-e connections=$(LOAD_CONNECTIONS) \
 			-e time_seconds=$(LOAD_TOTAL_TIME) \
 			-e tx_per_second=$(LOAD_TX_RATE) \
-			-e iterations=$(ITERATIONS) 
-
-.PHONY: prometheus-restart
-prometheus-restart:
-	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook restart-prometheus.yaml -i hosts -u root
+			-e iterations=$(ITERATIONS)
 
 .PHONY: restart
 restart:
@@ -116,6 +112,7 @@ restart:
 ifneq ($(VERSION2_WEIGHT), 0)
 	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts --limit validators2 -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION2_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
 endif
+	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook restart-prometheus.yaml -i hosts -u root
 	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook re-init-testapp.yaml -i hosts -u root -f $(ANSIBLE_FORKS)
 
 .PHONY: rotate

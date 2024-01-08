@@ -1,0 +1,45 @@
+{
+   "comment": "Entries are processed sequentially",
+   "sequences": [
+      {
+         "name": "flood skip",
+         "comment": "Configurations are combined",
+         "configurations": [
+            {
+               "name": "skip rate",
+               "comment": "Propagation rates.",
+               "zip_vars": [
+                  {
+                     "tmpl_file": "flood_skip_testnet_tmpl.toml",
+                     "output_file": "testnet.toml",
+                     "tag": "{{FLOOD_SKIP_RATE}}",
+                     "values": [
+                        0,
+                        10,
+                        20,
+                        30,
+                        40,
+                        50,
+                        60
+                     ]
+                  }
+               ]
+             },
+             {
+               "name": "tx rate",
+               "comment": "tx rate",
+               "zip_vars": [
+                  {
+                     "tmpl_file": "flood_skip_experiment.mk_tmpl",
+                     "output_file": "experiment.mk",
+                     "tag": "{{LOAD_TX_RATE}}",
+                     "values": [
+                        400
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

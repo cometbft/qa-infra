@@ -1,0 +1,43 @@
+{
+   "comment": "Entries are processed sequentially",
+   "sequences": [
+      {
+         "name": "max peers",
+         "comment": "Configurations are combined",
+         "configurations": [
+            {
+               "name": "max peers",
+               "comment": "Max Peers.",
+               "zip_vars": [
+                  {
+                     "tmpl_file": "flood_limit_peers_testnet_tmpl.toml",
+                     "output_file": "testnet.toml",
+                     "tag": "{{MAX_PEERS}}",
+                     "values": [
+                        20,
+                        15,
+                        10,
+                        5,
+                        0
+                     ]
+                  }
+               ]
+             },
+             {
+               "name": "tx rate",
+               "comment": "tx rate",
+               "zip_vars": [
+                  {
+                     "tmpl_file": "flood_limit_peers_experiment.mk_tmpl",
+                     "output_file": "experiment.mk",
+                     "tag": "{{LOAD_TX_RATE}}",
+                     "values": [
+                        600
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

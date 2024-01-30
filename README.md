@@ -42,63 +42,70 @@ After you have all the prerequisites installed and have configured your
     EOF
     ```
 
-4. Initialize Terraform (only needed once)
+4. If necessary, set the Makefile variables `DO_INSTANCE_TAGNAME` and
+    `DO_VPC_SUBNET` to customized values to prevent collisions with other users
+    of the DigitalOcean project who might be running these scripts.
+    If the subnet is allocated in the private IP address range 172.16.0.0/12, as
+    it is in the unmodified assignment, a recommended choice should be
+    in the range 172.16.16.0/20 - 172.31.240.0/20.
+
+5. Initialize Terraform (only needed once)
 
     ```bash
     make terraform-init
     ```
 
-5. Create the VMs for the validators and Prometheus as specified in `./testnet.toml`   
+6. Create the VMs for the validators and Prometheus as specified in `./testnet.toml`   
     Be sure to use your actual DO token and SSH key fingerprints for the `do_token` and `do_ssh_keys` variables.
 
     ```bash
     make terraform-apply
     ```
 
-6. Retrieve the IP addresses of the hosts for Ansible
+7. Retrieve the IP addresses of the hosts for Ansible
 
     ```bash
     make hosts
     ```
 
-7. Generate the testnet configuration
+8. Generate the testnet configuration
 
     ```bash
     make configgen
     ```
 
-8. Install all necessary software on the created VMs using Ansible
+9. Install all necessary software on the created VMs using Ansible
 
     ```bash
     make ansible-install
     ```
 
-9. Initialize the Prometheus instance
+10. Initialize the Prometheus instance
 
     ```bash
     make prometheus-init
     ```
 
-10. Start the test application on all of the validators
+11. Start the test application on all of the validators
 
     ```bash
     make start-network
     ```
 
-11. Execute a load test against the network   
+12. Execute a load test against the network   
     This will start sending load until Ctrl-C is sent, so consider running this in its own terminal
 
     ```bash
     make runload
     ```
 
-12. Once the execution is over, stop the network
+13. Once the execution is over, stop the network
 
     ```bash
     make stop-network
     ```
 
-13. Retrieve the data produced during the execution.    
+14. Retrieve the data produced during the execution.    
     You can either use the following command to retrieve both the prometheus and the blockstore databases together
 
     ```bash

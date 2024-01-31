@@ -42,9 +42,10 @@ After you have all the prerequisites installed and have configured your
     EOF
     ```
 
-4. If necessary, set the Makefile variables `DO_INSTANCE_TAGNAME` and
-    `DO_VPC_SUBNET` to customized values to prevent collisions with other users
-    of the DigitalOcean project who might be running these scripts.
+4. If necessary, set the variables `DO_INSTANCE_TAGNAME` and `DO_VPC_SUBNET`,
+    assigned in the `experiment.mk` file, to customized values to prevent
+    collisions with other QA runs, including possible other users of the
+    DigitalOcean project who might be running these scripts.
     If the subnet is allocated in the private IP address range 172.16.0.0/12, as
     it is in the unmodified assignment, a recommended choice should be
     in the range 172.16.16.0/20 - 172.31.240.0/20.

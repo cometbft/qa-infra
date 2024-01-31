@@ -1,7 +1,5 @@
 include experiment.mk
 
-DO_INSTANCE_TAGNAME=main-testnet
-DO_VPC_SUBNET=172.19.144.0/20
 LOAD_RUNNER_COMMIT_HASH ?= latest
 LOAD_RUNNER_CMD=go run github.com/cometbft/cometbft/test/e2e/runner@$(LOAD_RUNNER_COMMIT_HASH)
 ANSIBLE_SSH_RETRIES=5

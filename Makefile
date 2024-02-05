@@ -11,6 +11,10 @@ VERSION_TAG ?= f92bace91 # tag of main on 05.02.2024
 VERSION_WEIGHT ?= 1
 VERSION2_WEIGHT ?= 0
 
+ifeq ($(VERSION_WEIGHT), 0)
+$(error VERSION_WEIGHT must be non-zero)
+endif
+
 LOAD_RUNNER_COMMIT_HASH ?= VERSION_TAG
 LOAD_RUNNER_CMD=go run github.com/cometbft/cometbft/test/e2e/runner@$(LOAD_RUNNER_COMMIT_HASH)
 ANSIBLE_SSH_RETRIES=5
@@ -24,10 +28,6 @@ export EPHEMERAL_SIZE
 # Set it to the exact name of a validator to retrieve from it
 RETRIEVE_TARGET_HOST ?= any
 EXPERIMENT_DIR ?= $(shell date "+%Y-%m-%d-%H_%M_%S%N")
-
-ifeq ($(VERSION_WEIGHT), 0)
-$(error VERSION_WEIGHT must be non-zero)
-endif
 
 .PHONY: terraform-init
 terraform-init:

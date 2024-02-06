@@ -1,21 +1,6 @@
 include experiment.mk
 
-LOAD_RUNNER_COMMIT_HASH ?= latest
-LOAD_RUNNER_CMD=go run github.com/cometbft/cometbft/test/e2e/runner@$(LOAD_RUNNER_COMMIT_HASH)
-ANSIBLE_SSH_RETRIES=5
-ANSIBLE_FORKS=150
-export DO_INSTANCE_TAGNAME
-export DO_VPC_SUBNET
-export EPHEMERAL_SIZE
-
-
-# Set it to "all" to retrieve from all hosts
-# Set it to "any" to retrieve from one full node
-# Set it to the exact name of a validator to retrieve from it
-RETRIEVE_TARGET_HOST ?= any
-EXPERIMENT_DIR ?= $(shell date "+%Y-%m-%d-%H_%M_%S%N")
-
-VERSION_TAG ?= 15b76b5 # tag of main on 23.11.2023
+VERSION_TAG ?= f92bace91 # tag of main on 05.02.2024
 #VERSION_TAG ?= 3b783434f #v0.34.27 (cometbft/cometbft)
 #VERSION_TAG ?= bef9a830e  #v0.37.alpha3 (cometbft/cometbft)
 #VERSION_TAG ?= v0.38.0-alpha.2
@@ -29,6 +14,20 @@ VERSION2_WEIGHT ?= 0
 ifeq ($(VERSION_WEIGHT), 0)
 $(error VERSION_WEIGHT must be non-zero)
 endif
+
+LOAD_RUNNER_COMMIT_HASH ?= $(VERSION_TAG)
+LOAD_RUNNER_CMD=go run github.com/cometbft/cometbft/test/e2e/runner@$(LOAD_RUNNER_COMMIT_HASH)
+ANSIBLE_SSH_RETRIES=5
+ANSIBLE_FORKS=150
+export DO_INSTANCE_TAGNAME
+export DO_VPC_SUBNET
+export EPHEMERAL_SIZE
+
+# Set it to "all" to retrieve from all hosts
+# Set it to "any" to retrieve from one full node
+# Set it to the exact name of a validator to retrieve from it
+RETRIEVE_TARGET_HOST ?= any
+EXPERIMENT_DIR ?= $(shell date "+%Y-%m-%d-%H_%M_%S%N")
 
 .PHONY: terraform-init
 terraform-init:

@@ -44,6 +44,7 @@ resource "digitalocean_droplet" "testnet-node" {
   size     = "s-4vcpu-8gb"
   vpc_uuid = digitalocean_vpc.testnet-vpc.id
   ssh_keys = var.ssh_keys
+  user_data = file("user-data.txt")
 }
 
 resource "digitalocean_droplet" "testnet-prometheus" {
@@ -54,6 +55,7 @@ resource "digitalocean_droplet" "testnet-prometheus" {
   size     = "s-4vcpu-8gb"
   vpc_uuid = digitalocean_vpc.testnet-vpc.id
   ssh_keys = var.ssh_keys
+  user_data = file("user-data.txt")
 }
 
 resource "digitalocean_droplet" "testnet-load-runner" {
@@ -64,6 +66,7 @@ resource "digitalocean_droplet" "testnet-load-runner" {
   size     = "s-8vcpu-16gb"
   vpc_uuid = digitalocean_vpc.testnet-vpc.id
   ssh_keys = var.ssh_keys
+  user_data = file("user-data.txt")
 }
 
 resource "digitalocean_droplet" "ephemeral-node" {
@@ -75,4 +78,5 @@ resource "digitalocean_droplet" "ephemeral-node" {
   size         = "s-4vcpu-8gb"
   vpc_uuid     = digitalocean_vpc.testnet-vpc.id
   ssh_keys     = var.ssh_keys
+  user_data = file("user-data.txt")
 }

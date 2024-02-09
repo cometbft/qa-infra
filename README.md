@@ -49,7 +49,7 @@ After you have all the prerequisites installed:
     make terraform-init
     ```
 
-### Run the experiment
+### Start the network
 
 After you have set up the infrastructure and have configured your
 [`testnet.toml`](./testnet.toml) file appropriately:
@@ -99,20 +99,23 @@ After you have set up the infrastructure and have configured your
     make start-network
     ```
 
-8. Execute a load test against the network   
-    This will start sending load until Ctrl-C is sent, so consider running this in its own terminal
+### Execute the load test
+
+This will start sending load until Ctrl-C is sent, so consider running this in its own terminal:
 
     ```bash
     make runload
     ```
 
-9. Once the execution is over, stop the network
+### Stop the network and retrieve data
+
+1. Once the execution is over, stop the network:
 
     ```bash
     make stop-network
     ```
 
-10. Retrieve the data produced during the execution.    
+2. Retrieve the data produced during the execution.
     You can either use the following command to retrieve both the prometheus and the blockstore databases together
 
     ```bash

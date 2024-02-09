@@ -11,8 +11,9 @@ This repo contains [Ansible] and [Terraform] scripts for spinning up CometBFT te
 
 ## Instructions
 
-After you have all the prerequisites installed and have configured your
-[`testnet.toml`](./testnet.toml) file appropriately:
+### Setup
+
+After you have all the prerequisites installed:
 
 1. Set up your [personal access token for DO](https://docs.digitalocean.com/reference/api/create-personal-access-token/)
 
@@ -42,71 +43,76 @@ After you have all the prerequisites installed and have configured your
     EOF
     ```
 
-4. If necessary, set the variables `DO_INSTANCE_TAGNAME` and `DO_VPC_SUBNET`,
-    assigned in the `experiment.mk` file, to customized values to prevent
-    collisions with other QA runs, including possible other users of the
-    DigitalOcean project who might be running these scripts.
-    If the subnet is allocated in the private IP address range 172.16.0.0/12, as
-    it is in the unmodified assignment, a recommended choice should be
-    in the range 172.16.16.0/20 - 172.31.240.0/20.
-
-5. Initialize Terraform (only needed once)
+4. Initialize Terraform (only needed once)
 
     ```bash
     make terraform-init
     ```
 
-6. Create the VMs for the validators and Prometheus as specified in `./testnet.toml`   
+### Run the experiment
+
+After you have set up the infrastructure and have configured your
+[`testnet.toml`](./testnet.toml) file appropriately:
+
+1. If necessary, set the variables `DO_INSTANCE_TAGNAME` and `DO_VPC_SUBNET`,
+    assigned in the `experiment.mk` file, to customized values to prevent
+    collisions with other QA runs, including possible other users of the
+    DigitalOcean project who might be running these scripts.
+    If the subnet is allocated in the private IP address range 172.16.0.0/12, as
+    it is in the unmodified file, a good choice should be in the range
+    172.16.16.0/20 - 172.31.240.0/20.
+
+2. Create the VMs for the validators and Prometheus as specified in `./testnet.toml`   
     Be sure to use your actual DO token and SSH key fingerprints for the `do_token` and `do_ssh_keys` variables.
 
     ```bash
     make terraform-apply
     ```
 
-7. Retrieve the IP addresses of the hosts for Ansible
+3. Retrieve the IP addresses of the hosts for Ansible
 
     ```bash
     make hosts
     ```
 
-8. Generate the testnet configuration
+4. Generate the testnet configuration
 
     ```bash
     make configgen
     ```
 
-9. Install all necessary software on the created VMs using Ansible
+5. Install all necessary software on the created VMs using Ansible
 
     ```bash
     make ansible-install
     ```
 
-10. Initialize the Prometheus instance
+6. Initialize the Prometheus instance
 
     ```bash
     make prometheus-init
     ```
 
-11. Start the test application on all of the validators
+7. Start the test application on all of the validators
 
     ```bash
     make start-network
     ```
 
-12. Execute a load test against the network   
+8. Execute a load test against the network   
     This will start sending load until Ctrl-C is sent, so consider running this in its own terminal
 
     ```bash
     make runload
     ```
 
-13. Once the execution is over, stop the network
+9. Once the execution is over, stop the network
 
     ```bash
     make stop-network
     ```
 
-14. Retrieve the data produced during the execution.    
+10. Retrieve the data produced during the execution.    
     You can either use the following command to retrieve both the prometheus and the blockstore databases together
 
     ```bash

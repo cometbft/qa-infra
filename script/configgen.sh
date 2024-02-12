@@ -71,13 +71,21 @@ ifd-from-ansible $HOSTS_PATH $IFD_PATH $VPC_SUBNET
 
 cp -p ./testnet.toml ./ansible
 rm -rf ./ansible/testnet
-go run github.com/cometbft/cometbft/test/e2e/runner@$VERSION setup -f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data $IFD_PATH
+
+mkdir -p latency
+curl -s https://raw.githubusercontent.com/cometbft/cometbft/$VERSION/test/e2e/pkg/latency/aws-latencies.csv > latency/aws-latencies.csv # needed in this directory to validate zones
+
+go run github.com/cometbft/cometbft/test/e2e/runner@$VERSION setup \
+	-f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data $IFD_PATH
 
 
 for file in `find ./ansible/testnet/ -name config.toml -type f`; do
 	sed $INPLACE_SED_FLAG "s/unsafe = .*/unsafe = true/g" $file
 	sed $INPLACE_SED_FLAG "s/prometheus = .*/prometheus = true/g" $file
-	sed $INPLACE_SED_FLAG "s/cache_size = .*/cache_size = 200000/g" $file
+
+	# to allow sending big txs via websockets
+	sed $INPLACE_SED_FLAG "s/max_body_bytes = .*/max_body_bytes = 2097152/g" $file
+	sed $INPLACE_SED_FLAG "s/max_header_bytes = .*/max_header_bytes = 2097152/g" $file
 done
 
 mv $IFD_PATH ./ansible/testnet/infrastructure-data.json

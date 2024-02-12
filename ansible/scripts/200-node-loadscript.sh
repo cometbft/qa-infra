@@ -16,7 +16,7 @@ mempoolfull() {
 for conn in ${CONNS[@]}; do
 	for rate in ${RATES[@]}; do
 		echo "Conns: $conn, Rate: $rate"
-		/root/go/bin/load -c $conn -T 90 -r $rate -s 1024 --broadcast-tx-method sync --endpoints "ws://$ADDR:26657/websocket"
+		/root/go/bin/load -c $conn -T 90 -r $rate -s 1024 --broadcast-tx-method sync --endpoints "ws://$ADDR:26657/v1/websocket"
 		while mempoolfull; do
 			sleep 5;
 		done

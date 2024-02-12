@@ -1,5 +1,5 @@
 NUM_CONNECTIONS=1
-endpoint_list=$(ansible-inventory -i hosts --export --list | jq '[.[] | .hostvars][0]' | grep name -B 1  | grep internal_ip | sed 's/\"//g' | cut -w -f3 | sed 's/,//' | sed 's/\(.*\)/ws:\/\/\1:26657\/websocket/')
+endpoint_list=$(ansible-inventory -i hosts --export --list | jq '[.[] | .hostvars][0]' | grep name -B 1  | grep internal_ip | sed 's/\"//g' | cut -w -f3 | sed 's/,//' | sed 's/\(.*\)/ws:\/\/\1:26657\/v1\/websocket/')
 
 IFS='
 '

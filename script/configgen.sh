@@ -80,12 +80,12 @@ go run github.com/cometbft/cometbft/test/e2e/runner@$VERSION setup \
 
 
 for file in `find ./ansible/testnet/ -name config.toml -type f`; do
-	sed $INPLACE_SED_FLAG "s/unsafe = .*/unsafe = true/g" $file
-	sed $INPLACE_SED_FLAG "s/prometheus = .*/prometheus = true/g" $file
+	sed $INPLACE_SED_FLAG "s/unsafe = .*/unsafe = true/" $file
+	sed $INPLACE_SED_FLAG "s/prometheus = .*/prometheus = true/" $file
 
 	# to allow sending big txs via websockets
-	sed $INPLACE_SED_FLAG "s/max_body_bytes = .*/max_body_bytes = 2097152/g" $file
-	sed $INPLACE_SED_FLAG "s/max_header_bytes = .*/max_header_bytes = 2097152/g" $file
+	sed $INPLACE_SED_FLAG "s/max_body_bytes = .*/max_body_bytes = 2097152/" $file
+	sed $INPLACE_SED_FLAG "s/max_header_bytes = .*/max_header_bytes = 2097152/" $file
 done
 
 mv $IFD_PATH ./ansible/testnet/infrastructure-data.json

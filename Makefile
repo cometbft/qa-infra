@@ -62,19 +62,20 @@ configgen:
 .PHONY: ansible-install
 ansible-install:
 	cd ansible && \
-		ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts -u root install.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)" -e "vpc_subnet=$(DO_VPC_SUBNET)"
+		ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts -u root testapp-install.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)" -e "vpc_subnet=$(DO_VPC_SUBNET)"
 ifneq ($(VERSION2_WEIGHT), 0)
 	cd ansible && \
-		ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts --limit validators2 -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION2_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+		ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts --limit validators2 -u root testapp-update.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION2_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
 endif
 
 .PHONY: prometheus-init
 prometheus-init:
-	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts  -u root prometheus.yaml -f 10
+	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts  -u root prometheus-init.yaml -f 10
 
 .PHONY: loadrunners-init
-loadrunners-init:
-	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts -u root loadrunners-init.yaml -f 10
+.PHONY: loadrunners-init
+:
+	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts -u root loader-init.yaml -f 10
 
 .PHONY: start-network
 start-network:
@@ -90,7 +91,7 @@ stop-network:
 runload:
 	cd ansible && \
 		endpoints=$$(scripts/get-endpoints.sh) && \
-		ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook runload.yaml -i hosts -u root \
+		ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook loader-run.yaml -i hosts -u root \
 			-e endpoints=$$endpoints \
 			-e connections=$(LOAD_CONNECTIONS) \
 			-e time_seconds=$(LOAD_TOTAL_TIME) \
@@ -99,12 +100,12 @@ runload:
 
 .PHONY: restart
 restart:
-	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts -u root testapp-update.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
 ifneq ($(VERSION2_WEIGHT), 0)
-	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts --limit validators2 -u root update-testapp.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION2_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts --limit validators2 -u root testapp-update.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION2_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
 endif
-	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook restart-prometheus.yaml -i hosts -u root
-	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook re-init-testapp.yaml -i hosts -u root -f $(ANSIBLE_FORKS)
+	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook prometheus-restart.yaml -i hosts -u root
+	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook testapp-reinit.yaml -i hosts -u root -f $(ANSIBLE_FORKS)
 
 .PHONY: rotate
 rotate:

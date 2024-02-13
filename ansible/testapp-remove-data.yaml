@@ -4,7 +4,7 @@
   gather_facts: yes
   vars:
     cmt_home: /root/.testapp/
- 
+
   tasks:
     - name: stop app
       ansible.builtin.systemd:

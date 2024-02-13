@@ -4,7 +4,9 @@
   hosts: loadrunners
   vars:
     ansible_host_key_checking: false
-    endpoints: ws://127.0.0.1:26656/v1/websocket # comma separated list of endpoints
+    validator_0_ip: "{{ groups['validators'][0] }}"
+    validator_0_internal_ip: "{{ hostvars[validator_0_ip].internal_ip }}"
+    endpoints: ws://{{ validator_0_internal_ip }}:26657/v1/websocket # comma separated list of endpoints
     connections: 25
     time_seconds: 60
     tx_per_second: 1000

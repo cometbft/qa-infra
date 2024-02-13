@@ -3,25 +3,25 @@
   gather_facts: true
   hosts: loadrunners
   tasks:
-  - name: Check if load tool exists
-    ansible.builtin.stat:
-      path: /root/go/bin/load
-    register: load_tool
+    - name: Check if load tool exists
+      ansible.builtin.stat:
+        path: /root/go/bin/load
+      register: load_tool
 
-  - name: Install load tool
-    ansible.builtin.command: /usr/lib/go-1.21/bin/go install
-    args:
-      chdir: /root/cometbft/test/loadtime/cmd/load/
-    when: not load_tool.stat.exists
-    register: result
-    changed_when: result.rc != 0
+    - name: Install load tool
+      ansible.builtin.command: /usr/lib/go-1.21/bin/go install
+      args:
+        chdir: /root/cometbft/test/loadtime/cmd/load/
+      when: not load_tool.stat.exists
+      register: result
+      changed_when: result.rc != 0
 
-  - name: Copy script files
-    ansible.builtin.copy:
-      src: "{{ item.src }}"
-      dest: /root
-      mode: u+rwx
-    loop:
-      - src: scripts/200-node-loadscript.sh
-      - src: scripts/rotating-loadscript.sh
-    become: true
+    - name: Copy script files
+      ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: /root
+        mode: u+rwx
+      loop:
+        - src: scripts/200-node-loadscript.sh
+        - src: scripts/rotating-loadscript.sh
+      become: true

@@ -73,8 +73,7 @@ prometheus-init:
 	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts  -u root prometheus-init.yaml -f 10
 
 .PHONY: loadrunners-init
-.PHONY: loadrunners-init
-:
+loadrunners-init:
 	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts -u root loader-init.yaml -f 10
 
 .PHONY: start-network

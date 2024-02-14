@@ -7,6 +7,7 @@
     cmt_home: /root/.testapp/
     testnet_dir: ./testnet
 
+  # TODO: the first three tasks are testapp-remove-data.yaml
   tasks:
     - name: stop app
       ansible.builtin.systemd:
@@ -14,7 +15,7 @@
         state: stopped
       become: yes
 
-    - name: delete cmt data
+    - name: delete data in home directory
       ansible.builtin.file:
         path: "{{ cmt_home }}"
         state: absent

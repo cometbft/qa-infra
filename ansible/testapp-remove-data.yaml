@@ -11,11 +11,13 @@
         name: testappd
         state: stopped
       become: yes
-    - name: delete cmt data
+
+    - name: delete data in home directory
       ansible.builtin.file:
         path: "{{ cmt_home }}"
         state: absent
       become: yes
+
     - name: delete app data
       ansible.builtin.file:
         path: "{{ ansible_user_dir }}/data"

@@ -147,7 +147,7 @@ behind() {
 
 while true; do
 	ephemeral-configs `echo "$ADDRS"`
-	ansible-playbook ./ansible/re-init-testapp.yaml -u root -i ./ansible/hosts --limit=ephemeral -e "testnet_dir=./rotating" -f 20
+	ansible-playbook ./ansible/testapp-reinit.yaml -u root -i ./ansible/hosts --limit=ephemeral -e "testnet_dir=./rotating" -f 20
 
 	# Wait for all of the ephemeral hosts to be running.
 	addrs=( `echo $ADDRS | sed 's/,/ /g'` )
@@ -175,5 +175,5 @@ while true; do
 		fi
 	done
 	echo "Ephemeral have all completed blocksync"
-	ansible-playbook ./ansible/stop-testapp.yaml -u root -i ./ansible/hosts --limit=ephemeral
+	ansible-playbook ./ansible/testapp-stop.yaml -u root -i ./ansible/hosts --limit=ephemeral
 done

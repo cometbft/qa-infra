@@ -2,6 +2,7 @@
   become: false
   gather_facts: true
   hosts: loadrunners
+
   tasks:
     - name: Check if load tool exists
       ansible.builtin.stat:

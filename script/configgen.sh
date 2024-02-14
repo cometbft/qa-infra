@@ -78,7 +78,6 @@ curl -s https://raw.githubusercontent.com/cometbft/cometbft/$VERSION/test/e2e/pk
 go run github.com/cometbft/cometbft/test/e2e/runner@$VERSION setup \
 	-f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data $IFD_PATH
 
-
 for file in `find ./ansible/testnet/ -name config.toml -type f`; do
 	sed $INPLACE_SED_FLAG "s/unsafe = .*/unsafe = true/" $file
 	sed $INPLACE_SED_FLAG "s/prometheus = .*/prometheus = true/" $file

@@ -1,9 +1,0 @@
-- hosts: validators,prometheus,loadrunners,ephemeral
-  vars:
-    ansible_host_key_checking: false
-
-- name: Init test app playbook
-  ansible.builtin.import_playbook: init-testapp.yaml
-
-- name: Update test app playbook 
-  ansible.builtin.import_playbook: update-testapp.yaml

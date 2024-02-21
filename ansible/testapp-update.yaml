@@ -21,6 +21,14 @@
         src: templates/testappd.service.j2
         dest: /lib/systemd/system/testappd.service
       become: yes
+    - name: copy storage script
+      ansible.builtin.copy:
+        src: scripts/get_storage_footprint.sh
+        dest: "{{ cmt_home }}"
+        mode: u+rwx
+    - name: update storage footprint file
+      shell: "screen -dm -S storage /root/.testapp/get_storage_footprint.sh"
+        
     - name: reload systemd daemon
       ansible.builtin.systemd:
         daemon_reload: yes

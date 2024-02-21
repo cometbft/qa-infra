@@ -1,0 +1,16 @@
+- name: retrieve folder size dump
+  hosts: validators
+  become: false
+  gather_facts: yes
+  vars:
+    cmt_home: /root/.testapp/
+    ansible_host_key_checking: false
+    target_host: all
+  
+  tasks:
+    - name: Fetch the storage usage
+      ansible.builtin.fetch:
+        src: "{{ cmt_home }}folder_size.log"
+        dest: "{{dir}}/{{ hostvars[inventory_hostname].name }}/folder_size.log"
+        flat: yes
+      when: target_host == "all" or target_host == hostvars[inventory_hostname].name

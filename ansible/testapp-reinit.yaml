@@ -14,6 +14,9 @@
         name: testappd
         state: stopped
       become: yes
+    
+    - name: stop storage collection script
+      shell: "kill $(ps aux | grep [s]torage_footprint | awk '{print $2}')"
 
     - name: delete data in home directory
       ansible.builtin.file:
@@ -37,3 +40,11 @@
         name: testappd
         state: started
         enabled: yes
+
+    - name: copy storage script
+      ansible.builtin.copy:
+        src: scripts/get_storage_footprint.sh
+        dest: "{{ cmt_home }}"
+        mode: u+rwx
+    - name: update storage footprint file
+      shell: "screen -dm -S storage {{ cmt_home }}/get_storage_footprint.sh {{ cmt_home }}"

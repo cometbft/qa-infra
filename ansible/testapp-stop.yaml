@@ -10,3 +10,6 @@
       name: testappd
       state: stopped
       enabled: yes
+
+  - name: stop storage collection script
+    shell: "kill $(ps aux | grep [s]torage_footprint | awk '{print $2}')"

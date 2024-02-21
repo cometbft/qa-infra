@@ -12,6 +12,9 @@
         state: stopped
       become: yes
 
+    - name: stop storage collection script
+      shell: "kill $(ps aux | grep [s]torage_footprint | awk '{print $2}')"
+
     - name: delete data in home directory
       ansible.builtin.file:
         path: "{{ cmt_home }}"

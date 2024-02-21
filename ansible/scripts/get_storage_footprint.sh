@@ -3,6 +3,7 @@
 CMT_HOME=$1
 
 if [ -z "${CMT_HOME}" ]; then
+echo "CMT_HOME is not set, setting it to /root/.testapp"
 CMT_HOME="/root/.testapp"
 fi 
 

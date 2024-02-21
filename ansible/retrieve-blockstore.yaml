@@ -30,12 +30,6 @@
         dest: "{{dir}}/{{ hostvars[inventory_hostname].name }}/blockstore.db.zip"
         flat: yes
       when: target_host == "all" or target_host == hostvars[inventory_hostname].name
-    - name: Fetch the storage usage
-      ansible.builtin.fetch:
-        src: "{{ cmt_home }}folder_size.log"
-        dest: "{{dir}}/{{ hostvars[inventory_hostname].name }}/folder_size.log"
-        flat: yes
-      when: target_host == "all" or target_host == hostvars[inventory_hostname].name
     - name: start the systemd-unit
       ansible.builtin.systemd:
         name: testappd

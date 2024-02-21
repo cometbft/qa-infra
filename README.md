@@ -81,7 +81,8 @@ After you have set up the infrastructure and have configured your
     make configgen
     ```
 
-5. Install all necessary software on the created VMs using Ansible
+5. Install all necessary software on the created VMs using Ansible. This also starts a background process to monitor storage usage of a CometBFT node.
+
 
     ```bash
     make ansible-install

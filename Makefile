@@ -128,6 +128,19 @@ else
 		ansible-playbook -i hosts -u root retrieve-blockstore.yaml -e "dir=../experiments/$(EXPERIMENT_DIR)/" -e "target_host=$(RETRIEVE_TARGET_HOST)"
 endif
 
+.PHONY: retrieve-folder-size
+retrieve-folder-size:
+	mkdir -p "./experiments/$(EXPERIMENT_DIR)"
+ifeq ($(RETRIEVE_TARGET_HOST), any)
+	cd ansible && \
+		last_val=$$(ansible -i hosts --list-hosts validators | tail -1 | sed  "s/ //g") && \
+		retrieve_target_host=$$(ansible-inventory -i hosts -y --host $$last_val | grep 'name' | cut -d ' ' -f2) && \
+		ansible-playbook -i hosts -u root retrieve-folder-size.yaml -e "dir=../experiments/$(EXPERIMENT_DIR)/" -e "target_host=$$retrieve_target_host"
+else
+	cd ansible && \
+		ansible-playbook -i hosts -u root retrieve-folder-size.yaml -e "dir=../experiments/$(EXPERIMENT_DIR)/" -e "target_host=$(RETRIEVE_TARGET_HOST)"
+endif
+
 .PHONY: retrieve-prometheus-data
 retrieve-prometheus-data:
 	mkdir -p "./experiments/$(EXPERIMENT_DIR)"; \

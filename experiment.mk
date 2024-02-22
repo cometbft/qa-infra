@@ -19,6 +19,8 @@ VERSION2_WEIGHT ?= 0
 
 EPHEMERAL_SIZE ?= 0
 
+MANIFEST=$(realpath ./testnets/example.toml)
+
 LOAD_CONNECTIONS ?= 2
 LOAD_TX_RATE ?= 200
 LOAD_TOTAL_TIME ?= 91

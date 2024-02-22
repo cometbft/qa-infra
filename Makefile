@@ -22,6 +22,7 @@ ANSIBLE_FORKS=150
 export DO_INSTANCE_TAGNAME
 export DO_VPC_SUBNET
 export EPHEMERAL_SIZE
+export MANIFEST
 
 # Set it to "all" to retrieve from all hosts
 # Set it to "any" to retrieve from one full node
@@ -57,7 +58,7 @@ endif
 
 .PHONY: configgen
 configgen:
-	./script/configgen.sh $(RUNNER_COMMIT_HASH) ./ansible/hosts $(DO_VPC_SUBNET)
+	./script/configgen.sh $(RUNNER_COMMIT_HASH) ./ansible/hosts $(DO_VPC_SUBNET) $(MANIFEST)
 
 .PHONY: ansible-install
 ansible-install:
@@ -79,12 +80,12 @@ loadrunners-init:
 .PHONY: start-network
 start-network:
 	go run github.com/cometbft/cometbft/test/e2e/runner@$(RUNNER_COMMIT_HASH) start \
-		-f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
+		-f $(MANIFEST) --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
 
 .PHONY: stop-network
 stop-network:
 	go run github.com/cometbft/cometbft/test/e2e/runner@$(RUNNER_COMMIT_HASH) stop \
-		-f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
+		-f $(MANIFEST) --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
 
 .PHONY: runload
 runload:
@@ -108,12 +109,13 @@ endif
 
 .PHONY: rotate
 rotate:
-	./script/rotate.sh $(RUNNER_COMMIT_HASH) `ansible all --list-hosts -i ./ansible/hosts --limit ephemeral | tail +2 | paste -s -d, - | tr -d ' '`
+	./script/rotate.sh $(RUNNER_COMMIT_HASH) $(MANIFEST) \
+		`ansible all --list-hosts -i ./ansible/hosts --limit ephemeral | tail +2 | paste -s -d, - | tr -d ' '`
 
 .PHONY: perturb-nodes
 perturb-nodes:
 	go run github.com/cometbft/cometbft/test/e2e/runner@$(RUNNER_COMMIT_HASH) perturb \
-		-f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
+		-f $(MANIFEST) --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
 
 .PHONY: retrieve-blockstore
 retrieve-blockstore:

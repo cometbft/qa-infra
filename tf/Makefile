@@ -10,9 +10,13 @@ ifndef DO_VPC_SUBNET
 	$(error DO_VPC_SUBNET is not set)
 endif
 
+ifndef MANIFEST
+	$(error MANIFEST is not set)
+endif
+
 EPHEMERAL_NAMES=$(shell for i in $$(seq 1 `expr $(EPHEMERAL_SIZE)`); do printf "\"ephemeral%03d\"\n" $$i; done | paste -s -d, -)
-TESTNET_SIZE=$(shell grep '^\[node.*\]' -c ../testnet.toml)
-INSTANCE_NAMES=$(shell grep '^\[node.*\]' ../testnet.toml | sed -e 's/^\[node\.\(.*\)]/"\1"/' | sort | paste -s -d, -)
+TESTNET_SIZE=$(shell grep '^\[node.*\]' -c ${MANIFEST})
+INSTANCE_NAMES=$(shell grep '^\[node.*\]' ${MANIFEST} | sed -e 's/^\[node\.\(.*\)]/"\1"/' | sort | paste -s -d, -)
 
 .PHONY: init
 init:

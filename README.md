@@ -51,18 +51,17 @@ After you have all the prerequisites installed:
 
 ### Start the network
 
-After you have set up the infrastructure and have configured your
-[`testnet.toml`](./testnet.toml) file appropriately:
+After you have set up the infrastructure:
 
-1. If necessary, set the variables `DO_INSTANCE_TAGNAME` and `DO_VPC_SUBNET`,
-    assigned in the `experiment.mk` file, to customized values to prevent
-    collisions with other QA runs, including possible other users of the
-    DigitalOcean project who might be running these scripts.
-    If the subnet is allocated in the private IP address range 172.16.0.0/12, as
-    it is in the unmodified file, a good choice should be in the range
-    172.16.16.0/20 - 172.31.240.0/20.
+1. Set up the test you will run in the `experiment.mk` file:
+    1. Set the path to your manifest file in the variable `MANIFEST`.
+    2. If necessary, set the variables `DO_INSTANCE_TAGNAME` and `DO_VPC_SUBNET` to customized
+    values to prevent collisions with other QA runs, including possible other users of the
+    DigitalOcean project who might be running these scripts. If the subnet is allocated in the
+    private IP address range 172.16.0.0/12, as it is in the unmodified file, a good choice should be
+    in the range 172.16.16.0/20 - 172.31.240.0/20.
 
-2. Create the VMs for the validators and Prometheus as specified in `./testnet.toml`   
+2. Create the VMs for the validators and Prometheus as specified in the manifest file.
     Be sure to use your actual DO token and SSH key fingerprints for the `do_token` and `do_ssh_keys` variables.
 
     ```bash

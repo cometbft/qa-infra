@@ -65,20 +65,22 @@ EOF
 VERSION=$1
 HOSTS_PATH=$2
 VPC_SUBNET=$3
-IFD_PATH='./ifd.json'
+MANIFEST=$4
+
+TESTNET_DIR=./ansible/testnet
+mkdir -p $TESTNET_DIR
+IFD_PATH=$TESTNET_DIR/infrastructure-data.json
 
 ifd-from-ansible $HOSTS_PATH $IFD_PATH $VPC_SUBNET
-
-cp -p ./testnet.toml ./ansible
-rm -rf ./ansible/testnet
 
 mkdir -p latency
 curl -s https://raw.githubusercontent.com/cometbft/cometbft/$VERSION/test/e2e/pkg/latency/aws-latencies.csv > latency/aws-latencies.csv # needed in this directory to validate zones
 
 go run github.com/cometbft/cometbft/test/e2e/runner@$VERSION setup \
-	-f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data $IFD_PATH
+	-f $MANIFEST --infrastructure-type digital-ocean --infrastructure-data $IFD_PATH \
+	--testnet-dir $TESTNET_DIR
 
-for file in `find ./ansible/testnet/ -name config.toml -type f`; do
+for file in `find $TESTNET_DIR -name config.toml -type f`; do
 	sed $INPLACE_SED_FLAG "s/unsafe = .*/unsafe = true/" $file
 	sed $INPLACE_SED_FLAG "s/prometheus = .*/prometheus = true/" $file
 
@@ -86,5 +88,3 @@ for file in `find ./ansible/testnet/ -name config.toml -type f`; do
 	sed $INPLACE_SED_FLAG "s/max_body_bytes = .*/max_body_bytes = 2097152/" $file
 	sed $INPLACE_SED_FLAG "s/max_header_bytes = .*/max_header_bytes = 2097152/" $file
 done
-
-mv $IFD_PATH ./ansible/testnet/infrastructure-data.json

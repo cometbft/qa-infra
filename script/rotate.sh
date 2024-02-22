@@ -16,7 +16,8 @@ if [[ $(uname) == "Darwin" ]]; then
 fi
 
 VERSION=$1
-ADDRS=$2
+MANIFEST=$2
+ADDRS=$3
 
 
 # Ephemeral-configs creates the set of configuration files for the ephemeral
@@ -36,7 +37,7 @@ ephemeral-configs() {
 	# of fake configurations, one for each node that exists in the testnet, so
 	# that the runner script will create keys that are not part of the existing
 	# network.
-	c=`grep "^\[.*\]$" ./testnet.toml | wc -l`
+	c=`grep "^\[.*\]$" $MANIFEST | wc -l`
 	for i in `seq 1 $c`; do
 		printf "[node.ab%03d]\n" "$i" >> ./rotating.toml
 		echo "mode = \"full\"" >> ./rotating.toml

@@ -10,8 +10,6 @@ VERSION_TAG ?= f92bace91 # tag of main on 05.02.2024
 #VERSION_TAG ?= bef9a830e  #v0.37.alpha3 (cometbft/cometbft)
 #VERSION_TAG ?= v0.38.0-alpha.2
 #VERSION_TAG ?= e9abb116e #v0.38.alpha2 (cometbft/cometbft)
-#VERSION_TAG ?= 9fc711b6514f99b2dc0864fc703cb81214f01783 #vote extension sizes.
-#VERSION_TAG ?= 7d8c9d426 #main merged into feature/abci++vef + bugfixes
 
 VERSION_WEIGHT ?= 1
 

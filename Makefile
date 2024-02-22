@@ -1,15 +1,12 @@
 include experiment.mk
 
-VERSION_TAG ?= f92bace91 # tag of main on 05.02.2024
-#VERSION_TAG ?= 3b783434f #v0.34.27 (cometbft/cometbft)
-#VERSION_TAG ?= bef9a830e  #v0.37.alpha3 (cometbft/cometbft)
-#VERSION_TAG ?= v0.38.0-alpha.2
-#VERSION_TAG ?= e9abb116e #v0.38.alpha2 (cometbft/cometbft)
-#VERSION_TAG ?= 9fc711b6514f99b2dc0864fc703cb81214f01783 #vote extension sizes.
-#VERSION_TAG ?= 7d8c9d426 #main merged into feature/abci++vef + bugfixes
-#VERSION2_TAG ?= 66c2cb634 #v0.34.26 (informalsystems/tendermint)
-VERSION_WEIGHT ?= 1
-VERSION2_WEIGHT ?= 0
+ifndef VERSION_TAG
+	$(error VERSION_TAG is not set)
+endif
+
+ifndef VERSION_WEIGHT
+	$(error VERSION_TAG is not set)
+endif
 
 ifeq ($(VERSION_WEIGHT), 0)
 $(error VERSION_WEIGHT must be non-zero)

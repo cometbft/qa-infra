@@ -55,7 +55,12 @@ After you have set up the infrastructure:
 
 1. Set up the test you will run in the `experiment.mk` file:
     1. Set the path to your manifest file in the variable `MANIFEST`.
-    2. If necessary, set the variables `DO_INSTANCE_TAGNAME` and `DO_VPC_SUBNET` to customized
+    2. Set the commit hash of CometBFT that you to install in the nodes in the variable `VERSION_TAG`.
+    3. If you want to deploy a subset of the validators with a different version of CometBFT, set
+       the variable `VERSION2_TAG` to the commit hash you want to install in that subset. Then set
+       the proportion of nodes that will run `VERSION_TAG` and `VERSION2_TAG` in the variables
+       `VERSION_WEIGHT` and `VERSION2_WEIGHT` respectively.
+    4. If necessary, set the variables `DO_INSTANCE_TAGNAME` and `DO_VPC_SUBNET` to customized
     values to prevent collisions with other QA runs, including possible other users of the
     DigitalOcean project who might be running these scripts. If the subnet is allocated in the
     private IP address range 172.16.0.0/12, as it is in the unmodified file, a good choice should be

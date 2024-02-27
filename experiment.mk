@@ -3,7 +3,8 @@
 DO_INSTANCE_TAGNAME=main-testnet
 DO_VPC_SUBNET=172.19.144.0/20
 
-MANIFEST=$(realpath ./testnets/example.toml)
+MANIFEST ?= ./testnets/example.toml
+MANIFEST_PATH=$(shell realpath $(MANIFEST))
 
 VERSION_TAG ?= f92bace91 # tag of main on 05.02.2024
 #VERSION_TAG ?= 3b783434f #v0.34.27 (cometbft/cometbft)
@@ -18,8 +19,6 @@ VERSION_WEIGHT ?= 1
 VERSION2_WEIGHT ?= 0
 
 EPHEMERAL_SIZE ?= 0
-
-MANIFEST=$(realpath ./testnets/example.toml)
 
 LOAD_CONNECTIONS ?= 2
 LOAD_TX_RATE ?= 200

@@ -3,7 +3,7 @@
 ${val.ip} name=${val.name} internal_ip=${val.internal_ip}
 %{ endfor ~}
 
-%{ if length(validators2) > 0 ~}
+%{~ if length(validators2) > 0 ~}
 [validators2]
 %{ for val in validators2 ~}
 ${val.ip} name=${val.name} internal_ip=${val.internal_ip}
@@ -16,8 +16,8 @@ ${prometheus.ip} internal_ip=${prometheus.internal_ip}
 [loadrunners]
 ${loadrunner.ip} internal_ip=${loadrunner.internal_ip}
 
-%{ if length(ephemerals) > 0 ~}
 [ephemeral]
+%{~ if length(ephemerals) > 0 ~}
 %{ for val in ephemerals ~}
 ${val.ip} name=${val.name} internal_ip=${val.internal_ip}
 %{ endfor ~}

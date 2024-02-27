@@ -1,3 +1,5 @@
+# Validators2 is a subset of validators that run a different version of CometBFT. They are the last
+# `validators2_size` entries in the validators list.
 variable "validators2_size" {
   type    = number
   default = 0

@@ -1,15 +1,19 @@
 include experiment.mk
 
+ifndef MANIFEST_PATH
+	$(error MANIFEST_PATH is not set)
+endif
+
 ifndef VERSION_TAG
 	$(error VERSION_TAG is not set)
 endif
 
 ifndef VERSION_WEIGHT
-	$(error VERSION_TAG is not set)
+	$(error VERSION_WEIGHT is not set)
 endif
 
 ifeq ($(VERSION_WEIGHT), 0)
-$(error VERSION_WEIGHT must be non-zero)
+	$(error VERSION_WEIGHT must be non-zero)
 endif
 
 RUNNER_COMMIT_HASH ?= $(VERSION_TAG)
@@ -19,7 +23,9 @@ ANSIBLE_FORKS=150
 export DO_INSTANCE_TAGNAME
 export DO_VPC_SUBNET
 export EPHEMERAL_SIZE
-export MANIFEST
+export MANIFEST_PATH
+export VERSION_WEIGHT
+export VERSION2_WEIGHT
 
 # Set it to "all" to retrieve from all hosts
 # Set it to "any" to retrieve from one full node
@@ -34,24 +40,6 @@ terraform-init:
 .PHONY: terraform-apply
 terraform-apply:
 	$(MAKE) -C ./tf/ apply
-
-.PHONY: hosts
-hosts:
-	echo "[validators]" > ./ansible/hosts
-	doctl compute droplet list --tag-name "testnet-node" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f2,3,4 | sort -k1 | sed 's/\(.*\) \(.*\) \(.*\)/\2 name=\1 internal_ip=\3/g' >> ./ansible/hosts
-ifneq ($(VERSION2_WEIGHT), 0) #(num+den-1)/den is ceiling division
-	echo "[validators2]" >> ./ansible/hosts
-	total_validators=$$(doctl compute droplet list --tag-name "testnet-node" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f2,3,4 | sort -k1 | sed 's/\(.*\) \(.*\) \(.*\)/\2 name=\1 internal_ip=\3/g' | wc -l) && \
-	num=$$(( total_validators * $(VERSION2_WEIGHT) )) den=$$(( $(VERSION_WEIGHT)+$(VERSION2_WEIGHT) )) && \
-	vals2=$$(( (num+den-1)/den )) && \
-	doctl compute droplet list --tag-name "testnet-node" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f2,3,4 | sort -k1 | sed 's/\(.*\) \(.*\) \(.*\)/\2 name=\1 internal_ip=\3/g' | tail -n $$vals2 >> ./ansible/hosts
-endif
-	echo "[prometheus]" >> ./ansible/hosts
-	doctl compute droplet list --tag-name "testnet-observability" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f3,4 | sed 's/\(.*\) \(.*\)/\1 internal_ip=\2/g' >> ./ansible/hosts
-	echo "[loadrunners]" >> ./ansible/hosts
-	doctl compute droplet list --tag-name "testnet-load" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f3,4 | sed 's/\(.*\) \(.*\)/\1 internal_ip=\2/g' >> ./ansible/hosts
-	echo "[ephemeral]" >> ./ansible/hosts
-	doctl compute droplet list --tag-name "ephemeral-node" | tail -n+2 | grep $(DO_INSTANCE_TAGNAME) | tr -s ' ' | cut -d' ' -f2,3,4 | sort -k1 | sed 's/\(.*\) \(.*\) \(.*\)/\2 name=\1 internal_ip=\3/g' >> ./ansible/hosts
 
 .PHONY: configgen
 configgen:
@@ -77,12 +65,12 @@ loadrunners-init:
 .PHONY: start-network
 start-network:
 	go run github.com/cometbft/cometbft/test/e2e/runner@$(RUNNER_COMMIT_HASH) start \
-		-f $(MANIFEST) --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
+		-f $(MANIFEST_PATH) --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
 
 .PHONY: stop-network
 stop-network:
 	go run github.com/cometbft/cometbft/test/e2e/runner@$(RUNNER_COMMIT_HASH) stop \
-		-f $(MANIFEST) --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
+		-f $(MANIFEST_PATH) --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
 
 .PHONY: runload
 runload:
@@ -106,13 +94,13 @@ endif
 
 .PHONY: rotate
 rotate:
-	./script/rotate.sh $(RUNNER_COMMIT_HASH) $(MANIFEST) \
+	./script/rotate.sh $(RUNNER_COMMIT_HASH) $(MANIFEST_PATH) \
 		`ansible all --list-hosts -i ./ansible/hosts --limit ephemeral | tail +2 | paste -s -d, - | tr -d ' '`
 
 .PHONY: perturb-nodes
 perturb-nodes:
 	go run github.com/cometbft/cometbft/test/e2e/runner@$(RUNNER_COMMIT_HASH) perturb \
-		-f $(MANIFEST) --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
+		-f $(MANIFEST_PATH) --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
 
 .PHONY: retrieve-blockstore
 retrieve-blockstore:

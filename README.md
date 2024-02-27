@@ -72,32 +72,29 @@ After you have set up the infrastructure:
     ```bash
     make terraform-apply
     ```
+    
+    This will generate an Ansible inventory file `./ansible/hosts` with the IP addresses of the
+    nodes.
 
-3. Retrieve the IP addresses of the hosts for Ansible
-
-    ```bash
-    make hosts
-    ```
-
-4. Generate the testnet configuration
+3. Generate the testnet configuration
 
     ```bash
     make configgen
     ```
 
-5. Install all necessary software on the created VMs using Ansible
+4. Install all necessary software on the created VMs using Ansible
 
     ```bash
     make ansible-install
     ```
 
-6. Initialize the Prometheus instance
+5. Initialize the Prometheus instance
 
     ```bash
     make prometheus-init
     ```
 
-7. Start the test application on all of the validators
+6. Start the test application on all of the validators
 
     ```bash
     make start-network

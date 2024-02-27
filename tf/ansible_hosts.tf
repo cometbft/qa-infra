@@ -12,11 +12,12 @@ resource "local_file" "ansible_hosts" {
     digitalocean_droplet.testnet-load-runner,
     digitalocean_droplet.ephemeral-node,
   ]
+  filename = "../ansible/hosts"
   content = templatefile("${path.module}/templates/hosts.tmpl", {
     validators = slice(
       [for node in digitalocean_droplet.testnet-node : {
-        ip          = node.ipv4_address,
         name        = node.name,
+        ip          = node.ipv4_address,
         internal_ip = node.ipv4_address_private
       }],
       # TODO: consider not including the validators2 set by setting the upper bound to (var.testnet_size - var.validators2_size)
@@ -24,15 +25,15 @@ resource "local_file" "ansible_hosts" {
     )
     validators2 = slice(
       [for node in digitalocean_droplet.testnet-node : {
-        ip          = node.ipv4_address,
         name        = node.name,
+        ip          = node.ipv4_address,
         internal_ip = node.ipv4_address_private
       }],
       var.testnet_size - var.validators2_size, var.testnet_size
     )
     ephemerals = [for node in digitalocean_droplet.ephemeral-node : {
-      ip          = node.ipv4_address,
       name        = node.name,
+      ip          = node.ipv4_address,
       internal_ip = node.ipv4_address_private
     }]
     prometheus = {
@@ -44,5 +45,4 @@ resource "local_file" "ansible_hosts" {
       internal_ip = digitalocean_droplet.testnet-load-runner.ipv4_address_private
     }
   })
-  filename = "../ansible/hosts"
 }

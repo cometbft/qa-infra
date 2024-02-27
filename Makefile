@@ -55,7 +55,7 @@ endif
 
 .PHONY: configgen
 configgen:
-	./script/configgen.sh $(RUNNER_COMMIT_HASH) ./ansible/hosts $(DO_VPC_SUBNET) $(MANIFEST)
+	./script/configgen.sh $(RUNNER_COMMIT_HASH) $(MANIFEST)
 
 .PHONY: ansible-install
 ansible-install:

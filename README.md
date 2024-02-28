@@ -73,8 +73,9 @@ After you have set up the infrastructure:
     make terraform-apply
     ```
     
-    This will generate an Ansible inventory file `./ansible/hosts` with the IP addresses of the
-    nodes.
+    After creating the DO droplets, this command will generate two files with information about the
+    IP addresses of the nodes: an Ansible inventory file `./ansible/hosts`, and
+    `./ansible/testnet/infrastructure-data.json` for E2E's `runner` tool.
 
 3. Generate the testnet configuration
 

@@ -16,62 +16,11 @@ if [[ $(uname) == "Darwin" ]]; then
 	SED_EW='[[:>:]]' #End of word in regex
 fi
 
-# ifd-from-ansible is responsible for generating the 'infrastructure-data' that is
-# read by the testnet generator tool.
-ifd-from-ansible() {
-	HOST_PATH=$1
-	OUT_PATH=$2
-	VPC_SUBNET=$3
-	
-	cat <<EOF > $OUT_PATH
-{
-	"provider": "digital-ocean",
-	"network": "$VPC_SUBNET",
-	"instances": {
-EOF
-	
-	lines=`grep '^.*name=.*$' $HOST_PATH | tr " " : | sort | uniq`
-	count=`echo "$lines" | wc -l`
-	
-	i=1
-	for host in  $lines; do
-		ext_ip=`echo $host | cut -d: -f1`
-		ip=`echo $host | cut -d: -f3 | cut -d= -f2`
-		name=`echo $host | cut -d: -f2 | sed -n 's/name=\(.*\)/\1/p'`
-		cat <<EOF >> $OUT_PATH
-		"$name": {
-			"ext_ip_address": "$ext_ip",
-			"ip_address": "$ip",
-			"rpc_port": 26657
-EOF
-		if [ $i -lt $count ]; then
-			cat <<EOF >> $OUT_PATH
-		},
-EOF
-		else
-			cat <<EOF >> $OUT_PATH
-		}
-EOF
-		fi
-		
-		i=`expr $i + 1`
-	done
-	cat <<EOF >> $OUT_PATH
-	}
-}
-EOF
-}
-
 VERSION=$1
-HOSTS_PATH=$2
-VPC_SUBNET=$3
-MANIFEST=$4
+MANIFEST=$2
 
-TESTNET_DIR=./ansible/testnet
-mkdir -p $TESTNET_DIR
+TESTNET_DIR=./ansible/testnet # created by terraform
 IFD_PATH=$TESTNET_DIR/infrastructure-data.json
-
-ifd-from-ansible $HOSTS_PATH $IFD_PATH $VPC_SUBNET
 
 mkdir -p latency
 curl -s https://raw.githubusercontent.com/cometbft/cometbft/$VERSION/test/e2e/pkg/latency/aws-latencies.csv > latency/aws-latencies.csv # needed in this directory to validate zones

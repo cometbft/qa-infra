@@ -1,0 +1,30 @@
+[node.validator00]
+seeds = ["seed01"]
+
+[node.validator01]
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 7
+compact = true
+seeds = ["seed01"]
+
+[node.validator02]
+discard_abci_responses = true
+retain_blocks = 7
+indexer = "null"
+compact = true
+seeds = ["seed01"]
+
+[node.validator03]
+discard_abci_responses = true
+db_key_layout_version = "v2"
+retain_blocks = 7
+indexer = "null"
+seeds = ["seed01"]
+
+[node.seed01]
+discard_abci_responses = true
+retain_blocks = 7
+indexer = "null"
+mode = "seed"

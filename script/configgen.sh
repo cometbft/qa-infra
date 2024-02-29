@@ -33,6 +33,12 @@ for file in `find $TESTNET_DIR -name config.toml -type f`; do
 	sed $INPLACE_SED_FLAG "s/unsafe = .*/unsafe = true/" $file
 	sed $INPLACE_SED_FLAG "s/prometheus = .*/prometheus = true/" $file
 
+	# We need that nodes have a very big mempool cache because our test application does not
+	# implement a unique number or nonce mechanism to prevent replay attacks. When our tests inject
+	# a high number of transactions and the caches are not big enough, transactions are continuously
+	# gossipped and evicted from the mempools ad infinitum.
+	sed $INPLACE_SED_FLAG "s/cache_size = .*/cache_size = 200000/" $file
+
 	# to allow sending big txs via websockets
 	sed $INPLACE_SED_FLAG "s/max_body_bytes = .*/max_body_bytes = 2097152/" $file
 	sed $INPLACE_SED_FLAG "s/max_header_bytes = .*/max_header_bytes = 2097152/" $file

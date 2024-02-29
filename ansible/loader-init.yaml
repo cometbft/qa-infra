@@ -26,3 +26,9 @@
         - src: scripts/200-node-loadscript.sh
         - src: scripts/rotating-loadscript.sh
       become: true
+    - name: ufw - allow outgoing ntp
+      community.general.ufw:
+        rule: allow
+        direction: out
+        to_port: '123'
+        proto: udp

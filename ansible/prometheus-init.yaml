@@ -34,3 +34,9 @@
         to: 0.0.0.0/0
         to_port: '9090'
         proto: tcp
+    - name: ufw - allow outgoing ntp
+      community.general.ufw:
+        rule: allow
+        direction: out
+        to_port: '123'
+        proto: udp

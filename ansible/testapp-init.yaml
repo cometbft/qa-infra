@@ -11,3 +11,9 @@
       ansible.builtin.copy:
         src: ./testnet/{{ hostvars[inventory_hostname].name }}/
         dest: "{{ cmt_home }}/"
+    - name: ufw - allow outgoing ntp
+      community.general.ufw:
+        rule: allow
+        direction: out
+        to_port: '123'
+        proto: udp

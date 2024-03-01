@@ -3,10 +3,10 @@
 DO_INSTANCE_TAGNAME=storage-testnet
 DO_VPC_SUBNET=172.19.144.0/20
 
-MANIFEST ?= ./testnets/example.toml
+MANIFEST ?= ./testnets/storage_example.toml
 MANIFEST_PATH=$(shell realpath $(MANIFEST))
 
-VERSION_TAG ?= a9e99776d # tag of jasmina/1041-support-for-two-key-layouts 29.02.2024
+VERSION_TAG ?= 6e08e6350 # tag of jasmina/1041-support-for-two-key-layouts 01.03.2024
 #VERSION_TAG ?= 3b783434f #v0.34.27 (cometbft/cometbft)
 #VERSION_TAG ?= bef9a830e  #v0.37.alpha3 (cometbft/cometbft)
 #VERSION_TAG ?= v0.38.0-alpha.2
@@ -21,6 +21,6 @@ VERSION2_WEIGHT ?= 0
 EPHEMERAL_SIZE ?= 0
 
 LOAD_CONNECTIONS ?= 2
-LOAD_TX_RATE ?= 200
-LOAD_TOTAL_TIME ?= 91
-ITERATIONS ?= 5
+LOAD_TX_RATE ?= 4000
+LOAD_TOTAL_TIME ?= 1800
+ITERATIONS ?= 1

@@ -1,5 +1,7 @@
 [node.validator00]
 seeds = ["seed01"]
+discard_abci_responses = true
+indexer = "null"
 
 [node.validator01]
 db_key_layout_version = "v2"

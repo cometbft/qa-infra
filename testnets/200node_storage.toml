@@ -1,0 +1,1855 @@
+vote_extensions_enable_height = 1
+
+[node.seed0] 
+mode = "seed" 
+persistent_peers = ["seed1", "seed2", "seed3", "seed4"]
+[node.seed1]
+mode = "seed"
+persistent_peers = ["seed0", "seed2", "seed3", "seed4"]
+[node.seed2]
+mode = "seed"
+persistent_peers = ["seed1", "seed0", "seed3", "seed4"]
+[node.seed3]
+mode = "seed"
+persistent_peers = ["seed1", "seed2", "seed0", "seed4"]
+[node.seed4]
+mode = "seed"
+persistent_peers = ["seed1", "seed2", "seed3", "seed0"]
+
+[node.full00]
+mode = "full"
+seeds = ["seed0"]
+[node.full01]
+mode = "full"
+seeds = ["seed1"]
+[node.full02]
+mode = "full"
+seeds = ["seed2"]
+[node.full03]
+mode = "full"
+seeds = ["seed3"]
+[node.full04]
+mode = "full"
+seeds = ["seed4"]
+[node.full05]
+mode = "full"
+seeds = ["seed0"]
+[node.full06]
+mode = "full"
+seeds = ["seed1"]
+[node.full07]
+mode = "full"
+seeds = ["seed2"]
+[node.full08]
+mode = "full"
+seeds = ["seed3"]
+[node.full09]
+mode = "full"
+seeds = ["seed4"]
+[node.full10]
+mode = "full"
+seeds = ["seed0"]
+[node.full11]
+mode = "full"
+seeds = ["seed1"]
+[node.full12]
+mode = "full"
+seeds = ["seed2"]
+[node.full13]
+mode = "full"
+seeds = ["seed3"]
+[node.full14]
+mode = "full"
+seeds = ["seed4"]
+[node.full15]
+mode = "full"
+seeds = ["seed0"]
+[node.full16]
+mode = "full"
+seeds = ["seed1"]
+[node.full17]
+mode = "full"
+seeds = ["seed2"]
+[node.full18]
+mode = "full"
+seeds = ["seed3"]
+[node.full19]
+mode = "full"
+seeds = ["seed4"]
+
+
+
+[node.validator000]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator001]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator002]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator003]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator004]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator005]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator006]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator007]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator008]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator009]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator010]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator011]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator012]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator013]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator014]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator015]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator016]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator017]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator018]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator019]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator020]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator021]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator022]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator023]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator024]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator025]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator026]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator027]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator028]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator029]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator030]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator031]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator032]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator033]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator034]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator035]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator036]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator037]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator038]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator039]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator040]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator041]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator042]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator043]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator044]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator045]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator046]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator047]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator048]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator049]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator050]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator051]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator052]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator053]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator054]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator055]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator056]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator057]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator058]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator059]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator060]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator061]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator062]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator063]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator064]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator065]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator066]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator067]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator068]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator069]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator070]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator071]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator072]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator073]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator074]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator075]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator076]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator077]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator078]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator079]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator080]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator081]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator082]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator083]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator084]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator085]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator086]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator087]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator088]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator089]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator090]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator091]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator092]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator093]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator094]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator095]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator096]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator097]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator098]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator099]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator100]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator101]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator102]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator103]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator104]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator105]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator106]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator107]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator108]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator109]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator110]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator111]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator112]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator113]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator114]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator115]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator116]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator117]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator118]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator119]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator120]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator121]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator122]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator123]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator124]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator125]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator126]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator127]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator128]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator129]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator130]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator131]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator132]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator133]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator134]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator135]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator136]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator137]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator138]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator139]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator140]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator141]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator142]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator143]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator144]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator145]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator146]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator147]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator148]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator149]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator150]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator151]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator152]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator153]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator154]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator155]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator156]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator157]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator158]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator159]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator160]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator161]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator162]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator163]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator164]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator165]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator166]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator167]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator168]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator169]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator170]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator171]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator172]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator173]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator174]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator175]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator176]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator177]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator178]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator179]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator180]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator181]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator182]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator183]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator184]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator185]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator186]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator187]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator188]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator189]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator190]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator191]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator192]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator193]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator194]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]
+
+
+[node.validator195]
+# no pruning new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed3"]
+
+
+[node.validator196]
+# pruning no compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed4"]
+
+
+[node.validator197]
+# pruning + compaction old layout
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed0"]
+
+
+[node.validator198]
+#no pruning old layout
+discard_abci_responses = true
+indexer = "null"
+seeds = ["seed0"]
+
+
+[node.validator199]
+# pruning + compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+compaction_interval = 200
+compact = true
+seeds = ["seed1"]
+
+
+[node.validator200]
+# pruning no compaction new layout
+db_key_layout_version = "v2"
+discard_abci_responses = true
+indexer = "null"
+retain_blocks = 100
+seeds = ["seed2"]

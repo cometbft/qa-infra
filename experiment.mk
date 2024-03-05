@@ -6,7 +6,7 @@ DO_VPC_SUBNET=172.19.144.0/20
 MANIFEST ?= ./testnets/storage_example.toml
 MANIFEST_PATH=$(shell realpath $(MANIFEST))
 
-VERSION_TAG ?= 6e08e6350 # tag of jasmina/1041-support-for-two-key-layouts 01.03.2024
+VERSION_TAG ?= 2a3315af09065f44653519b4a72f0bfda3422e9c # tag of jasmina/1041-support-for-two-key-layouts 05.03.2024
 #VERSION_TAG ?= 3b783434f #v0.34.27 (cometbft/cometbft)
 #VERSION_TAG ?= bef9a830e  #v0.37.alpha3 (cometbft/cometbft)
 #VERSION_TAG ?= v0.38.0-alpha.2

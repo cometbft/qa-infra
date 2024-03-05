@@ -81,7 +81,7 @@ mode = "full"
 seeds = ["seed4"]
 '
 
-for x in {0..200}; do 
+for x in {0..174}; do 
 tmp=$((x % 6)) 
 echo -e "\n"
 if [[ $x -lt 10 ]]; then

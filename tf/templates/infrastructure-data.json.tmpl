@@ -1,0 +1,12 @@
+{
+	"provider": "digital-ocean",
+	"network": "${subnet}",
+	"instances": ${jsonencode({
+        for n in nodes:
+            "${n.name}" => {
+                "ext_ip_address": "${n.ip}",
+                "ip_address": "${n.internal_ip}",
+                "rpc_port": 26657
+            }
+        })}
+}

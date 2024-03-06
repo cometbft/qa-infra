@@ -16,68 +16,30 @@ if [[ $(uname) == "Darwin" ]]; then
 	SED_EW='[[:>:]]' #End of word in regex
 fi
 
-# ifd-from-ansible is responsible for generating the 'infrastructure-data' that is
-# read by the testnet generator tool.
-ifd-from-ansible() {
-	HOST_PATH=$1
-	OUT_PATH=$2
-	VPC_SUBNET=$3
-	
-	cat <<EOF > $OUT_PATH
-{
-	"provider": "digital-ocean",
-	"network": "$VPC_SUBNET",
-	"instances": {
-EOF
-	
-	lines=`grep '^.*name=.*$' $HOST_PATH | tr " " : | sort | uniq`
-	count=`echo "$lines" | wc -l`
-	
-	i=1
-	for host in  $lines; do
-		ext_ip=`echo $host | cut -d: -f1`
-		ip=`echo $host | cut -d: -f3 | cut -d= -f2`
-		name=`echo $host | cut -d: -f2 | sed -n 's/name=\(.*\)/\1/p'`
-		cat <<EOF >> $OUT_PATH
-		"$name": {
-			"ext_ip_address": "$ext_ip",
-			"ip_address": "$ip",
-			"rpc_port": 26657
-EOF
-		if [ $i -lt $count ]; then
-			cat <<EOF >> $OUT_PATH
-		},
-EOF
-		else
-			cat <<EOF >> $OUT_PATH
-		}
-EOF
-		fi
-		
-		i=`expr $i + 1`
-	done
-	cat <<EOF >> $OUT_PATH
-	}
-}
-EOF
-}
-
 VERSION=$1
-HOSTS_PATH=$2
-VPC_SUBNET=$3
-IFD_PATH='./ifd.json'
+MANIFEST=$2
 
-ifd-from-ansible $HOSTS_PATH $IFD_PATH $VPC_SUBNET
+TESTNET_DIR=./ansible/testnet # created by terraform
+IFD_PATH=$TESTNET_DIR/infrastructure-data.json
 
-cp -p ./testnet.toml ./ansible
-rm -rf ./ansible/testnet
-go run github.com/cometbft/cometbft/test/e2e/runner@$VERSION setup -f ./ansible/testnet.toml --infrastructure-type digital-ocean --infrastructure-data $IFD_PATH
+mkdir -p latency
+curl -s https://raw.githubusercontent.com/cometbft/cometbft/$VERSION/test/e2e/pkg/latency/aws-latencies.csv > latency/aws-latencies.csv # needed in this directory to validate zones
 
+go run github.com/cometbft/cometbft/test/e2e/runner@$VERSION setup \
+	-f $MANIFEST --infrastructure-type digital-ocean --infrastructure-data $IFD_PATH \
+	--testnet-dir $TESTNET_DIR
 
-for file in `find ./ansible/testnet/ -name config.toml -type f`; do
-	sed $INPLACE_SED_FLAG "s/unsafe = .*/unsafe = true/g" $file
-	sed $INPLACE_SED_FLAG "s/prometheus = .*/prometheus = true/g" $file
-	sed $INPLACE_SED_FLAG "s/cache_size = .*/cache_size = 200000/g" $file
+for file in `find $TESTNET_DIR -name config.toml -type f`; do
+	sed $INPLACE_SED_FLAG "s/unsafe = .*/unsafe = true/" $file
+	sed $INPLACE_SED_FLAG "s/prometheus = .*/prometheus = true/" $file
+
+	# We need that nodes have a very big mempool cache because our test application does not
+	# implement a unique number or nonce mechanism to prevent replay attacks. When our tests inject
+	# a high number of transactions and the caches are not big enough, transactions are continuously
+	# gossipped and evicted from the mempools ad infinitum.
+	sed $INPLACE_SED_FLAG "s/cache_size = .*/cache_size = 200000/" $file
+
+	# to allow sending big txs via websockets
+	sed $INPLACE_SED_FLAG "s/max_body_bytes = .*/max_body_bytes = 2097152/" $file
+	sed $INPLACE_SED_FLAG "s/max_header_bytes = .*/max_header_bytes = 2097152/" $file
 done
-
-mv $IFD_PATH ./ansible/testnet/infrastructure-data.json

@@ -4,13 +4,12 @@
   hosts: loadrunners
   vars:
     ansible_host_key_checking: false
-    endpoints: ws://127.0.0.1:26656/websocket # comma separated list of endpoints
+    endpoints: ws://{{ hostvars[groups[validators][0]].internal_ip }}:26657/v1/websocket # comma separated list of endpoints
     connections: 25
     time_seconds: 60
     tx_per_second: 1000
     size_bytes: 1024
     iterations: 1
-
 
   tasks:
     - name: install load tool
@@ -19,4 +18,4 @@
       shell: "/root/go/bin/load -c {{ connections }} -T {{ time_seconds }} -r {{ tx_per_second }} -s {{ size_bytes }} --broadcast-tx-method sync --endpoints {{endpoints}}"
       loop: "{{ range(0, iterations| int, 1)| list }}"
       loop_control:
-         pause: 300
+        pause: 300

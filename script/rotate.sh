@@ -16,7 +16,8 @@ if [[ $(uname) == "Darwin" ]]; then
 fi
 
 VERSION=$1
-ADDRS=$2
+MANIFEST=$2
+ADDRS=$3
 
 
 # Ephemeral-configs creates the set of configuration files for the ephemeral
@@ -36,7 +37,7 @@ ephemeral-configs() {
 	# of fake configurations, one for each node that exists in the testnet, so
 	# that the runner script will create keys that are not part of the existing
 	# network.
-	c=`grep "^\[.*\]$" ./testnet.toml | wc -l`
+	c=`grep "^\[.*\]$" $MANIFEST | wc -l`
 	for i in `seq 1 $c`; do
 		printf "[node.ab%03d]\n" "$i" >> ./rotating.toml
 		echo "mode = \"full\"" >> ./rotating.toml
@@ -147,7 +148,7 @@ behind() {
 
 while true; do
 	ephemeral-configs `echo "$ADDRS"`
-	ansible-playbook ./ansible/re-init-testapp.yaml -u root -i ./ansible/hosts --limit=ephemeral -e "testnet_dir=./rotating" -f 20
+	ansible-playbook ./ansible/testapp-reinit.yaml -u root -i ./ansible/hosts --limit=ephemeral -e "testnet_dir=./rotating" -f 20
 
 	# Wait for all of the ephemeral hosts to be running.
 	addrs=( `echo $ADDRS | sed 's/,/ /g'` )
@@ -175,5 +176,5 @@ while true; do
 		fi
 	done
 	echo "Ephemeral have all completed blocksync"
-	ansible-playbook ./ansible/stop-testapp.yaml -u root -i ./ansible/hosts --limit=ephemeral
+	ansible-playbook ./ansible/testapp-stop.yaml -u root -i ./ansible/hosts --limit=ephemeral
 done

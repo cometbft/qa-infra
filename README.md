@@ -11,8 +11,9 @@ This repo contains [Ansible] and [Terraform] scripts for spinning up CometBFT te
 
 ## Instructions
 
-After you have all the prerequisites installed and have configured your
-[`testnet.toml`](./testnet.toml) file appropriately:
+### Setup
+
+After you have all the prerequisites installed:
 
 1. Set up your [personal access token for DO](https://docs.digitalocean.com/reference/api/create-personal-access-token/)
 
@@ -42,77 +43,88 @@ After you have all the prerequisites installed and have configured your
     EOF
     ```
 
-4. If necessary, set the variables `DO_INSTANCE_TAGNAME` and `DO_VPC_SUBNET`,
-    assigned in the `experiment.mk` file, to customized values to prevent
-    collisions with other QA runs, including possible other users of the
-    DigitalOcean project who might be running these scripts.
-    If the subnet is allocated in the private IP address range 172.16.0.0/12, as
-    it is in the unmodified assignment, a recommended choice should be
-    in the range 172.16.16.0/20 - 172.31.240.0/20.
-
-5. Initialize Terraform (only needed once)
+4. Initialize Terraform (only needed once)
 
     ```bash
     make terraform-init
     ```
 
-5. If you are using `scripts/runtests.py`, execute it now to update your `./testnet.toml` according to your templates. 
-    Use the `-s` flag to run it just once, as in `python3 runtests.py -l log.log -o flood_options.json -s`
-    Otherwise, ensure that your `./testnet.toml` is correct.
+### Start the network
 
-6. Create the VMs for the validators and Prometheus as specified in `./testnet.toml`
+After you have set up the infrastructure:
+
+1. Set up your experiment.
+    - If you are using `scripts/runtests.py`, execute it 
+       to update your experiment setup according to your templates.  Use the `-s` flag to run it just 
+       once, as in `python3 runtests.py -l log.log -o flood_options.json -s`
+    - If you are not using `runtests.py`, then
+        1. Set up the test you will run in the `experiment.mk` file:
+            1. Set the path to your manifest file in the variable `MANIFEST`.
+            2. Set the commit hash of CometBFT that you to install in the nodes in the variable `VERSION_TAG`.
+            3. If you want to deploy a subset of the validators with a different version of CometBFT, set
+               the variable `VERSION2_TAG` to the commit hash you want to install in that subset. Then set
+               the proportion of nodes that will run `VERSION_TAG` and `VERSION2_TAG` in the variables
+               `VERSION_WEIGHT` and `VERSION2_WEIGHT` respectively.
+            4. If necessary, set the variables `DO_INSTANCE_TAGNAME` and `DO_VPC_SUBNET` to customized
+               values to prevent collisions with other QA runs, including possible other users of the
+               DigitalOcean project who might be running these scripts. If the subnet is allocated in the
+               private IP address range 172.16.0.0/12, as it is in the unmodified file, a good choice should be
+               in the range 172.16.16.0/20 - 172.31.240.0/20.
+
+2. Create the VMs for the validators and Prometheus as specified in the manifest file.
     Be sure to use your actual DO token and SSH key fingerprints for the `do_token` and `do_ssh_keys` variables.
 
     ```bash
     make terraform-apply
     ```
+    
+    After creating the DO droplets, this command will generate two files with information about the
+    IP addresses of the nodes: an Ansible inventory file `./ansible/hosts`, and
+    `./ansible/testnet/infrastructure-data.json` for E2E's `runner` tool.
 
-7. Retrieve the IP addresses of the hosts for Ansible
-
-    ```bash
-    make hosts
-    ```
-
-8. Generate the testnet configuration
+3. Generate the testnet configuration
 
     ```bash
     make configgen
     ```
 
-9. Install all necessary software on the created VMs using Ansible
+4. Install all necessary software on the created VMs using Ansible
 
     ```bash
     make ansible-install
     ```
 
-10. Initialize the Prometheus instance
+5. Initialize the Prometheus instance
 
     ```bash
     make prometheus-init
     ```
 
-11. If you are using `script/runtests.py`, do it now and skip to step 14 once you are done. Otherwise, execute steps 12 and 13.
-
-12. Start the test application on all of the validators
+6. Start the network
+    - If you are using `script/runtests.py`, run it again and skip to session (#stop-the-network-and-retrieve-data) once the test is completed.
+    - If you are not using the script, start the test application on all of the validators
 
     ```bash
     make start-network
     ```
 
-13. Execute a load test against the network
-    This will start sending load until Ctrl-C is sent, so consider running this in its own terminal
+### Execute the load test
+
+This will start sending load until Ctrl-C is sent, so consider running this in its own terminal:
 
     ```bash
     make runload
     ```
 
-14. Once the execution is over, stop the network
+### Stop the network and retrieve data
+
+1. Once the execution is over, stop the network:
 
     ```bash
     make stop-network
     ```
 
-15. Retrieve the data produced during the execution.
+2. Retrieve the data produced during the execution.
     If you have used `runtests.py`, the data may have been retrieved already. 
     Otherwise, you can either use the following command to retrieve both the prometheus and the blockstore databases together
 

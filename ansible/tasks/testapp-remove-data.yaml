@@ -1,0 +1,11 @@
+- name: delete data in home directory
+  ansible.builtin.file:
+    path: "{{ cmt_home }}"
+    state: absent
+  become: true
+
+- name: delete app data
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/data"
+    state: absent
+  become: true

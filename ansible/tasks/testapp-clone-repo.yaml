@@ -1,0 +1,10 @@
+- name: remove directory with CometBFT repo
+  ansible.builtin.file:
+    path: "{{ ansible_user_dir }}/cometbft"
+    state: absent          
+
+- name: "clone CometBFT repo hash={{ version_tag }}"
+  ansible.builtin.git:
+    repo: https://{{ go_modules_token }}@github.com/cometbft/cometbft
+    dest: "{{ ansible_user_dir }}/cometbft"
+    version: "{{ version_tag }}"

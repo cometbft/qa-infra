@@ -3,6 +3,7 @@
 /tf/terraform.tfstate*
 /tf/.terraform/*
 /tf/.terraform.lock.hcl
+/ansible/.retry
 /ansible/testnet.toml
 /ansible/testnet/*
 /ansible/rotating/*

@@ -1,25 +1,8 @@
 - name: remove testapp data
   hosts: validators
   become_method: sudo
-  gather_facts: yes
-  vars:
-    cmt_home: /root/.testapp/
+  gather_facts: true
 
   tasks:
-    - name: stop app
-      ansible.builtin.systemd:
-        name: testappd
-        state: stopped
-      become: yes
-
-    - name: delete data in home directory
-      ansible.builtin.file:
-        path: "{{ cmt_home }}"
-        state: absent
-      become: yes
-
-    - name: delete app data
-      ansible.builtin.file:
-        path: "{{ ansible_user_dir }}/data"
-        state: absent
-      become: yes
+    - ansible.builtin.import_tasks: tasks/testapp-stop.yaml
+    - ansible.builtin.import_tasks: tasks/testapp-remove-data.yaml

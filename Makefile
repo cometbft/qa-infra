@@ -78,7 +78,7 @@ runload:
 		-e load.iterations=$(ITERATIONS)
 
 .PHONY: restart
-restart:
+restart: loadrunners-init
 	ansible-playbook ./ansible/testapp-update.yaml -e "version_tag=$(VERSION_TAG)"
 ifneq ($(VERSION2_WEIGHT), 0)
 	ansible-playbook ./ansible/testapp-update.yaml -e "version_tag=$(VERSION2_TAG)" --limit validators2

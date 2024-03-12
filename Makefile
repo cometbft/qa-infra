@@ -79,9 +79,9 @@ runload:
 
 .PHONY: restart
 restart:
-	ansible-playbook ./ansible/testapp-install.yaml -e "version_tag=$(VERSION_TAG)" -e "restart=true"
+	ansible-playbook ./ansible/testapp-update.yaml -e "version_tag=$(VERSION_TAG)"
 ifneq ($(VERSION2_WEIGHT), 0)
-	ansible-playbook ./ansible/testapp-install.yaml -e "version_tag=$(VERSION2_TAG)" --limit validators2
+	ansible-playbook ./ansible/testapp-update.yaml -e "version_tag=$(VERSION2_TAG)" --limit validators2
 endif
 	ansible-playbook ./ansible/prometheus-restart.yaml
 	ansible-playbook ./ansible/testapp-reinit.yaml

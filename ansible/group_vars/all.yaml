@@ -1,0 +1,13 @@
+---
+testnet_dir: testnet
+cmt_home: /root/.testapp/
+ansible_host_key_checking: false
+
+go_modules_token: ""
+
+load:
+  connections: 2
+  time_seconds: 91
+  tx_per_second: 200
+  size_bytes: 1024
+  iterations: 5

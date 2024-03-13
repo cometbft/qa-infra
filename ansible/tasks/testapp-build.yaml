@@ -1,0 +1,5 @@
+- name: redirect https
+  shell: "git config --global url.https://{{ go_modules_token }}@github.com/.insteadOf https://github.com/"
+
+- name: build testapp
+  shell: "cd cometbft/test/e2e/node && GOPRIVATE=github.com/cometbft /usr/lib/go-1.21/bin/go install"

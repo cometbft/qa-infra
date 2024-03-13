@@ -1,0 +1,4 @@
+- name: copy configuration files
+  ansible.builtin.copy:
+    src: "./{{ testnet_dir }}/{{ hostvars[inventory_hostname].name }}/"
+    dest: "{{ cmt_home }}/"

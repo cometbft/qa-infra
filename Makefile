@@ -18,8 +18,6 @@ endif
 
 RUNNER_COMMIT_HASH ?= $(VERSION_TAG)
 LOAD_RUNNER_CMD=go run github.com/cometbft/cometbft/test/e2e/runner@$(RUNNER_COMMIT_HASH)
-ANSIBLE_SSH_RETRIES=5
-ANSIBLE_FORKS=150
 export DO_INSTANCE_TAGNAME
 export DO_VPC_SUBNET
 export EPHEMERAL_SIZE
@@ -47,20 +45,18 @@ configgen:
 
 .PHONY: ansible-install
 ansible-install:
-	cd ansible && \
-		ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts -u root testapp-install.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)" -e "vpc_subnet=$(DO_VPC_SUBNET)"
+	ansible-playbook ./ansible/testapp-install.yaml -e "version_tag=$(VERSION_TAG)"
 ifneq ($(VERSION2_WEIGHT), 0)
-	cd ansible && \
-		ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts --limit validators2 -u root testapp-update.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION2_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+	ansible-playbook ./ansible/testapp-update.yaml -e "version_tag=$(VERSION2_TAG)" --limit validators2
 endif
 
 .PHONY: prometheus-init
 prometheus-init:
-	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts  -u root prometheus-init.yaml -f 10
+	ansible-playbook ./ansible/prometheus-init.yaml
 
 .PHONY: loadrunners-init
 loadrunners-init:
-	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts -u root loader-init.yaml -f 10
+	ansible-playbook ./ansible/loader-init.yaml -e "version_tag=$(VERSION_TAG)"
 
 .PHONY: start-network
 start-network:
@@ -74,23 +70,21 @@ stop-network:
 
 .PHONY: runload
 runload:
-	cd ansible && \
-		endpoints=$$(scripts/get-endpoints.sh) && \
-		ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook loader-run.yaml -i hosts -u root \
-			-e endpoints=$$endpoints \
-			-e connections=$(LOAD_CONNECTIONS) \
-			-e time_seconds=$(LOAD_TOTAL_TIME) \
-			-e tx_per_second=$(LOAD_TX_RATE) \
-			-e iterations=$(ITERATIONS)
+	ansible-playbook ./ansible/loader-run.yaml \
+		-e endpoints=`./ansible/scripts/get-endpoints.sh` \
+		-e load.connections=$(LOAD_CONNECTIONS) \
+		-e load.time_seconds=$(LOAD_TOTAL_TIME) \
+		-e load.tx_per_second=$(LOAD_TX_RATE) \
+		-e load.iterations=$(ITERATIONS)
 
 .PHONY: restart
-restart:
-	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts -u root testapp-update.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+restart: loadrunners-init
+	ansible-playbook ./ansible/testapp-update.yaml -e "version_tag=$(VERSION_TAG)"
 ifneq ($(VERSION2_WEIGHT), 0)
-	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook -i hosts --limit validators2 -u root testapp-update.yaml -f $(ANSIBLE_FORKS) -e "version_tag=$(VERSION2_TAG)" -e "go_modules_token=$(GO_MODULES_TOKEN)"
+	ansible-playbook ./ansible/testapp-update.yaml -e "version_tag=$(VERSION2_TAG)" --limit validators2
 endif
-	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook prometheus-restart.yaml -i hosts -u root
-	cd ansible && ANSIBLE_SSH_RETRIES=$(ANSIBLE_SSH_RETRIES) ansible-playbook testapp-reinit.yaml -i hosts -u root -f $(ANSIBLE_FORKS)
+	ansible-playbook ./ansible/prometheus-restart.yaml
+	ansible-playbook ./ansible/testapp-reinit.yaml
 
 .PHONY: rotate
 rotate:
@@ -106,19 +100,17 @@ perturb-nodes:
 retrieve-blockstore:
 	mkdir -p "./experiments/$(EXPERIMENT_DIR)"
 ifeq ($(RETRIEVE_TARGET_HOST), any)
-	cd ansible && \
-		last_val=$$(ansible -i hosts --list-hosts validators | tail -1 | sed  "s/ //g") && \
-		retrieve_target_host=$$(ansible-inventory -i hosts -y --host $$last_val | grep 'name' | cut -d ' ' -f2) && \
-		ansible-playbook -i hosts -u root retrieve-blockstore.yaml -e "dir=../experiments/$(EXPERIMENT_DIR)/" -e "target_host=$$retrieve_target_host"
+	last_val=$$(ansible --list-hosts validators | tail -1 | sed  "s/ //g") && \
+	retrieve_target_host=$$(ansible-inventory -y --host $$last_val | grep 'name' | cut -d ' ' -f2) && \
+	ansible-playbook ./ansible/retrieve-blockstore.yaml -e "dir=../experiments/$(EXPERIMENT_DIR)/" -e "target_host=$$retrieve_target_host"
 else
-	cd ansible && \
-		ansible-playbook -i hosts -u root retrieve-blockstore.yaml -e "dir=../experiments/$(EXPERIMENT_DIR)/" -e "target_host=$(RETRIEVE_TARGET_HOST)"
+	ansible-playbook ./ansible/retrieve-blockstore.yaml -e "dir=../experiments/$(EXPERIMENT_DIR)/" -e "target_host=$(RETRIEVE_TARGET_HOST)"
 endif
 
 .PHONY: retrieve-prometheus-data
 retrieve-prometheus-data:
 	mkdir -p "./experiments/$(EXPERIMENT_DIR)"; \
-	cd ansible && ansible-playbook -i hosts -u root retrieve-prometheus.yaml --limit `ansible -i hosts --list-hosts prometheus | tail -1 | sed  's/ //g'` -e "dir=../experiments/$(EXPERIMENT_DIR)/";
+	ansible-playbook ./ansible/retrieve-prometheus.yaml --limit `ansible --list-hosts prometheus | tail -1 | sed  's/ //g'` -e "dir=../experiments/$(EXPERIMENT_DIR)/"
 
 .PHONY: retrieve-data
 retrieve-data: retrieve-prometheus-data retrieve-blockstore

@@ -1,0 +1,5 @@
+- name: update unit file
+  template:
+    src: templates/testappd.service.j2
+    dest: /lib/systemd/system/testappd.service
+  become: true

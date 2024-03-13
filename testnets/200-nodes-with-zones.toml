@@ -1,0 +1,630 @@
+vote_extensions_enable_height = 1
+pbts_enable_height = 1
+
+[node.seed0]
+mode = "seed"
+persistent_peers = ["seed1", "seed2", "seed3", "seed4"]
+zone = "N_Virginia"
+[node.seed1]
+mode = "seed"
+persistent_peers = ["seed0", "seed2", "seed3", "seed4"]
+zone = "Canada"
+[node.seed2]
+mode = "seed"
+persistent_peers = ["seed1", "seed0", "seed3", "seed4"]
+zone = "N_California"
+[node.seed3]
+mode = "seed"
+persistent_peers = ["seed1", "seed2", "seed0", "seed4"]
+zone = "London"
+[node.seed4]
+mode = "seed"
+persistent_peers = ["seed1", "seed2", "seed3", "seed0"]
+zone = "Oregon"
+
+[node.full00]
+mode = "full"
+seeds = ["seed0"]
+zone = "Ireland"
+[node.full01]
+mode = "full"
+seeds = ["seed1"]
+zone = "Frankfurt"
+[node.full02]
+mode = "full"
+seeds = ["seed2"]
+zone = "S_Paulo"
+[node.full03]
+mode = "full"
+seeds = ["seed3"]
+zone = "Tokyo"
+[node.full04]
+mode = "full"
+seeds = ["seed4"]
+zone = "Mumbai"
+[node.full05]
+mode = "full"
+seeds = ["seed0"]
+zone = "Sydney"
+[node.full06]
+mode = "full"
+seeds = ["seed1"]
+zone = "Seoul"
+[node.full07]
+mode = "full"
+seeds = ["seed2"]
+zone = "Singapore"
+[node.full08]
+mode = "full"
+seeds = ["seed3"]
+zone = "N_Virginia"
+[node.full09]
+mode = "full"
+seeds = ["seed4"]
+zone = "Canada"
+[node.full10]
+mode = "full"
+seeds = ["seed0"]
+zone = "N_California"
+[node.full11]
+mode = "full"
+seeds = ["seed1"]
+zone = "London"
+[node.full12]
+mode = "full"
+seeds = ["seed2"]
+zone = "Oregon"
+[node.full13]
+mode = "full"
+seeds = ["seed3"]
+zone = "Ireland"
+[node.full14]
+mode = "full"
+seeds = ["seed4"]
+zone = "Frankfurt"
+[node.full15]
+mode = "full"
+seeds = ["seed0"]
+zone = "S_Paulo"
+[node.full16]
+mode = "full"
+seeds = ["seed1"]
+zone = "Tokyo"
+[node.full17]
+mode = "full"
+seeds = ["seed2"]
+zone = "Mumbai"
+[node.full18]
+mode = "full"
+seeds = ["seed3"]
+zone = "Sydney"
+[node.full19]
+mode = "full"
+seeds = ["seed4"]
+zone = "Seoul"
+
+[node.validator000]
+seeds = ["seed0"]
+zone = "Singapore"
+[node.validator001]
+seeds = ["seed1"]
+zone = "N_Virginia"
+[node.validator002]
+seeds = ["seed2"]
+zone = "Canada"
+[node.validator003]
+seeds = ["seed3"]
+zone = "N_California"
+[node.validator004]
+seeds = ["seed4"]
+zone = "London"
+[node.validator005]
+seeds = ["seed0"]
+zone = "Oregon"
+[node.validator006]
+seeds = ["seed1"]
+zone = "Ireland"
+[node.validator007]
+seeds = ["seed2"]
+zone = "Frankfurt"
+[node.validator008]
+seeds = ["seed3"]
+zone = "S_Paulo"
+[node.validator009]
+seeds = ["seed4"]
+zone = "Tokyo"
+[node.validator010]
+seeds = ["seed0"]
+zone = "Mumbai"
+[node.validator011]
+seeds = ["seed1"]
+zone = "Sydney"
+[node.validator012]
+seeds = ["seed2"]
+zone = "Seoul"
+[node.validator013]
+seeds = ["seed3"]
+zone = "Singapore"
+[node.validator014]
+seeds = ["seed4"]
+zone = "N_Virginia"
+[node.validator015]
+seeds = ["seed0"]
+zone = "Canada"
+[node.validator016]
+seeds = ["seed1"]
+zone = "N_California"
+[node.validator017]
+seeds = ["seed2"]
+zone = "London"
+[node.validator018]
+seeds = ["seed3"]
+zone = "Oregon"
+[node.validator019]
+seeds = ["seed4"]
+zone = "Ireland"
+[node.validator020]
+seeds = ["seed0"]
+zone = "Frankfurt"
+[node.validator021]
+seeds = ["seed1"]
+zone = "S_Paulo"
+[node.validator022]
+seeds = ["seed2"]
+zone = "Tokyo"
+[node.validator023]
+seeds = ["seed3"]
+zone = "Mumbai"
+[node.validator024]
+seeds = ["seed4"]
+zone = "Sydney"
+[node.validator025]
+seeds = ["seed0"]
+zone = "Seoul"
+[node.validator026]
+seeds = ["seed1"]
+zone = "Singapore"
+[node.validator027]
+seeds = ["seed2"]
+zone = "N_Virginia"
+[node.validator028]
+seeds = ["seed3"]
+zone = "Canada"
+[node.validator029]
+seeds = ["seed4"]
+zone = "N_California"
+[node.validator030]
+seeds = ["seed0"]
+zone = "London"
+[node.validator031]
+seeds = ["seed1"]
+zone = "Oregon"
+[node.validator032]
+seeds = ["seed2"]
+zone = "Ireland"
+[node.validator033]
+seeds = ["seed3"]
+zone = "Frankfurt"
+[node.validator034]
+seeds = ["seed4"]
+zone = "S_Paulo"
+[node.validator035]
+seeds = ["seed0"]
+zone = "Tokyo"
+[node.validator036]
+seeds = ["seed1"]
+zone = "Mumbai"
+[node.validator037]
+seeds = ["seed2"]
+zone = "Sydney"
+[node.validator038]
+seeds = ["seed3"]
+zone = "Seoul"
+[node.validator039]
+seeds = ["seed4"]
+zone = "Singapore"
+[node.validator040]
+seeds = ["seed0"]
+zone = "N_Virginia"
+[node.validator041]
+seeds = ["seed1"]
+zone = "Canada"
+[node.validator042]
+seeds = ["seed2"]
+zone = "N_California"
+[node.validator043]
+seeds = ["seed3"]
+zone = "London"
+[node.validator044]
+seeds = ["seed4"]
+zone = "Oregon"
+[node.validator045]
+seeds = ["seed0"]
+zone = "Ireland"
+[node.validator046]
+seeds = ["seed1"]
+zone = "Frankfurt"
+[node.validator047]
+seeds = ["seed2"]
+zone = "S_Paulo"
+[node.validator048]
+seeds = ["seed3"]
+zone = "Tokyo"
+[node.validator049]
+seeds = ["seed4"]
+zone = "Mumbai"
+[node.validator050]
+seeds = ["seed0"]
+zone = "Sydney"
+[node.validator051]
+seeds = ["seed1"]
+zone = "Seoul"
+[node.validator052]
+seeds = ["seed2"]
+zone = "Singapore"
+[node.validator053]
+seeds = ["seed3"]
+zone = "N_Virginia"
+[node.validator054]
+seeds = ["seed4"]
+zone = "Canada"
+[node.validator055]
+seeds = ["seed0"]
+zone = "N_California"
+[node.validator056]
+seeds = ["seed1"]
+zone = "London"
+[node.validator057]
+seeds = ["seed2"]
+zone = "Oregon"
+[node.validator058]
+seeds = ["seed3"]
+zone = "Ireland"
+[node.validator059]
+seeds = ["seed4"]
+zone = "Frankfurt"
+[node.validator060]
+seeds = ["seed0"]
+zone = "S_Paulo"
+[node.validator061]
+seeds = ["seed1"]
+zone = "Tokyo"
+[node.validator062]
+seeds = ["seed2"]
+zone = "Mumbai"
+[node.validator063]
+seeds = ["seed3"]
+zone = "Sydney"
+[node.validator064]
+seeds = ["seed4"]
+zone = "Seoul"
+[node.validator065]
+seeds = ["seed0"]
+zone = "Singapore"
+[node.validator066]
+seeds = ["seed1"]
+zone = "N_Virginia"
+[node.validator067]
+seeds = ["seed2"]
+zone = "Canada"
+[node.validator068]
+seeds = ["seed3"]
+zone = "N_California"
+[node.validator069]
+seeds = ["seed4"]
+zone = "London"
+[node.validator070]
+seeds = ["seed0"]
+zone = "Oregon"
+[node.validator071]
+seeds = ["seed1"]
+zone = "Ireland"
+[node.validator072]
+seeds = ["seed2"]
+zone = "Frankfurt"
+[node.validator073]
+seeds = ["seed3"]
+zone = "S_Paulo"
+[node.validator074]
+seeds = ["seed4"]
+zone = "Tokyo"
+[node.validator075]
+seeds = ["seed0"]
+zone = "Mumbai"
+[node.validator076]
+seeds = ["seed1"]
+zone = "Sydney"
+[node.validator077]
+seeds = ["seed2"]
+zone = "Seoul"
+[node.validator078]
+seeds = ["seed3"]
+zone = "Singapore"
+[node.validator079]
+seeds = ["seed4"]
+zone = "N_Virginia"
+[node.validator080]
+seeds = ["seed0"]
+zone = "Canada"
+[node.validator081]
+seeds = ["seed1"]
+zone = "N_California"
+[node.validator082]
+seeds = ["seed2"]
+zone = "London"
+[node.validator083]
+seeds = ["seed3"]
+zone = "Oregon"
+[node.validator084]
+seeds = ["seed4"]
+zone = "Ireland"
+[node.validator085]
+seeds = ["seed0"]
+zone = "Frankfurt"
+[node.validator086]
+seeds = ["seed1"]
+zone = "S_Paulo"
+[node.validator087]
+seeds = ["seed2"]
+zone = "Tokyo"
+[node.validator088]
+seeds = ["seed3"]
+zone = "Mumbai"
+[node.validator089]
+seeds = ["seed4"]
+zone = "Sydney"
+[node.validator090]
+seeds = ["seed0"]
+zone = "Seoul"
+[node.validator091]
+seeds = ["seed1"]
+zone = "Singapore"
+[node.validator092]
+seeds = ["seed2"]
+zone = "N_Virginia"
+[node.validator093]
+seeds = ["seed3"]
+zone = "Canada"
+[node.validator094]
+seeds = ["seed4"]
+zone = "N_California"
+[node.validator095]
+seeds = ["seed0"]
+zone = "London"
+[node.validator096]
+seeds = ["seed1"]
+zone = "Oregon"
+[node.validator097]
+seeds = ["seed2"]
+zone = "Ireland"
+[node.validator098]
+seeds = ["seed3"]
+zone = "Frankfurt"
+[node.validator099]
+seeds = ["seed4"]
+zone = "S_Paulo"
+[node.validator100]
+seeds = ["seed0"]
+zone = "Tokyo"
+[node.validator101]
+seeds = ["seed1"]
+zone = "Mumbai"
+[node.validator102]
+seeds = ["seed2"]
+zone = "Sydney"
+[node.validator103]
+seeds = ["seed3"]
+zone = "Seoul"
+[node.validator104]
+seeds = ["seed4"]
+zone = "Singapore"
+[node.validator105]
+seeds = ["seed0"]
+zone = "N_Virginia"
+[node.validator106]
+seeds = ["seed1"]
+zone = "Canada"
+[node.validator107]
+seeds = ["seed2"]
+zone = "N_California"
+[node.validator108]
+seeds = ["seed3"]
+zone = "London"
+[node.validator109]
+seeds = ["seed4"]
+zone = "Oregon"
+[node.validator110]
+seeds = ["seed0"]
+zone = "Ireland"
+[node.validator111]
+seeds = ["seed1"]
+zone = "Frankfurt"
+[node.validator112]
+seeds = ["seed2"]
+zone = "S_Paulo"
+[node.validator113]
+seeds = ["seed3"]
+zone = "Tokyo"
+[node.validator114]
+seeds = ["seed4"]
+zone = "Mumbai"
+[node.validator115]
+seeds = ["seed0"]
+zone = "Sydney"
+[node.validator116]
+seeds = ["seed1"]
+zone = "Seoul"
+[node.validator117]
+seeds = ["seed2"]
+zone = "Singapore"
+[node.validator118]
+seeds = ["seed3"]
+zone = "N_Virginia"
+[node.validator119]
+seeds = ["seed4"]
+zone = "Canada"
+[node.validator120]
+seeds = ["seed0"]
+zone = "N_California"
+[node.validator121]
+seeds = ["seed1"]
+zone = "London"
+[node.validator122]
+seeds = ["seed2"]
+zone = "Oregon"
+[node.validator123]
+seeds = ["seed3"]
+zone = "Ireland"
+[node.validator124]
+seeds = ["seed4"]
+zone = "Frankfurt"
+[node.validator125]
+seeds = ["seed0"]
+zone = "S_Paulo"
+[node.validator126]
+seeds = ["seed1"]
+zone = "Tokyo"
+[node.validator127]
+seeds = ["seed2"]
+zone = "Mumbai"
+[node.validator128]
+seeds = ["seed3"]
+zone = "Sydney"
+[node.validator129]
+seeds = ["seed4"]
+zone = "Seoul"
+[node.validator130]
+seeds = ["seed0"]
+zone = "Singapore"
+[node.validator131]
+seeds = ["seed1"]
+zone = "N_Virginia"
+[node.validator132]
+seeds = ["seed2"]
+zone = "Canada"
+[node.validator133]
+seeds = ["seed3"]
+zone = "N_California"
+[node.validator134]
+seeds = ["seed4"]
+zone = "London"
+[node.validator135]
+seeds = ["seed0"]
+zone = "Oregon"
+[node.validator136]
+seeds = ["seed1"]
+zone = "Ireland"
+[node.validator137]
+seeds = ["seed2"]
+zone = "Frankfurt"
+[node.validator138]
+seeds = ["seed3"]
+zone = "S_Paulo"
+[node.validator139]
+seeds = ["seed4"]
+zone = "Tokyo"
+[node.validator140]
+seeds = ["seed0"]
+zone = "Mumbai"
+[node.validator141]
+seeds = ["seed1"]
+zone = "Sydney"
+[node.validator142]
+seeds = ["seed2"]
+zone = "Seoul"
+[node.validator143]
+seeds = ["seed3"]
+zone = "Singapore"
+[node.validator144]
+seeds = ["seed4"]
+zone = "N_Virginia"
+[node.validator145]
+seeds = ["seed0"]
+zone = "Canada"
+[node.validator146]
+seeds = ["seed1"]
+zone = "N_California"
+[node.validator147]
+seeds = ["seed2"]
+zone = "London"
+[node.validator148]
+seeds = ["seed3"]
+zone = "Oregon"
+[node.validator149]
+seeds = ["seed4"]
+zone = "Ireland"
+[node.validator150]
+seeds = ["seed0"]
+zone = "Frankfurt"
+[node.validator151]
+seeds = ["seed1"]
+zone = "S_Paulo"
+[node.validator152]
+seeds = ["seed2"]
+zone = "Tokyo"
+[node.validator153]
+seeds = ["seed3"]
+zone = "Mumbai"
+[node.validator154]
+seeds = ["seed4"]
+zone = "Sydney"
+[node.validator155]
+seeds = ["seed0"]
+zone = "Seoul"
+[node.validator156]
+seeds = ["seed1"]
+zone = "Singapore"
+[node.validator157]
+seeds = ["seed2"]
+zone = "N_Virginia"
+[node.validator158]
+seeds = ["seed3"]
+zone = "Canada"
+[node.validator159]
+seeds = ["seed4"]
+zone = "N_California"
+[node.validator160]
+seeds = ["seed0"]
+zone = "London"
+[node.validator161]
+seeds = ["seed1"]
+zone = "Oregon"
+[node.validator162]
+seeds = ["seed2"]
+zone = "Ireland"
+[node.validator163]
+seeds = ["seed3"]
+zone = "Frankfurt"
+[node.validator164]
+seeds = ["seed4"]
+zone = "S_Paulo"
+[node.validator165]
+seeds = ["seed0"]
+zone = "Tokyo"
+[node.validator166]
+seeds = ["seed1"]
+zone = "Mumbai"
+[node.validator167]
+seeds = ["seed2"]
+zone = "Sydney"
+[node.validator168]
+seeds = ["seed3"]
+zone = "Seoul"
+[node.validator169]
+seeds = ["seed4"]
+zone = "Singapore"
+[node.validator170]
+seeds = ["seed0"]
+zone = "N_Virginia"
+[node.validator171]
+seeds = ["seed1"]
+zone = "Canada"
+[node.validator172]
+seeds = ["seed2"]
+zone = "N_California"
+[node.validator173]
+seeds = ["seed3"]
+zone = "London"
+[node.validator174]
+seeds = ["seed4"]
+zone = "Oregon"

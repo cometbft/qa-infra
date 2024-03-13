@@ -1,4 +1,5 @@
 vote_extensions_enable_height = 1
+pbts_enable_height = 1
 
 [node.seed0]
 mode = "seed"

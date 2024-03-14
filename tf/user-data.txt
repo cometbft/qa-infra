@@ -115,6 +115,7 @@ runcmd:
   - ufw default deny incoming
   - ufw default deny outgoing
   - systemctl daemon-reload
+  - systemctl force-reload systemd-journald
   - systemctl enable prometheus-node-exporter
   - systemctl start prometheus-node-exporter
   - systemctl enable docker

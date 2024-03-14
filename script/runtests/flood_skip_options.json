@@ -30,7 +30,7 @@
                "comment": "tx rate",
                "zip_vars": [
                   {
-                     "tmpl_file": "flood_skip_experiment.mk_tmpl",
+                     "tmpl_file": "flood_skip_experiment_tmpl.mk",
                      "output_file": "experiment.mk",
                      "tag": "{{LOAD_TX_RATE}}",
                      "values": [

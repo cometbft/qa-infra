@@ -52,15 +52,42 @@ After you have all the prerequisites installed:
 ### Start the network
 
 After you have set up the infrastructure, you need to setup the experiment.
-The script `scripts/runtests.py` automates this step. If you are using it, execute it 
-now to update your experiment setup according to your templates.  
+There are two ways of doing this, using the script `scripts/runtests.py` to automates part of it or not.
+
+#### Using `scripts/runtests.py` 
+
+Execute the script once to update your experiment setup according to your templates.  
 Use the `-s` flag to run it just once, as in the following, and then skip to (#execute-the-load-test).
 
     ```bash
     python3 runtests.py -l log.log -o flood_options.json -s
     ```
 
-Otherwise, execute the following steps.
+2. Create the VMs for the validators and Prometheus as specified in the manifest file.
+    Be sure to use your actual DO token and SSH key fingerprints for the `do_token` and `do_ssh_keys` variables.
+
+    ```bash
+    make terraform-apply
+    ```
+    
+    After creating the DO droplets, this command will generate two files with information about the
+    IP addresses of the nodes: an Ansible inventory file `./ansible/hosts`, and
+    `./ansible/testnet/infrastructure-data.json` for E2E's `runner` tool.
+
+3. Install all necessary software on the created VMs using Ansible
+
+    ```bash
+    make ansible-install
+    ```
+
+4. Initialize the Prometheus instance
+
+    ```bash
+    make prometheus-init
+    ```
+
+
+#### Without the script
 
 1. Set up the test you will run in the `experiment.mk` file:
     1. Set the path to your manifest file in the variable `MANIFEST`.
@@ -111,7 +138,7 @@ Otherwise, execute the following steps.
     ```
 
 ### Execute the load test
-If you are using `script/runtests.py`, run it again, without the `-s` flag and skip to session (#stop-the-network-and-retrieve-data) once the test is completed.
+If you are using `script/runtests.py`, run it now.
 
     ```bash
     python3 runtests.py -l log.log -o flood_options.json

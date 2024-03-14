@@ -51,25 +51,29 @@ After you have all the prerequisites installed:
 
 ### Start the network
 
-After you have set up the infrastructure:
+After you have set up the infrastructure, you need to setup the experiment.
+The script `scripts/runtests.py` automates this step. If you are using it, execute it 
+now to update your experiment setup according to your templates.  
+Use the `-s` flag to run it just once, as in the following, and then skip to (#execute-the-load-test).
 
-1. Set up your experiment.
-    - If you are using `scripts/runtests.py`, execute it 
-       to update your experiment setup according to your templates.  Use the `-s` flag to run it just 
-       once, as in `python3 runtests.py -l log.log -o flood_options.json -s`
-    - If you are not using `runtests.py`, then
-        1. Set up the test you will run in the `experiment.mk` file:
-            1. Set the path to your manifest file in the variable `MANIFEST`.
-            2. Set the commit hash of CometBFT that you to install in the nodes in the variable `VERSION_TAG`.
-            3. If you want to deploy a subset of the validators with a different version of CometBFT, set
-               the variable `VERSION2_TAG` to the commit hash you want to install in that subset. Then set
-               the proportion of nodes that will run `VERSION_TAG` and `VERSION2_TAG` in the variables
-               `VERSION_WEIGHT` and `VERSION2_WEIGHT` respectively.
-            4. If necessary, set the variables `DO_INSTANCE_TAGNAME` and `DO_VPC_SUBNET` to customized
-               values to prevent collisions with other QA runs, including possible other users of the
-               DigitalOcean project who might be running these scripts. If the subnet is allocated in the
-               private IP address range 172.16.0.0/12, as it is in the unmodified file, a good choice should be
-               in the range 172.16.16.0/20 - 172.31.240.0/20.
+    ```bash
+    python3 runtests.py -l log.log -o flood_options.json -s
+    ```
+
+Otherwise, execute the following steps.
+
+1. Set up the test you will run in the `experiment.mk` file:
+    1. Set the path to your manifest file in the variable `MANIFEST`.
+    2. Set the commit hash of CometBFT that you to install in the nodes in the variable `VERSION_TAG`.
+    3. If you want to deploy a subset of the validators with a different version of CometBFT, set
+       the variable `VERSION2_TAG` to the commit hash you want to install in that subset. Then set
+       the proportion of nodes that will run `VERSION_TAG` and `VERSION2_TAG` in the variables
+       `VERSION_WEIGHT` and `VERSION2_WEIGHT` respectively.
+    4. If necessary, set the variables `DO_INSTANCE_TAGNAME` and `DO_VPC_SUBNET` to customized
+       values to prevent collisions with other QA runs, including possible other users of the
+       DigitalOcean project who might be running these scripts. If the subnet is allocated in the
+       private IP address range 172.16.0.0/12, as it is in the unmodified file, a good choice should be
+       in the range 172.16.16.0/20 - 172.31.240.0/20.
 
 2. Create the VMs for the validators and Prometheus as specified in the manifest file.
     Be sure to use your actual DO token and SSH key fingerprints for the `do_token` and `do_ssh_keys` variables.
@@ -100,17 +104,20 @@ After you have set up the infrastructure:
     make prometheus-init
     ```
 
-6. Start the network
-    - If you are using `script/runtests.py`, run it again and skip to session (#stop-the-network-and-retrieve-data) once the test is completed.
-    - If you are not using the script, start the test application on all of the validators
+6. Start the test application on all of the validators
 
     ```bash
     make start-network
     ```
 
 ### Execute the load test
+If you are using `script/runtests.py`, run it again, without the `-s` flag and skip to session (#stop-the-network-and-retrieve-data) once the test is completed.
 
-This will start sending load until Ctrl-C is sent, so consider running this in its own terminal:
+    ```bash
+    python3 runtests.py -l log.log -o flood_options.json
+    ```
+
+If you are not using the script, the following command will start sending load until Ctrl-C is sent, so consider running this in its own terminal:
 
     ```bash
     make runload

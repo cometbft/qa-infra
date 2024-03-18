@@ -2,21 +2,13 @@
   hosts: validators,ephemeral
   become_method: sudo
   gather_facts: true
-  vars:
-    is_same_version: hostvars[inventory_hostname].version_tag == "{{ version_tag }}"
 
   tasks:
     - ansible.builtin.import_tasks: tasks/testapp-copy-config-files.yaml
       when: "'ephemeral' not in group_names" # initially there are no config files for ephemeral nodes
 
     - ansible.builtin.import_tasks: tasks/testapp-clone-repo.yaml
-      when: not is_same_version
 
     - ansible.builtin.import_tasks: tasks/testapp-build.yaml
-      when: not is_same_version
 
     - ansible.builtin.import_tasks: tasks/testapp-update-unit-file.yaml
-      when: not is_restarting
-
-    - ansible.builtin.import_tasks: tasks/testapp-start.yaml
-      when: is_restarting

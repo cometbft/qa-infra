@@ -1,9 +1,22 @@
-- hosts: validators,loadrunners,ephemeral
+- name: build testapp
+  hosts: validators,ephemeral
+  become_method: sudo
+  gather_facts: true
   vars:
-    ansible_host_key_checking: false
+    is_same_version: hostvars[inventory_hostname].version_tag == "{{ version_tag }}"
 
-- name: Init test app playbook
-  ansible.builtin.import_playbook: testapp-init.yaml
+  tasks:
+    - ansible.builtin.import_tasks: tasks/testapp-copy-config-files.yaml
+      when: "'ephemeral' not in group_names" # initially there are no config files for ephemeral nodes
 
-- name: Update test app playbook 
-  ansible.builtin.import_playbook: testapp-update.yaml
+    - ansible.builtin.import_tasks: tasks/testapp-clone-repo.yaml
+      when: not is_same_version
+
+    - ansible.builtin.import_tasks: tasks/testapp-build.yaml
+      when: not is_same_version
+
+    - ansible.builtin.import_tasks: tasks/testapp-update-unit-file.yaml
+      when: not is_restarting
+
+    - ansible.builtin.import_tasks: tasks/testapp-start.yaml
+      when: is_restarting

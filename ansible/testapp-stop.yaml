@@ -1,12 +1,6 @@
 - name: start testapp
   hosts: validators,ephemeral
-  gather_facts: yes
-  vars:
-    ansible_host_key_checking: false
- 
+  gather_facts: false
+
   tasks:
-  - name: stop the systemd-unit
-    ansible.builtin.systemd:
-      name: testappd
-      state: stopped
-      enabled: yes
+    - ansible.builtin.import_tasks: tasks/testapp-stop.yaml

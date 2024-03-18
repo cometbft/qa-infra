@@ -1,26 +1,12 @@
 - name: update testapp
-  hosts: validators,loadrunners,ephemeral
+  hosts: validators,ephemeral
   become_method: sudo
-  gather_facts: yes
-  vars:
-    cmt_home: /root/.testapp/
-    ansible_host_key_checking: false
+  gather_facts: true
 
   tasks:
-    - name: clone cometbft repo
-      ansible.builtin.git:
-        repo: https://{{ go_modules_token }}@github.com/cometbft/cometbft
-        dest: "{{ ansible_user_dir }}/cometbft"
-        version: "{{ version_tag }}"
-    - name: redirect https
-      shell: "git config --global url.https://{{ go_modules_token }}@github.com/.insteadOf https://github.com/"
-    - name: rebuild testapp
-      shell: "cd cometbft/test/e2e/node && GOPRIVATE=github.com/cometbft /usr/lib/go-1.21/bin/go install"
-    - name: update unit file
-      template:
-        src: templates/testappd.service.j2
-        dest: /lib/systemd/system/testappd.service
-      become: yes
+    - ansible.builtin.import_tasks: tasks/testapp-clone-repo.yaml
+    - ansible.builtin.import_tasks: tasks/testapp-build.yaml
+    - ansible.builtin.import_tasks: tasks/testapp-update-unit-file.yaml
     - name: reload systemd daemon
       ansible.builtin.systemd:
         daemon_reload: yes

@@ -1,0 +1,5 @@
+- name: start the systemd-unit
+  ansible.builtin.systemd:
+    name: testappd
+    state: started
+    enabled: yes

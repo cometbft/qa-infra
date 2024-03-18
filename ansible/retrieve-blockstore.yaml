@@ -1,11 +1,10 @@
 - name: retrieve blockstore
   hosts: validators
   become: false
-  gather_facts: yes
+  gather_facts: true
   vars:
-    cmt_home: /root/.testapp/
-    ansible_host_key_checking: false
     target_host: all
+
   tasks:
     - name: stop app
       ansible.builtin.systemd:

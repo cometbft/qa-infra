@@ -57,10 +57,16 @@ There are two ways of doing this, using the script `scripts/runtests.py` to auto
 #### Using `scripts/runtests.py` 
 
 Execute the script once to update your experiment setup according to your templates.  
-Use the `-s` flag to run it just once, as in the following, and then skip to (#execute-the-load-test).
+Use the `-s` flag to run it just once, as in the following.
 
     ```bash
     python3 runtests.py -l log.log -o flood_options.json -s
+    ```
+
+1. Generate the testnet configuration, using the updated scripts
+
+    ```bash
+    make configgen
     ```
 
 2. Create the VMs for the validators and Prometheus as specified in the manifest file.

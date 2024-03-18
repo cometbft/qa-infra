@@ -118,9 +118,8 @@ def setup_shell(log_file):
 
 def main():
 
-    ######################################################################
-    # Parse the options, arguments, get ready, etc.
-    ######################################################################
+    # TODO: use argparse (https://docs.python.org/pt-br/3/library/argparse.html#module-argparse) instead?
+ 
     try:
         optlist, args = getopt.getopt(sys.argv[1:], 'hal:o:virts', [
                                       'help', 'append', 'log', 'options', 'interactive', 'retrieve', 'tag-experiments', 'single-pass'])

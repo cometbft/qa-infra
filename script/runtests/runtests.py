@@ -187,6 +187,14 @@ def main():
 
     bash = setup_shell(log_file)
 
+    bash.sendline("make loadrunners-init")
+    index = bash.expect([pexpect.TIMEOUT, global_COMMAND_PROMPT])
+    if index == 0:
+       log.error('Timeout!!')
+       exit()
+    elif index == 1:
+       log.info('Load runner initialized')
+
     for seq in options['sequences']:
         log.info("Sequence entry: %s", seq['name'])
 
@@ -250,7 +258,7 @@ def main():
             elif index == 1:
                 log.info('Configurations updated')
 
-            bash.sendline("make restart")
+            bash.sendline("make restart2")
             index = bash.expect([pexpect.TIMEOUT, global_COMMAND_PROMPT])
             if index == 0:
                 log.error('Timeout!!')

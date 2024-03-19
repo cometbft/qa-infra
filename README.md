@@ -63,13 +63,7 @@ Use the `-s` flag to run it just once, as in the following.
     python3 runtests.py -l log.log -o flood_options.json -s
     ```
 
-1. Generate the testnet configuration, using the updated scripts
-
-    ```bash
-    make configgen
-    ```
-
-2. Create the VMs for the validators and Prometheus as specified in the manifest file.
+1. Create the VMs for the validators and Prometheus as specified in the manifest file.
     Be sure to use your actual DO token and SSH key fingerprints for the `do_token` and `do_ssh_keys` variables.
 
     ```bash
@@ -79,6 +73,12 @@ Use the `-s` flag to run it just once, as in the following.
     After creating the DO droplets, this command will generate two files with information about the
     IP addresses of the nodes: an Ansible inventory file `./ansible/hosts`, and
     `./ansible/testnet/infrastructure-data.json` for E2E's `runner` tool.
+
+2. Generate the testnet configuration, using the updated scripts
+
+    ```bash
+    make configgen
+    ```
 
 3. Install all necessary software on the created VMs using Ansible
 

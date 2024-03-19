@@ -30,9 +30,11 @@
       stat:
         path: "{{ cmt_home }}/data/blockstore.db.zip"
       register: file_size
+      when: target_host == "all" or target_host == hostvars[inventory_hostname].name
 
     - name: Show file size
       debug: msg="blockstore.db.zip={{ file_size.stat.size | filesizeformat(True) }}"
+      when: target_host == "all" or target_host == hostvars[inventory_hostname].name
 
     - name: Fetch the blockstore
       ansible.builtin.fetch:

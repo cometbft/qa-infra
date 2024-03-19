@@ -12,23 +12,35 @@
         state: stopped
       become: yes
       when: target_host == "all" or target_host == hostvars[inventory_hostname].name
+
     - name: Delete old zip
       ansible.builtin.file:
         path: "{{ cmt_home }}/data/blockstore.db.zip"
         state: absent
       when: target_host == "all" or target_host == hostvars[inventory_hostname].name
+
     - name: Zip the blockstore directory
       archive:
         path: "{{ cmt_home }}/data/blockstore.db"
         format: zip
         dest: "{{ cmt_home }}/data/blockstore.db.zip"
       when: target_host == "all" or target_host == hostvars[inventory_hostname].name
+
+    - name: Fetch file size
+      stat:
+        path: "{{ cmt_home }}/data/blockstore.db.zip"
+      register: file_size
+
+    - name: Show file size
+      debug: msg="blockstore.db.zip={{ file_size.stat.size | filesizeformat(True) }}"
+
     - name: Fetch the blockstore
       ansible.builtin.fetch:
         src: "{{ cmt_home }}/data/blockstore.db.zip"
         dest: "{{dir}}/{{ hostvars[inventory_hostname].name }}/blockstore.db.zip"
         flat: yes
       when: target_host == "all" or target_host == hostvars[inventory_hostname].name
+
     - name: start the systemd-unit
       ansible.builtin.systemd:
         name: testappd

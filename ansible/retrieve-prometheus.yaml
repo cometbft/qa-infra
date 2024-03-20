@@ -9,6 +9,15 @@
         path: "/var/lib/prometheus"
         format: zip
         dest: "/tmp/prometheus.zip"
+
+    - name: Fetch file size
+      stat:
+        path: "/tmp/prometheus.zip"
+      register: file_size
+
+    - name: Show file size
+      debug: msg="prometheus.zip={{ file_size.stat.size | filesizeformat(True) }}"
+
     - name: Fetch the prometheus dir
       ansible.builtin.fetch:
         src: "/tmp/prometheus.zip"

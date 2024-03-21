@@ -12,6 +12,7 @@
           tx_per_second: "{{ load.tx_per_second }}"
           size_bytes: "{{ load.size_bytes }}"
           time_seconds: "{{ load.time_seconds }}"
+          load_iterations: "{{ load.iterations }}"
           endpoints: "{{ endpoints }}"
 
     - name: install load tool

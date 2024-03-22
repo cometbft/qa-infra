@@ -1,4 +1,4 @@
-NUM_CONNECTIONS=1
+NUM_CONNECTIONS=4 #TODO: pass this value from Makefile
 endpoint_list=$(ansible-inventory --export --list | jq '[.[] | .hostvars][0]' | grep name -B 1  | grep internal_ip | sed 's/\"//g' | cut -w -f3 | sed 's/,//' | sed 's/\(.*\)/ws:\/\/\1:26657\/v1\/websocket/')
 
 IFS='

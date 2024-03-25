@@ -18,15 +18,27 @@ fi
 
 VERSION=$1
 MANIFEST=$2
+EPHEMERAL_SIZE=$3
+TESTNET_DIR=$4
 
-TESTNET_DIR=./ansible/testnet # created by terraform
 IFD_PATH=$TESTNET_DIR/infrastructure-data.json
 
 mkdir -p latency
 curl -s https://raw.githubusercontent.com/cometbft/cometbft/$VERSION/test/e2e/pkg/latency/aws-latencies.csv > latency/aws-latencies.csv # needed in this directory to validate zones
 
+cp $MANIFEST ./ansible/testnet/manifest.toml
+seeds=`grep 'node\.seed' ./testnets/rotating.toml | grep -o 'seed[0-9][0-9]*' | sort | uniq | sed 's/^\(.*\)$/"\1"/' | paste -s -d, -`
+if [ 0$EPHEMERAL_SIZE -gt 0 ]; then
+	echo >> ./ansible/testnet/manifest.toml
+	for i in `seq 1 $EPHEMERAL_SIZE`; do
+		printf "[node.ephemeral%03d]\n" "$i" >> ./ansible/testnet/manifest.toml
+		echo 'mode = "full"' >> ./ansible/testnet/manifest.toml
+		echo "seeds = [$seeds]" >> ./ansible/testnet/manifest.toml
+	done
+fi
+
 go run github.com/cometbft/cometbft/test/e2e/runner@$VERSION setup \
-	-f $MANIFEST --infrastructure-type digital-ocean --infrastructure-data $IFD_PATH \
+	-f ./ansible/testnet/manifest.toml --infrastructure-type digital-ocean --infrastructure-data $IFD_PATH \
 	--testnet-dir $TESTNET_DIR
 
 for file in `find $TESTNET_DIR -name config.toml -type f`; do

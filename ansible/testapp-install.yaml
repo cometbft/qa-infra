@@ -5,9 +5,8 @@
 
   tasks:
     - ansible.builtin.import_tasks: tasks/testapp-copy-config-files.yaml
-      # initially there are no config files for ephemeral nodes
       # no config files for loadrunners
-      when: "'ephemeral' not in group_names and 'loadrunners' not in group_names"
+      when: "'loadrunners' not in group_names"
 
     - ansible.builtin.import_tasks: tasks/testapp-clone-repo.yaml
 

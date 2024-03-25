@@ -12,6 +12,10 @@ ifndef VERSION_WEIGHT
 	$(error VERSION_WEIGHT is not set)
 endif
 
+ifndef EPHEMERAL_SIZE
+	$(error EPHEMERAL_SIZE is not set)
+endif
+
 ifeq ($(VERSION_WEIGHT), 0)
 	$(error VERSION_WEIGHT must be non-zero)
 endif
@@ -31,6 +35,8 @@ export VERSION2_WEIGHT
 RETRIEVE_TARGET_HOST ?= any
 EXPERIMENT_DIR ?= $(shell date "+%Y-%m-%d-%H_%M_%S%N")
 
+TESTNET_DIR=./ansible/testnet # created by terraform
+
 .PHONY: terraform-init
 terraform-init:
 	$(MAKE) -C ./tf/ init
@@ -41,7 +47,7 @@ terraform-apply:
 
 .PHONY: configgen
 configgen:
-	./script/configgen.sh $(RUNNER_COMMIT_HASH) $(MANIFEST)
+	./script/configgen.sh $(RUNNER_COMMIT_HASH) $(MANIFEST) $(EPHEMERAL_SIZE) $(TESTNET_DIR)
 
 .PHONY: ansible-install
 ansible-install:
@@ -61,13 +67,15 @@ loadrunners-init:
 
 .PHONY: start-network
 start-network:
-	go run github.com/cometbft/cometbft/test/e2e/runner@$(RUNNER_COMMIT_HASH) start \
-		-f $(MANIFEST_PATH) --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
+	$(LOAD_RUNNER_CMD) start \
+		-f ./ansible/testnet/manifest.toml --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json \
+		--testnet-dir $(TESTNET_DIR)
 
 .PHONY: stop-network
 stop-network:
-	go run github.com/cometbft/cometbft/test/e2e/runner@$(RUNNER_COMMIT_HASH) stop \
-		-f $(MANIFEST_PATH) --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
+	$(LOAD_RUNNER_CMD) stop \
+		-f ./ansible/testnet/manifest.toml --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json \
+		--testnet-dir $(TESTNET_DIR)
 
 .PHONY: runload
 runload:
@@ -89,13 +97,14 @@ endif
 
 .PHONY: rotate
 rotate:
-	./script/rotate.sh $(RUNNER_COMMIT_HASH) $(MANIFEST_PATH) \
+	./script/rotate.sh $(TESTNET_DIR) \
 		`ansible all --list-hosts -i ./ansible/hosts --limit ephemeral | tail +2 | paste -s -d, - | tr -d ' '`
 
 .PHONY: perturb-nodes
 perturb-nodes:
-	go run github.com/cometbft/cometbft/test/e2e/runner@$(RUNNER_COMMIT_HASH) perturb \
-		-f $(MANIFEST_PATH) --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
+	$(LOAD_RUNNER_CMD) perturb \
+		-f ./ansible/testnet/manifest.toml --infrastructure-type digital-ocean --infrastructure-data ansible/testnet/infrastructure-data.json
+		--testnet-dir $(TESTNET_DIR)
 
 .PHONY: retrieve-blockstore
 retrieve-blockstore:

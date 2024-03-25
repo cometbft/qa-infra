@@ -49,6 +49,7 @@ ansible-install:
 ifneq ($(VERSION2_WEIGHT), 0)
 	ansible-playbook ./ansible/testapp-update.yaml -e "version_tag=$(VERSION2_TAG)" --limit validators2
 endif
+	$(MAKE) loadrunners-init
 
 .PHONY: prometheus-init
 prometheus-init:

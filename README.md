@@ -53,7 +53,7 @@ After you have all the prerequisites installed:
 
 After you have set up the infrastructure:
 
-1. Set up the test you will run in the `experiment.mk` file:
+5. Set up the test you will run in the `experiment.mk` file:
     1. Set the path to your manifest file in the variable `MANIFEST`.
     2. Set the commit hash of CometBFT that you to install in the nodes in the variable `VERSION_TAG`.
     3. If you want to deploy a subset of the validators with a different version of CometBFT, set
@@ -64,11 +64,11 @@ After you have set up the infrastructure:
     values to prevent collisions with other QA runs, including possible other users of the
     DigitalOcean project who might be running these scripts. If the subnet is allocated in the
     private IP address range 172.16.0.0/12, as it is in the unmodified file, a good choice should be
-    in the range 172.16.16.0/20 - 172.31.240.0/20.
+    in the range 172.16.16.0/20 - 172.31.240.0/20. You may also need to rename the DO project
+    `cmt-testnet` in the `tf/project.tf` file to a unique name.
 
-2. Create the VMs for the validators and Prometheus as specified in the manifest file.
-    Be sure to use your actual DO token and SSH key fingerprints for the `do_token` and `do_ssh_keys` variables
-    as specified in step 3 above.
+6. Create the VMs for the validators and Prometheus as specified in the manifest file.
+    Be sure to use your actual DO token and SSH key fingerprints for the `do_token` and `do_ssh_keys` variables.
 
     ```bash
     make terraform-apply
@@ -78,25 +78,29 @@ After you have set up the infrastructure:
     IP addresses of the nodes: an Ansible inventory file `./ansible/hosts`, and
     `./ansible/testnet/infrastructure-data.json` for E2E's `runner` tool.
 
-3. Generate the testnet configuration
+    Note that installing packages defined in `tf/user-data.txt` may take more time than expected.
+    It's possible that the installation process has not yet finished even when DO says that droplets
+    have been created successfully.
+
+7. Generate the testnet configuration
 
     ```bash
     make configgen
     ```
 
-4. Install all necessary software on the created VMs using Ansible
+8. Install all necessary software on the created VMs using Ansible
 
     ```bash
     make ansible-install
     ```
 
-5. Initialize the Prometheus instance
+9. Initialize the Prometheus instance
 
     ```bash
     make prometheus-init
     ```
 
-6. Start the test application on all of the validators
+10. Start the test application on all of the validators
 
     ```bash
     make start-network
@@ -104,21 +108,25 @@ After you have set up the infrastructure:
 
 ### Execute the load test
 
-This will start sending load until Ctrl-C is sent, so consider running this in its own terminal:
+Initialize the load-runner node, if not it's yet running:
+```bash
+make loadrunners-init
+```
 
-    ```bash
-    make runload
-    ```
+The following command will start sending load until Ctrl-C is sent, so consider running this in its own terminal:
+```bash
+make runload
+```
 
 ### Stop the network and retrieve data
 
-1. Once the execution is over, stop the network:
+11. Once the execution is over, stop the network:
 
     ```bash
     make stop-network
     ```
 
-2. Retrieve the data produced during the execution.
+12. Retrieve the data produced during the execution.
     You can either use the following command to retrieve both the prometheus and the blockstore databases together
 
     ```bash
@@ -159,6 +167,15 @@ IDs that they previously used, but all of their data will be deleted and reset.
 Do not forget to destroy the experiment to stop charging.
 
 ```sh
+make terraform-destroy
+```
+
+#### Keep the Prometheus node running
+
+You may want to keep running some nodes to retrieve data from them and destroy the others.
+The following commands will destroy all nodes except the Prometheus node and the last validator.
+```
+cd tf && terraform state rm digitalocean_droplet.testnet-prometheus digitalocean_droplet.testnet-node[199]
 make terraform-destroy
 ```
 

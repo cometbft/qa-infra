@@ -11,12 +11,13 @@ ${val.ip} name=${val.name} internal_ip=${val.internal_ip}
 %{~ endif ~}
 
 [prometheus]
-${prometheus.ip} internal_ip=${prometheus.internal_ip}
+${prometheus.ip} name=${prometheus.name} internal_ip=${prometheus.internal_ip}
 
 [loadrunners]
-${loadrunner.ip} internal_ip=${loadrunner.internal_ip}
+${loadrunner.ip} name=${loadrunner.name} internal_ip=${loadrunner.internal_ip}
 
 [ephemeral]
+
 %{~ if length(ephemerals) > 0 ~}
 %{ for val in ephemerals ~}
 ${val.ip} name=${val.name} internal_ip=${val.internal_ip}

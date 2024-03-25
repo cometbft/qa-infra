@@ -72,10 +72,10 @@ stop-network:
 runload:
 	ansible-playbook ./ansible/loader-run.yaml \
 		-e endpoints=`./ansible/scripts/get-endpoints.sh` \
-		-e load.connections=$(LOAD_CONNECTIONS) \
-		-e load.time_seconds=$(LOAD_TOTAL_TIME) \
-		-e load.tx_per_second=$(LOAD_TX_RATE) \
-		-e load.iterations=$(ITERATIONS)
+		-e connections=$(LOAD_CONNECTIONS) \
+		-e time_seconds=$(LOAD_TOTAL_TIME) \
+		-e tx_per_second=$(LOAD_TX_RATE) \
+		-e iterations=$(ITERATIONS)
 
 .PHONY: restart
 restart: loadrunners-init

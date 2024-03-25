@@ -67,7 +67,8 @@ After you have set up the infrastructure:
     in the range 172.16.16.0/20 - 172.31.240.0/20.
 
 2. Create the VMs for the validators and Prometheus as specified in the manifest file.
-    Be sure to use your actual DO token and SSH key fingerprints for the `do_token` and `do_ssh_keys` variables.
+    Be sure to use your actual DO token and SSH key fingerprints for the `do_token` and `do_ssh_keys` variables
+    as specified in step 3 above.
 
     ```bash
     make terraform-apply

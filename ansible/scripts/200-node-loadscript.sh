@@ -7,7 +7,7 @@ RATES=(200 400 800 1600)
 ADDR=127.0.0.1 # Fill in with the IP address of a node to target
 
 mempoolfull() {
-	if [ `curl -s "http://$ADDR:26657/num_unconfirmed_txs" | jq .result.n_txs | tr -d '"'` ]; then
+	if [ `curl -s "http://$ADDR:26657/v1/num_unconfirmed_txs" | jq .result.n_txs | tr -d '"'` ]; then
 		return 1
 	fi
 	return 0

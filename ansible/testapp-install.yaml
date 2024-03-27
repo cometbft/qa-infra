@@ -1,11 +1,13 @@
 - name: build testapp
-  hosts: validators,ephemeral
+  hosts: validators,ephemeral,loadrunners
   become_method: sudo
   gather_facts: true
 
   tasks:
     - ansible.builtin.import_tasks: tasks/testapp-copy-config-files.yaml
-      when: "'ephemeral' not in group_names" # initially there are no config files for ephemeral nodes
+      # initially there are no config files for ephemeral nodes
+      # no config files for loadrunners
+      when: "'ephemeral' not in group_names and 'loadrunners' not in group_names"
 
     - ansible.builtin.import_tasks: tasks/testapp-clone-repo.yaml
 

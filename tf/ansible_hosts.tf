@@ -37,10 +37,12 @@ resource "local_file" "ansible_hosts" {
       internal_ip = node.ipv4_address_private
     }]
     prometheus = {
+      name        = digitalocean_droplet.testnet-prometheus.name,
       ip          = digitalocean_droplet.testnet-prometheus.ipv4_address,
       internal_ip = digitalocean_droplet.testnet-prometheus.ipv4_address_private
     }
     loadrunner = {
+      name        = digitalocean_droplet.testnet-load-runner.name,
       ip          = digitalocean_droplet.testnet-load-runner.ipv4_address,
       internal_ip = digitalocean_droplet.testnet-load-runner.ipv4_address_private
     }

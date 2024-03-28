@@ -27,7 +27,7 @@ mkdir -p latency
 curl -s https://raw.githubusercontent.com/cometbft/cometbft/$VERSION/test/e2e/pkg/latency/aws-latencies.csv > latency/aws-latencies.csv # needed in this directory to validate zones
 
 cp $MANIFEST ./ansible/testnet/manifest.toml
-seeds=`grep 'node\.seed' ./testnets/rotating.toml | grep -o 'seed[0-9][0-9]*' | sort | uniq | sed 's/^\(.*\)$/"\1"/' | paste -s -d, -`
+seeds=`grep 'node\.seed' $MANIFEST | grep -o 'seed[0-9][0-9]*' | sort | uniq | sed 's/^\(.*\)$/"\1"/' | paste -s -d, -`
 if [ 0$EPHEMERAL_SIZE -gt 0 ]; then
 	echo >> ./ansible/testnet/manifest.toml
 	for i in `seq 1 $EPHEMERAL_SIZE`; do

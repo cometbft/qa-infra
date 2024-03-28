@@ -4,22 +4,22 @@
   gather_facts: true
   vars:
     endpoints: ws://{{ hostvars[groups[validators][0]].internal_ip }}:26657/v1/websocket # comma separated list of endpoints
+    size_bytes: 1024
 
   tasks:
     - debug: 
         msg:
-          connections: "{{ load.connections }}"
-          tx_per_second: "{{ load.tx_per_second }}"
-          size_bytes: "{{ load.size_bytes }}"
-          time_seconds: "{{ load.time_seconds }}"
-          load_iterations: "{{ load.iterations }}"
+          connections: "{{ connections }}"
+          tx_per_second: "{{ tx_per_second }}"
+          size_bytes: "{{ size_bytes }}"
+          time_seconds: "{{ time_seconds }}"
           endpoints: "{{ endpoints }}"
 
     - name: install load tool
       shell: "cd cometbft/test/loadtime/cmd/load/ && /usr/lib/go-1.21/bin/go install"
 
     - name: run the load tool
-      shell: "/root/go/bin/load -c {{ load.connections }} -T {{ load.time_seconds }} -r {{ load.tx_per_second }} -s {{ load.size_bytes }} --broadcast-tx-method sync --endpoints {{ endpoints }}"
-      loop: "{{ range(0, load.iterations| int, 1)| list }}"
+      shell: "/root/go/bin/load -c {{ connections }} -T {{ time_seconds }} -r {{ tx_per_second }} -s {{ size_bytes }} --broadcast-tx-method sync --endpoints {{ endpoints }}"
+      loop: "{{ range(0, iterations| int, 1)| list }}"
       loop_control:
         pause: 300

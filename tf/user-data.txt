@@ -110,7 +110,8 @@ runcmd:
   - ufw allow out dns
   - ufw allow out ntp
   - ufw allow in ssh
-  - ufw allow in proto tcp from any port 26657,26670
+  - ufw allow in 26657/tcp
+  - ufw allow in 26670/tcp
   - ufw enable
   - ufw default deny incoming
   - ufw default deny outgoing

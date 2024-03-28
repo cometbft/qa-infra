@@ -1,12 +1,12 @@
 # Take care to make these values unique between experiments running
 # on the same DigitalOcean project.
-DO_INSTANCE_TAGNAME=main-testnet
-DO_VPC_SUBNET=172.19.144.0/20
+DO_INSTANCE_TAGNAME=main-testnet-lasaro
+DO_VPC_SUBNET=172.31.240.0/20
 
-MANIFEST ?= ./testnets/example.toml
+MANIFEST ?= ./testnet.toml
 MANIFEST_PATH=$(shell realpath $(MANIFEST))
 
-VERSION_TAG ?= f92bace91 # tag of main on 05.02.2024
+VERSION_TAG ?= 72450bc82902c8c3f5995da116454c067c0d3373 
 #VERSION_TAG ?= 3b783434f #v0.34.27 (cometbft/cometbft)
 #VERSION_TAG ?= bef9a830e  #v0.37.alpha3 (cometbft/cometbft)
 #VERSION_TAG ?= v0.38.0-alpha.2

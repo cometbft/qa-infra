@@ -1,0 +1,33 @@
+{
+   "comment": "Entries are processed sequentially",
+   "sequences": [
+      {
+         "name": "Intra gossip delay",
+         "comment": "Configurations are combined",
+         "configurations": [
+            {
+               "name": "Intra gossip delay",
+               "comment": "Intra gossip delay",
+               "zip_vars": [
+                  {
+                     "tmpl_file": "vary_sleep_testnet_tmpl.toml",
+                     "output_file": "testnet.toml",
+                     "tag": "{{INTRA_GOSSIP_DELAY}}",
+                     "values": [
+			"500ms",
+			"400ms",
+			"300ms",
+			"250ms",
+			"200ms",
+			"150ms",
+			"100ms",
+			"50ms",
+                        "0ms"
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

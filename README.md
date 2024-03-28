@@ -51,7 +51,49 @@ After you have all the prerequisites installed:
 
 ### Start the network
 
-After you have set up the infrastructure:
+After you have set up the infrastructure, you need to setup the experiment.
+There are two ways of doing this, using the script `scripts/runtests.py` to automates part of it or not.
+
+#### Using `scripts/runtests.py` 
+
+Execute the script once to update your experiment setup according to your templates.  
+Use the `-s` flag to run it just once, as in the following.
+
+    ```bash
+    python3 runtests.py -l log.log -o flood_options.json -s
+    ```
+
+1. Create the VMs for the validators and Prometheus as specified in the manifest file.
+    Be sure to use your actual DO token and SSH key fingerprints for the `do_token` and `do_ssh_keys` variables.
+
+    ```bash
+    make terraform-apply
+    ```
+    
+    After creating the DO droplets, this command will generate two files with information about the
+    IP addresses of the nodes: an Ansible inventory file `./ansible/hosts`, and
+    `./ansible/testnet/infrastructure-data.json` for E2E's `runner` tool.
+
+2. Generate the testnet configuration, using the updated scripts
+
+    ```bash
+    make configgen
+    ```
+
+3. Install all necessary software on the created VMs using Ansible
+
+    ```bash
+    make ansible-install
+    ```
+
+4. Initialize the Prometheus instance
+
+    ```bash
+    make prometheus-init
+    ```
+
+
+#### Without the script
 
 5. Set up the test you will run in the `experiment.mk` file:
     1. Set the path to your manifest file in the variable `MANIFEST`.
@@ -61,10 +103,10 @@ After you have set up the infrastructure:
        the proportion of nodes that will run `VERSION_TAG` and `VERSION2_TAG` in the variables
        `VERSION_WEIGHT` and `VERSION2_WEIGHT` respectively.
     4. If necessary, set the variables `DO_INSTANCE_TAGNAME` and `DO_VPC_SUBNET` to customized
-    values to prevent collisions with other QA runs, including possible other users of the
-    DigitalOcean project who might be running these scripts. If the subnet is allocated in the
-    private IP address range 172.16.0.0/12, as it is in the unmodified file, a good choice should be
-    in the range 172.16.16.0/20 - 172.31.240.0/20. You may also need to rename the DO project
+       values to prevent collisions with other QA runs, including possible other users of the
+       DigitalOcean project who might be running these scripts. If the subnet is allocated in the
+       private IP address range 172.16.0.0/12, as it is in the unmodified file, a good choice should be
+       in the range 172.16.16.0/20 - 172.31.240.0/20. You may also need to rename the DO project
     `cmt-testnet` in the `tf/project.tf` file to a unique name.
 
 6. Create the VMs for the validators and Prometheus as specified in the manifest file.
@@ -107,13 +149,20 @@ After you have set up the infrastructure:
     ```
 
 ### Execute the load test
+If you are using `script/runtests.py`, run it now.
 
-Initialize the load-runner node, if not it's yet running:
+    ```bash
+    python3 runtests.py -l log.log -o flood_options.json
+    ```
+
+If you are not using the script, first nitialize the load-runner node, if not it's yet running:
+
 ```bash
 make loadrunners-init
 ```
 
 The following command will start sending load until Ctrl-C is sent, so consider running this in its own terminal:
+
 ```bash
 make runload
 ```
@@ -127,19 +176,20 @@ make runload
     ```
 
 12. Retrieve the data produced during the execution.
-    You can either use the following command to retrieve both the prometheus and the blockstore databases together
+    If you have used `runtests.py`, the data may have been retrieved already. 
+    Otherwise, you can either use the following command to retrieve both the prometheus and the blockstore databases together
 
     ```bash
     make retrieve-data
     ```
 
-    To retrieve them independently use the following for prometheus, which will retrieve the data from all nodes.
+    or, to retrieve them independently, use the following for prometheus, which will retrieve the data from all nodes,
 
     ```bash
     make retrieve-prometheus-data
     ```
 
-    For blockstore, use the following. Here, notice that the target node from which the data is retrieved can be changed via the environment variable `RETRIEVE_TARGET_HOST`.
+    and, for the blockstore, use the following. Here, notice that the target node from which the data is retrieved can be changed via the environment variable `RETRIEVE_TARGET_HOST`.
       - `"any"` (default) - retrieve from one random validator from the inventory.
       - `"all"` - retrieve from all nodes (very slow!);
       - set it to the exact name of a validator to retrieve from that particular validator.
@@ -155,12 +205,24 @@ make runload
 If you need to restart the running experiment, run the following command:
 
 ```sh
+# Modify your testnet.toml file
+# Update the configuration files locally
+make configgen
+# Update the configuration files and restart CometBFT in the nodes
 make restart
+# Reset and restart prometheus
+make restart-prometheus
 ```
 
 This command will delete all of the prometheus data, and re-initialize the nodes
-on the network. The nodes will restart with the same configuration files and
-IDs that they previously used, but all of their data will be deleted and reset.
+on the network. The nodes will restart with the new configuration and all of their
+data will be deleted and reset, but they will use the same IDs that they previously used.
+
+If you do not want to update the configuration files and rerun experiments with same
+configuration, you can omit the `make configgen` step.
+
+If you are want to collect the metrics of multiple experiments on the same prometheus database
+you can omit the `make restart-prometheus` command.
 
 ### Destroy the network
 

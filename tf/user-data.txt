@@ -99,6 +99,12 @@ write_files:
       ExecStart=/usr/bin/prometheus-node-exporter
       [Install]
       WantedBy=multi-user.target
+write_files:
+  - path: /etc/docker/daemon.json
+    content: |
+      {
+        "insecure-registries" : ["0.0.0.0/0"]
+      }
 runcmd:
   - ufw allow in from 10.0.0.0/8
   - ufw allow in from 172.16.0.0/12

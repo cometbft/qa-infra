@@ -41,7 +41,7 @@ pip install pandas matplotlib
 echo Generating latency/throughput image...
 python3 latency_throughput.py -t 'CometBFT: Latency vs Throughput' latency_throughput_$RELEASE_NAME.png results/raw.csv
 
-echo latency_plotter.py $RELEASE_NAME $CSV_PATH
+echo python3 latency_plotter.py $RELEASE_NAME $CSV_PATH
 python3 latency_plotter.py $RELEASE_NAME $CSV_PATH
 
 deactivate

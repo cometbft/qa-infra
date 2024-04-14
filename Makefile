@@ -95,6 +95,10 @@ endif
 	ansible-playbook ./ansible/prometheus-restart.yaml
 	ansible-playbook ./ansible/testapp-reinit.yaml
 
+.PHONY: restart2
+restart2: 
+	ansible-playbook ./ansible/testapp-reinit.yaml
+
 .PHONY: rotate
 rotate:
 	./script/rotate.sh $(TESTNET_DIR) \
